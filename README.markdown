@@ -79,7 +79,7 @@ The library can load data from either an [OGC SOS compatible service](http://www
 
 Define an SOS service object:
 
-		var sosSource = Geocens.SOS({
+		var sosSource = new Geocens.SOS({
 			service_url: "http://example.com/sos"
 		});
 
@@ -104,7 +104,7 @@ These can be combined:
 
 Define a Data Service object with your Data Service API key:
 
-		var dsSource = Geocens.DataService({
+		var dsSource = new Geocens.DataService({
 			api_key: "your_32_character_api_key"
 		});
 

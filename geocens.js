@@ -45,8 +45,14 @@
   });
 
   // Geocens.DataService
+  var DataService = Geocens.DataService = function(options) {
+    // Handle undefined options
+    if (options === undefined) {
+      options = {};
+    }
+  };
 
-  var DataService = Geocens.DataService = {
+  jQuery.extend(DataService, {
     // Default Data Service URL
     path: "http://dataservice.geocens.ca/api/",
 
@@ -71,6 +77,8 @@
       this.path = newPath;
       return this;
     }
-  };
+  });
+
+  jQuery.extend(DataService.prototype, DataService);
 
 }).call(this);
