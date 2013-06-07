@@ -4,4 +4,9 @@ $(document).ready(function() {
     ok(Geocens !== undefined, "Geocens is defined");
   });
 
+  test('includes jQuery', 2, function() {
+    ok(Geocens.$ !== undefined, "Geocens.$ is defined");
+    ok(Geocens.$ === jQuery, "Geocens.$ is jQuery");
+  });
+
 });
