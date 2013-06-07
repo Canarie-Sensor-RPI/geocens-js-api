@@ -244,7 +244,9 @@ TODO: Explain how to add features/fixes to the JS API
 
 ## Running Test
 
-TODO: How to run the included test suite
+There is a test suite for ensuring the JS API meets its requirements. The JS API is build with Behaviour Driven Development ([BDD](http://dannorth.net/introducing-bdd/)), which focuses on defining *requirements* before any code is written. This keeps new code clean and concise, only enough to satisfy the new behaviour.
+
+The tests can be run in a web browser by opening the `test/index.html` file. They are based on [Qunit](http://qunitjs.com/).
 
 ## License
 
