@@ -30,6 +30,8 @@
   };
 
   // Geocens.Sensor
+  // --------------
+  //
   var Sensor = Geocens.Sensor = function(options) {
     // Handle undefined options
     if (options === undefined) {
@@ -45,11 +47,16 @@
   });
 
   // Geocens.DataService
+  // -------------------
+  //
   var DataService = Geocens.DataService = function(options) {
     // Handle undefined options
     if (options === undefined) {
       options = {};
     }
+
+    // Let user set api key once for data source
+    this.api_key = options.api_key;
   };
 
   jQuery.extend(DataService, {
@@ -63,7 +70,7 @@
         url: path,
         type: 'GET',
         headers: {
-          "x-api-key": options.api_key
+          "x-api-key": options.api_key || this.api_key
         }
       }).done(function (data) {
         var sensor = new Sensor(data);
