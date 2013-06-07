@@ -4,7 +4,7 @@ The GeoCENS JavaScript API can be used to retrieve geospatial sensor data from e
 
 ## Requirements
 
-TODO: List of libraries required
+* jQuery 1.10.1 or newer
 
 ## Installation
 
