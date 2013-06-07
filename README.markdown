@@ -64,6 +64,13 @@ The returned objects contain timestamp and value properties. The timestamps corr
 
 ## Usage
 
+#### Geocens.noConflict
+
+If you are using a variable that already is called `Geocens`, you can prevent the GeoCENS JS API from overwriting it. The `noConflict()` method will return the `Geocens` variable back to the previous owner/value.
+
+		var GeocensAPI = Geocens.noConflict();
+		var sosSource = GeocensAPI.SOS({…});
+
 ### Loading Data
 
 The library can load data from either an [OGC SOS compatible service](http://www.opengeospatial.org/standards/sos), or from our GeoCENS Data Service.
