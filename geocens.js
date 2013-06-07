@@ -29,4 +29,12 @@
     return this;
   };
 
+  // Geocens.DataService
+
+  var DataService = Geocens.DataService = function(options) {
+    if (options === undefined) {
+      options = {};
+    }
+  };
+
 }).call(this);
