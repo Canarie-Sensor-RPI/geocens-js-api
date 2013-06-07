@@ -42,6 +42,37 @@ $(document).ready(function() {
     server.respond();
 
     ok(callback.called, "Done was not called");
+
+    server.restore();
+  });
+
+  test('sends the api key', 2, function() {
+    var api_key = "your_32_character_api_key",
+        sensor_id = "32_character_sensor_id",
+        datastream_id = "32_character_datastream_id";
+
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensor
+    Geocens.DataService.getSensor({
+      api_key: api_key,
+      sensor_id: sensor_id,
+      datastream_id: datastream_id
+    });
+
+    equal(1, requests.length, "Fake server did not receive request");
+
+    var request = requests[0];
+
+    equal(request.requestHeaders["x-api-key"], api_key, "API mismatch");
+
+    xhr.restore();
+
   });
 
 });

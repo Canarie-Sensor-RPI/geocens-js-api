@@ -40,7 +40,10 @@
 
       $.ajax({
         url: path,
-        type: 'GET'
+        type: 'GET',
+        headers: {
+          "x-api-key": options.api_key
+        }
       }).done(options.done);
 
     },
