@@ -36,7 +36,13 @@
     path: "http://iot.example.com/",
 
     getSensor: function(options) {
-      return {};
+      var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
+
+      $.ajax({
+        url: path,
+        type: 'GET'
+      }).done(options.done);
+
     },
 
     // Allow user to set a custom Data Service URL
