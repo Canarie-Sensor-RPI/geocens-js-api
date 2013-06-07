@@ -6,4 +6,13 @@
 
 (function() {
 
+  // Reference to global object
+  var root = this;
+
+  // Set top-level namespace
+  var Geocens;
+  Geocens = root.Geocens = {};
+
+  // Current library version
+  Geocens.VERSION = 'alpha1';
 }).call(this);
