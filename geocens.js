@@ -31,9 +31,14 @@
 
   // Geocens.DataService
 
-  var DataService = Geocens.DataService = function(options) {
-    if (options === undefined) {
-      options = {};
+  var DataService = Geocens.DataService = {
+    // Default Data Service URL
+    path: "http://iot.example.com/",
+
+    // Allow user to set a custom Data Service URL
+    setPath: function(newPath) {
+      this.path = newPath;
+      return this;
     }
   };
 
