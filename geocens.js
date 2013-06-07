@@ -35,6 +35,10 @@
     // Default Data Service URL
     path: "http://iot.example.com/",
 
+    getSensor: function(options) {
+      return {};
+    },
+
     // Allow user to set a custom Data Service URL
     setPath: function(newPath) {
       this.path = newPath;
