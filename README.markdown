@@ -18,6 +18,14 @@ TODO: A very brief tutorial
 
 TODO: Explain the API
 
+## Developing and Extending
+
+TODO: Explain how to add features/fixes to the JS API
+
+## Running Test
+
+TODO: How to run the included test suite
+
 ## License
 
 2013, James Badger, Geo Sensor Web Lab, All Rights Reserved.
