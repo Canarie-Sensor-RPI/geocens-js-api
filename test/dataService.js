@@ -22,7 +22,8 @@ $(document).ready(function() {
         datastream_id = "32_character_datastream_id";
 
     var server = this.sandbox.useFakeServer();
-    var path = "http://iot.example.com/sensors/" + sensor_id + "/datastreams/" + datastream_id;
+    var basePath = Geocens.DataService.path;
+    var path = basePath + "sensors/" + sensor_id + "/datastreams/" + datastream_id;
 
     server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },

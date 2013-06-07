@@ -33,7 +33,7 @@
 
   var DataService = Geocens.DataService = {
     // Default Data Service URL
-    path: "http://iot.example.com/",
+    path: "http://dataservice.geocens.ca/api/",
 
     getSensor: function(options) {
       var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
