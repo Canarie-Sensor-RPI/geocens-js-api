@@ -14,7 +14,7 @@ $(document).ready(function() {
     Geocens.DataService.setPath(originalPath);
   });
 
-  module("Data Service getSensor");
+  module("Data Service with getSensor");
 
   test('responds on success', 1, function() {
     var api_key = "your_32_character_api_key",
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
   });
 
-  test('returns a Sensor object', 2, function() {
+  test('returns a "Sensor" object', 2, function() {
     var api_key = "your_32_character_api_key",
         sensor_id = "32_character_sensor_id",
         datastream_id = "32_character_datastream_id";
