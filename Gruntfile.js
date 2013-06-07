@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['<%= jshint.files %>'],
+      files: ['<%= jshint.files %>', 'test/index.html'],
       tasks: ['jshint', 'qunit']
     }
   });
