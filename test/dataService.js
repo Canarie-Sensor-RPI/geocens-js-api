@@ -178,6 +178,43 @@ $(document).ready(function() {
 
   });
 
+  test('returns a "Sensor" object', 2, function() {
+    var api_key = "your_32_character_api_key",
+        sensor_id = "32_character_sensor_id",
+        datastream_id = "32_character_datastream_id";
+
+    var server = this.sandbox.useFakeServer();
+    var basePath = Geocens.DataService.path;
+    var path = basePath + "sensors/" + sensor_id + "/datastreams/" + datastream_id;
+
+    server.respondWith("GET", path,
+                       [200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+
+    var newSensor;
+
+    // Retrieve sensor
+    var source = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    source.getSensor({
+      sensor_id: sensor_id,
+      datastream_id: datastream_id,
+      done: function (sensor) {
+        newSensor = sensor;
+      }
+    });
+
+    server.respond();
+
+    ok(newSensor !== undefined, "Sensor was not defined");
+    // If it looks and acts like a Sensor object…
+    ok(newSensor.attributes !== undefined, "Sensor does not respond to attributes()");
+
+    server.restore();
+  });
+
 });
 
 // Fixtures
