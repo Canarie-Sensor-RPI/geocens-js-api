@@ -1,10 +1,12 @@
 $(document).ready(function() {
 
-  test('defined', 1, function() {
+  module("Data Service");
+
+  test('is defined', 1, function() {
     ok(Geocens.DataService !== undefined, "Geocens.DataService is not defined");
   });
 
-  test('Data Service path override', 1, function() {
+  test('can override data service path', 1, function() {
     var originalPath = Geocens.DataService.path;
 
     var newPath = "http://dataservice.example.com/";
