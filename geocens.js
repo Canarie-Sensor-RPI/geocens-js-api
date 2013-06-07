@@ -29,6 +29,21 @@
     return this;
   };
 
+  // Geocens.Sensor
+  var Sensor = Geocens.Sensor = function(options) {
+    // Handle undefined options
+    if (options === undefined) {
+      options = {};
+    }
+  };
+
+  // Extend Sensor object (actually function) prototype with new methods and
+  // properties
+  jQuery.extend(Sensor.prototype, {
+    // Respond to call for attributes
+    attributes: function() {}
+  });
+
   // Geocens.DataService
 
   var DataService = Geocens.DataService = {
@@ -44,7 +59,10 @@
         headers: {
           "x-api-key": options.api_key
         }
-      }).done(options.done);
+      }).done(function (data) {
+        var sensor = new Sensor(data);
+        options.done(sensor);
+      });
 
     },
 
