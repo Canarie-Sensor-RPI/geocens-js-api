@@ -1,0 +1,27 @@
+{
+  "name"          : "geocens_js_api",
+  "description"   : "GeoCENS JavaScript Data and Visualization Library",
+  "author"        : "James Badger <jamesbadger@gmail.com>",
+  "version"       : "0.0.0a1",
+  "license"       : "All Rights Reserved",
+  "main"          : "geocens.js",
+  "readmeFilename": "README.markdown",
+  "dependencies": {
+    "jquery": ">=1.10.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-nodeunit": "~0.1.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url" : "git@git.geocens.ca:geocens-js-api.git"
+  }
+}
