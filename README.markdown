@@ -248,6 +248,13 @@ There is a test suite for ensuring the JS API meets its requirements. The JS API
 
 The tests can be run in a web browser by opening the `test/index.html` file. They are based on [Qunit](http://qunitjs.com/).
 
+Alternatively, the tests can be run from the command line if Node and NPM is installed.
+
+		$ npm install
+		$ grunt qunit
+
+See `Gruntfile.js` for more tasks that can be run from the command line.
+
 ## License
 
 2013, James Badger, Geo Sensor Web Lab, All Rights Reserved.
