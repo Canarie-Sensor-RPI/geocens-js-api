@@ -47,7 +47,10 @@
     // Respond to call for attributes
     attributes: function() {
       return this._attributes;
-    }
+    },
+
+    // Return sensorML documents
+    metadata: function() {}
   });
 
   // Geocens.DataService

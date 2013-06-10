@@ -17,4 +17,12 @@ $(document).ready(function() {
     equal(attributes.phenName, options.phenName);
   });
 
+  test("metadata is no-op for data service sensors", 1, function() {
+    var sensor = new Geocens.Sensor({
+      sensor_type: "DataService"
+    });
+
+    equal(sensor.metadata(), undefined, "Data Service sensor metadata is not a no-op");
+  });
+
 });
