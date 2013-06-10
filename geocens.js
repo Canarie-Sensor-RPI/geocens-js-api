@@ -86,6 +86,7 @@
     path: "http://dataservice.geocens.ca/api/",
 
     getSensor: function(options) {
+      var service = this;
       var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
 
       $.ajax({
@@ -96,6 +97,7 @@
         }
       }).done(function (data) {
         var sensor = new Sensor(data);
+        sensor.service = service;
         options.done(sensor);
       });
 
