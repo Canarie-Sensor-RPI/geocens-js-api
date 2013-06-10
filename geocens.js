@@ -49,6 +49,21 @@
       return this._attributes;
     },
 
+    getTimeSeries: function(options) {
+      var path = this.service.path + "datastreams/" + this._attributes.datastream_id + "/records";
+
+      $.ajax({
+        url: path,
+        type: 'GET',
+        headers: {
+          "x-api-key": options.api_key || this.service.api_key
+        }
+      }).done(function (data) {
+        options.done(data);
+      });
+
+    },
+
     // Return sensorML documents
     metadata: function() {}
   });

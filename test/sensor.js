@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+  module("Sensor");
+
   test("returns attributes object", 1, function() {
     var sensor = new Geocens.Sensor();
     ok(sensor.attributes() instanceof Object, "attributes is not object");
@@ -23,6 +25,44 @@ $(document).ready(function() {
     });
 
     equal(sensor.metadata(), undefined, "Data Service sensor metadata is not a no-op");
+  });
+
+  module("Sensor GetTimeSeries");
+
+  test('responds on success', 1, function() {
+    var api_key = "your_32_character_api_key",
+        sensor_id = "32_character_sensor_id",
+        datastream_id = "32_character_datastream_id";
+
+    var server = this.sandbox.useFakeServer();
+    var basePath = Geocens.DataService.path;
+    var path = basePath + "datastreams/" + datastream_id + "/records";
+
+    server.respondWith("GET", path,
+                       [200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+
+    var callback = this.spy();
+
+    // "Retrieve" sensor
+    var service = new Geocens.DataService({ api_key: api_key });
+    var sensor = new Geocens.Sensor({
+      sensor_type: "DataService",
+      sensor_id: sensor_id,
+      datastream_id: datastream_id
+    });
+    sensor.service = service;
+
+    // Retrieve time series
+    sensor.getTimeSeries({
+      done: callback
+    });
+
+    server.respond();
+
+    ok(callback.called, "Done was not called");
+
+    server.restore();
   });
 
 });
