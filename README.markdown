@@ -18,13 +18,16 @@ Here is a brief introduction on how to retrieve data from the GeoCENS Data Servi
 
 In this example, we will retrieve data from a sensor. First, we connect to the Data Service and download the sensor information:
 
-		var sensor = Geocens.DataService.getSensor({
-			api_key: "your_32_character_api_key",
-			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id"
+		Geocens.DataService.getSensor({
+			api_key: api_key,
+			sensor_id: sensor_id,
+			datastream_id: datastream_id,
+			done: function (sensor) {
+				window.newSensor = sensor;
+			}
 		});
 
-This provides us with a `Sensor` object. We can retrieve properties for the Sensor:
+This provides us with a `Sensor` object in the `done` callback. We can retrieve properties for the Sensor:
 
 		sensor.attributes();
 
@@ -45,9 +48,13 @@ Which returns an object with the properties:
 
 We can also use the Sensor object to retrieve the latest time series observations:
 
-		var series = sensor.getTimeSeries();
+		sensor.getTimeSeries({
+			done: function (seriesData) {
+				window.seriesData = seriesData;
+			}
+		});
 
-If no options are passed into `getTimeSeries()`, then it will default to retrieving the latest 24 hours of data, capped at 1000 points. See the USAGE section below for instructions on overriding this.
+If no other options are passed into `getTimeSeries()`, then it will default to retrieving the latest 24 hours of data, capped at 1000 points. See the USAGE section below for instructions on overriding this.
 
 The `getTimeSeries()` method will cache the results in the Sensor object, and return an array of objects:
 
@@ -112,18 +119,26 @@ Define a Data Service object with your Data Service API key:
 
 Use a Data Service object to retrieve a singular sensor with its sensor ID and datastream ID:
 
-		var sensor = dsSource.getSensor({
+		dsSource.getSensor({
 			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id"
+			datastream_id: "32_character_datastream_id",
+			done: function (sensor) {
+				window.sensor = sensor;
+			}
 		});
 
 These can be combined:
 
-		var sensor = Geocens.DataService.getSensor({
+		Geocens.DataService.getSensor({
 			api_key: "your_32_character_api_key",
 			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id"
+			datastream_id: "32_character_datastream_id",
+			done: function (sensor) {
+				window.sensor = sensor;
+			}
 		});
+
+The `done` option will return the Sensor object as the first parameter after the metadata has been retrieved.
 
 #### Sensor.attributes
 
@@ -178,13 +193,20 @@ For Data Service Sensors, the method is a no-op:
 
 For all Sensors, the time series observations can be retrieved:
 
-		var series = sensor.getTimeSeries({
+		sensor.getTimeSeries({
 			start: new Date("2013-01-01 00:00:00Z"),
 			end:   new Date("2013-05-28 00:00:00Z"),
-			limit: 1000
+			limit: 1000,
+			done: function (seriesData) {
+				window.seriesData = seriesData;
+			}
 		});
 
-There are three options that can be specified.
+There are four options that can be specified.
+
+#### done
+
+This callback function will return the series data as the first parameter after it has been retrieved.
 
 ##### start
 
