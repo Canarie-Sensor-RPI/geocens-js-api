@@ -43,7 +43,9 @@
   // properties
   jQuery.extend(Sensor.prototype, {
     // Respond to call for attributes
-    attributes: function() {}
+    attributes: function() {
+      return {};
+    }
   });
 
   // Geocens.DataService
