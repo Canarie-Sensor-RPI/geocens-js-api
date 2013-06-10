@@ -37,6 +37,8 @@
     if (options === undefined) {
       options = {};
     }
+
+    this._attributes = options;
   };
 
   // Extend Sensor object (actually function) prototype with new methods and
@@ -44,7 +46,7 @@
   jQuery.extend(Sensor.prototype, {
     // Respond to call for attributes
     attributes: function() {
-      return {};
+      return this._attributes;
     }
   });
 
