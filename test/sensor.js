@@ -40,7 +40,7 @@ $(document).ready(function() {
 
     server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
+                        JSON.stringify(Fixtures.TimeSeries)]);
 
     var callback = this.spy();
 

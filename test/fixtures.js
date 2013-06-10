@@ -14,5 +14,14 @@ window.Fixtures = {
       user: "bob@example.com",
       user_id: "4b9bb80620f03eb3719e0a061c14283d"
     }
-  }
+  },
+
+  TimeSeries: [{
+    timestamp: 1356998400000,
+    value: 3.88
+  },
+  {
+    timestamp: 1369699200000,
+    value: 5.22
+  }]
 };
