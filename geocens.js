@@ -50,6 +50,10 @@
     },
 
     getTimeSeries: function(options) {
+      if (options === undefined) {
+        options = {};
+      }
+
       var path = this.service.path + "datastreams/" + this._attributes.datastream_id + "/records";
 
       $.ajax({
@@ -86,6 +90,10 @@
     path: "http://dataservice.geocens.ca/api/",
 
     getSensor: function(options) {
+      if (options === undefined) {
+        options = {};
+      }
+
       var service = this;
       var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
 
