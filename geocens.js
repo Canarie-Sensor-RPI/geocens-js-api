@@ -54,6 +54,8 @@
         options = {};
       }
 
+      options.done = options.done || function() {};
+
       var path = this.service.path + "datastreams/" + this._attributes.datastream_id + "/records";
 
       $.ajax({
@@ -93,6 +95,8 @@
       if (options === undefined) {
         options = {};
       }
+
+      options.done = options.done || function() {};
 
       var service = this;
       var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
