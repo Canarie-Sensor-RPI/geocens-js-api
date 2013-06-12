@@ -142,6 +142,18 @@ $(document).ready(function() {
 
   module("Sensor seriesData", {
     setup: function () {
+      this.api_key = "your_32_character_api_key";
+      this.sensor_id = "32_character_sensor_id";
+      this.datastream_id = "32_character_datastream_id";
+
+      var service = new Geocens.DataService({ api_key: this.api_key });
+      this.sensor = new Geocens.Sensor({
+        sensor_type: "DataService",
+        sensor_id: this.sensor_id,
+        datastream_id: this.datastream_id
+      });
+      this.sensor.service = service;
+
       this.server = sinon.fakeServer.create();
     },
 
@@ -151,20 +163,7 @@ $(document).ready(function() {
   });
 
   test('returns no data when no time series data has been retrieved', 2, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
-
-    var data = sensor.seriesData();
+    var data = this.sensor.seriesData();
 
     ok(data instanceof Array, 'seriesData is not an array');
     equal(data.length, 0, 'seriesData is not empty');
@@ -172,58 +171,32 @@ $(document).ready(function() {
   });
 
   test('returns data when time series data has been retrieved', 1, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
     var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + datastream_id + "/records";
+    var path = basePath + "datastreams/" + this.datastream_id + "/records";
 
     this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
-
     // Retrieve time series
-    sensor.getTimeSeries();
+    this.sensor.getTimeSeries();
 
     this.server.respond();
 
-    var data = sensor.seriesData();
+    var data = this.sensor.seriesData();
 
     equal(data.length, 2, 'seriesData is empty');
   });
 
 test('returns data when time series data has been retrieved multiple times', 2, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
     var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + datastream_id + "/records";
-
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
+    var path = basePath + "datastreams/" + this.datastream_id + "/records";
 
     // Retrieve first time series
     this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
-    sensor.getTimeSeries({
+    this.sensor.getTimeSeries({
       start: new Date("2013-01-01 00:00:00Z"),
       end:   new Date("2013-05-28 00:00:00Z")
     });
@@ -233,13 +206,13 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[1])]);
-    sensor.getTimeSeries({
+    this.sensor.getTimeSeries({
       start: new Date("2012-01-01 00:00:00Z"),
       end:   new Date("2012-05-28 00:00:00Z")
     });
     this.server.respond();
 
-    var data = sensor.seriesData();
+    var data = this.sensor.seriesData();
 
     equal(data.length, 4, 'seriesData is empty');
 
