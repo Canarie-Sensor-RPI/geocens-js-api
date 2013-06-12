@@ -39,6 +39,7 @@
     }
 
     this._attributes = options;
+    this._data = [];
   };
 
   // Extend Sensor object (actually function) prototype with new methods and
@@ -49,7 +50,15 @@
       return this._attributes;
     },
 
+    // Merge an array into currently cached time series data for the sensor
+    cache: function(data) {
+      this._data = data;
+    },
+
+    // Retrieve time series data for the sensor
     getTimeSeries: function(options) {
+      var sensor = this;
+
       if (options === undefined) {
         options = {};
       }
@@ -65,6 +74,7 @@
           "x-api-key": options.api_key || this.service.api_key
         }
       }).done(function (data) {
+        sensor.cache(data);
         options.done(data);
       });
 
@@ -75,7 +85,7 @@
 
     // Return cached time series data
     seriesData: function() {
-      return [];
+      return this._data;
     }
   });
 
