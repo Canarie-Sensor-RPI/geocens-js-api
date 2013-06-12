@@ -71,7 +71,12 @@
     },
 
     // Return sensorML documents
-    metadata: function() {}
+    metadata: function() {},
+
+    // Return cached time series data
+    seriesData: function() {
+      return [];
+    }
   });
 
   // Geocens.DataService

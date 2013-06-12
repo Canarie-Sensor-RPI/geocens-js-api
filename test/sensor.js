@@ -99,4 +99,27 @@ $(document).ready(function() {
 
   });
 
+  module("Sensor seriesData");
+
+  test('returns no data when no time series data has been retrieved', 2, function() {
+    var api_key = "your_32_character_api_key",
+        sensor_id = "32_character_sensor_id",
+        datastream_id = "32_character_datastream_id";
+
+    // "Retrieve" sensor
+    var service = new Geocens.DataService({ api_key: api_key });
+    var sensor = new Geocens.Sensor({
+      sensor_type: "DataService",
+      sensor_id: sensor_id,
+      datastream_id: datastream_id
+    });
+    sensor.service = service;
+
+    var data = sensor.seriesData();
+
+    ok(data instanceof Array, 'seriesData is not an array');
+    equal(data.length, 0, 'seriesData is not empty');
+
+  });
+
 });
