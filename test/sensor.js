@@ -142,15 +142,20 @@ $(document).ready(function() {
 
   module("Sensor seriesData", {
     setup: function () {
-      this.api_key = "your_32_character_api_key";
-      this.sensor_id = "32_character_sensor_id";
-      this.datastream_id = "32_character_datastream_id";
+      var api_key = "your_32_character_api_key",
+          sensor_id = "32_character_sensor_id",
+          datastream_id = "32_character_datastream_id";
 
-      var service = new Geocens.DataService({ api_key: this.api_key });
+      // Path to resource on Data Service
+      var basePath = Geocens.DataService.path;
+      this.api_path = basePath + "datastreams/" + datastream_id + "/records";
+
+      // Create service, sensor
+      var service = new Geocens.DataService({ api_key: api_key });
       this.sensor = new Geocens.Sensor({
         sensor_type: "DataService",
-        sensor_id: this.sensor_id,
-        datastream_id: this.datastream_id
+        sensor_id: sensor_id,
+        datastream_id: datastream_id
       });
       this.sensor.service = service;
 
@@ -171,10 +176,7 @@ $(document).ready(function() {
   });
 
   test('returns data when time series data has been retrieved', 1, function() {
-    var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + this.datastream_id + "/records";
-
-    this.server.respondWith("GET", path,
+    this.server.respondWith("GET", this.api_path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
@@ -189,11 +191,8 @@ $(document).ready(function() {
   });
 
 test('returns data when time series data has been retrieved multiple times', 2, function() {
-    var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + this.datastream_id + "/records";
-
     // Retrieve first time series
-    this.server.respondWith("GET", path,
+    this.server.respondWith("GET", this.api_path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
     this.sensor.getTimeSeries({
@@ -203,7 +202,7 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     this.server.respond();
 
     // Retrieve second time series
-    this.server.respondWith("GET", path,
+    this.server.respondWith("GET", this.api_path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[1])]);
     this.sensor.getTimeSeries({
