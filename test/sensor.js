@@ -27,49 +27,51 @@ $(document).ready(function() {
     equal(sensor.metadata(), undefined, "Data Service sensor metadata is not a no-op");
   });
 
-  module("Sensor GetTimeSeries");
+  module("Sensor GetTimeSeries", {
+    setup: function () {
+      this.api_key      = "your_32_character_api_key";
+      var sensor_id     = "32_character_sensor_id",
+          datastream_id = "32_character_datastream_id";
+
+      // Path to resource on Data Service
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "datastreams/" + datastream_id + "/records";
+
+      // Create service, sensor
+      var service = new Geocens.DataService({ api_key: this.api_key });
+      this.sensor = new Geocens.Sensor({
+        sensor_type:   "DataService",
+        sensor_id:     sensor_id,
+        datastream_id: datastream_id
+      });
+      this.sensor.service = service;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
 
   test('responds on success', 1, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
-    var server = this.sandbox.useFakeServer();
-    var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + datastream_id + "/records";
-
-    server.respondWith("GET", path,
+    this.server.respondWith("GET", this.api_path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     var callback = this.spy();
 
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
-
     // Retrieve time series
-    sensor.getTimeSeries({
+    this.sensor.getTimeSeries({
       done: callback
     });
 
-    server.respond();
+    this.server.respond();
 
     ok(callback.called, "Done was not called");
-
-    server.restore();
   });
 
   test('sends the api key', 2, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
     var xhr = sinon.useFakeXMLHttpRequest();
     var requests = [];
 
@@ -77,66 +79,38 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
-
     // Retrieve time series
-    sensor.getTimeSeries();
+    this.sensor.getTimeSeries();
 
     equal(1, requests.length, "Fake server did not receive request");
 
     var request = requests[0];
 
-    equal(request.requestHeaders["x-api-key"], api_key, "API mismatch");
+    equal(request.requestHeaders["x-api-key"], this.api_key, "API mismatch");
 
     xhr.restore();
 
   });
 
   test('returns timestamp/value array', 3, function() {
-    var api_key = "your_32_character_api_key",
-        sensor_id = "32_character_sensor_id",
-        datastream_id = "32_character_datastream_id";
-
-    var server = this.sandbox.useFakeServer();
-    var basePath = Geocens.DataService.path;
-    var path = basePath + "datastreams/" + datastream_id + "/records";
-
-    server.respondWith("GET", path,
+    this.server.respondWith("GET", this.api_path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     var seriesData;
 
-    // "Retrieve" sensor
-    var service = new Geocens.DataService({ api_key: api_key });
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService",
-      sensor_id: sensor_id,
-      datastream_id: datastream_id
-    });
-    sensor.service = service;
-
     // Retrieve time series
-    sensor.getTimeSeries({
+    this.sensor.getTimeSeries({
       done: function(data) { seriesData = data; }
     });
 
-    server.respond();
+    this.server.respond();
 
     ok(seriesData instanceof Array, "Data is not an array");
 
     var firstPair = seriesData[0];
     ok(firstPair.timestamp !== undefined, "timestamp property is undefined");
     ok(firstPair.value !== undefined, "value property is undefined");
-
-    server.restore();
   });
 
 
