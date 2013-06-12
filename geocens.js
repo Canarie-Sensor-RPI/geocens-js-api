@@ -52,7 +52,20 @@
 
     // Merge an array into currently cached time series data for the sensor
     cache: function(data) {
-      this._data = data;
+      this._data = this._data.concat(data);
+
+      // sort by timestamp
+      this._data.sort(function(a, b) {
+        if (a.timestamp < b.timestamp) {
+          return -1;
+        } else if (a.timestamp > b.timestamp) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      return this._data;
     },
 
     // Retrieve time series data for the sensor

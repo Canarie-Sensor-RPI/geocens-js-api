@@ -40,7 +40,7 @@ $(document).ready(function() {
 
     server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.TimeSeries)]);
+                        JSON.stringify(Fixtures.TimeSeries[0])]);
 
     var callback = this.spy();
 
@@ -133,7 +133,7 @@ $(document).ready(function() {
 
     server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.TimeSeries)]);
+                        JSON.stringify(Fixtures.TimeSeries[0])]);
 
     // "Retrieve" sensor
     var service = new Geocens.DataService({ api_key: api_key });
@@ -152,6 +152,65 @@ $(document).ready(function() {
     var data = sensor.seriesData();
 
     equal(data.length, 2, 'seriesData is empty');
+
+    server.restore();
+  });
+
+test('returns data when time series data has been retrieved multiple times', 2, function() {
+    var api_key = "your_32_character_api_key",
+        sensor_id = "32_character_sensor_id",
+        datastream_id = "32_character_datastream_id";
+
+    var server = this.sandbox.useFakeServer();
+    var basePath = Geocens.DataService.path;
+    var path = basePath + "datastreams/" + datastream_id + "/records";
+
+    // "Retrieve" sensor
+    var service = new Geocens.DataService({ api_key: api_key });
+    var sensor = new Geocens.Sensor({
+      sensor_type: "DataService",
+      sensor_id: sensor_id,
+      datastream_id: datastream_id
+    });
+    sensor.service = service;
+
+    // Retrieve first time series
+    server.respondWith("GET", path,
+                       [200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0])]);
+    sensor.getTimeSeries({
+      start: new Date("2013-01-01 00:00:00Z"),
+      end:   new Date("2013-05-28 00:00:00Z")
+    });
+    server.respond();
+
+    // Retrieve second time series
+    server = this.sandbox.useFakeServer();
+    server.respondWith("GET", path,
+                       [200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[1])]);
+    sensor.getTimeSeries({
+      start: new Date("2012-01-01 00:00:00Z"),
+      end:   new Date("2012-05-28 00:00:00Z")
+    });
+    server.respond();
+
+    var data = sensor.seriesData();
+
+    equal(data.length, 4, 'seriesData is empty');
+
+    var sortedData = data.slice();
+    sortedData.sort(function(a, b) {
+      if (a.timestamp < b.timestamp) {
+        return -1;
+      } else if (a.timestamp > b.timestamp) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    deepEqual(data, sortedData, 'seriesData is not sorted by date');
 
     server.restore();
   });
