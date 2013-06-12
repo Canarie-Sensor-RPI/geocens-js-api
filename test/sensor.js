@@ -55,8 +55,7 @@ $(document).ready(function() {
   });
 
   test('responds on success', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
+    this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     var callback = this.spy();
@@ -93,8 +92,7 @@ $(document).ready(function() {
   });
 
   test('returns timestamp/value array', 3, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
+    this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     var seriesData;
@@ -113,6 +111,25 @@ $(document).ready(function() {
     ok(firstPair.value !== undefined, "value property is undefined");
   });
 
+  test('uses defaults for start/end times', 1, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.sensor.getTimeSeries({
+      start: new Date()
+    });
+
+    equal(1, requests.length, "Fake server did not receive request");
+
+    var request = requests[0];
+
+    xhr.restore();
+  });
 
   module("Sensor seriesData", {
     setup: function () {
@@ -150,8 +167,7 @@ $(document).ready(function() {
   });
 
   test('returns data when time series data has been retrieved', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
+    this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     // Retrieve time series
@@ -166,8 +182,7 @@ $(document).ready(function() {
 
 test('returns data when time series data has been retrieved multiple times', 2, function() {
     // Retrieve first time series
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
+    this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
     this.sensor.getTimeSeries({
       start: new Date("2013-01-01 00:00:00Z"),
@@ -176,8 +191,7 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     this.server.respond();
 
     // Retrieve second time series
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
+    this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[1])]);
     this.sensor.getTimeSeries({
       start: new Date("2012-01-01 00:00:00Z"),
