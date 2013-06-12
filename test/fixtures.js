@@ -19,21 +19,21 @@ window.Fixtures = {
   TimeSeries: [
     // 0
     [{
-      timestamp: 1356998400000,
-      value: 3.88
+      id: "2013-01-01T00:00:00",
+      reading: "3.88"
     },
     {
-      timestamp: 1369699200000,
-      value: 5.22
+      id: "2013-05-28T00:00:00",
+      reading: "5.22"
     }],
     // 1
     [{
-      timestamp: 1325376000000,
-      value: 2.88
+      id: "2012-01-01T00:00:00",
+      reading: "2.88"
     },
     {
-      timestamp: 1338163200000,
-      value: 4.22
+      id: "2012-05-28T00:00:00",
+      reading: "4.22"
     }]
   ]
 };

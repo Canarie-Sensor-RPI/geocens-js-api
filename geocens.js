@@ -87,8 +87,15 @@
           "x-api-key": options.api_key || this.service.api_key
         }
       }).done(function (data) {
-        sensor.cache(data);
-        options.done(data);
+        var convertedData = $.map(data, function(index, value) {
+          return {
+            timestamp: Date.parse(value.id),
+            value: parseFloat(value.reading)
+          };
+        });
+
+        sensor.cache(convertedData);
+        options.done(convertedData);
       });
 
     },
