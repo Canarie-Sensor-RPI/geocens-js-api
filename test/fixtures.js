@@ -2,17 +2,34 @@
 
 window.Fixtures = {
   DataService: {
-    Sensor: {
-      datastream_id: "4e1552900482a04b8850e4c4b097b690",
-      latitude: 51.000,
-      longitude: -114.000,
-      property: "airquality",
-      sensor_id: "d0bcf2894edc50a5160c52a4015bc768",
-      sensor_type: "DataService",
-      service_url: "http://example.com/data_service",
+    Datastream: {
+      uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+      id: "carbonMonoxide",
+      sensor: "5C-86-4A-00-2C-9E",
       unit: "ppm",
+      phenName: "airquality",
+      user: "bob@example.com"
+    },
+
+    Sensor: {
+      id: "5C-86-4A-00-2C-9E",
       user: "bob@example.com",
-      user_id: "4b9bb80620f03eb3719e0a061c14283d"
+      uid: "4ddecd5124661f9442cfca8be23f8dda",
+      altitude: 1100,
+      samplingrate: 0,
+      loc: [51,-114],
+      title: "Our first integration Testing",
+      height: 0,
+      nickName: "Alpha",
+      description: "",
+      last_time_online: "2012-09-18T21:04:40",
+      phens: [
+        "airtemperature",
+        "relatedhumidity",
+        "airquality",
+        "hydrogentest",
+        "hydrogentest1Name"
+      ]
     }
   },
 

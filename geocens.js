@@ -126,6 +126,21 @@
     // Default Data Service URL
     path: "http://dataservice.geocens.ca/api/",
 
+    ajax: {
+      // Retrieve just the resource
+      get: function(options) {
+        var service = this;
+
+        return $.ajax({
+          url: options.path,
+          type: 'GET',
+          headers: {
+            "x-api-key": options.api_key || service.api_key
+          }
+        });
+      }
+    },
+
     getSensor: function(options) {
       if (options === undefined) {
         options = {};
@@ -134,20 +149,27 @@
       options.done = options.done || function() {};
 
       var service = this;
-      var path = this.path + "sensors/" + options.sensor_id + "/datastreams/" + options.datastream_id;
+      var sensor_path = this.path + "sensors/" + options.sensor_id;
+      var datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
 
-      $.ajax({
-        url: path,
-        type: 'GET',
-        headers: {
-          "x-api-key": options.api_key || this.api_key
-        }
-      }).done(function (data) {
-        var sensor = new Sensor(data);
-        sensor.service = service;
-        options.done(sensor);
+      // Retrieve sensor resource
+      service.ajax.get({
+        path: sensor_path,
+        api_key: options.api_key || service.api_key
+      }).done(function (sensorData) {
+
+        // Retrieve datastream resource
+        service.ajax.get({
+          path: datastream_path,
+          api_key: options.api_key
+        }).done(function (datastreamData) {
+          // Merge data responses
+          $.extend(sensorData, datastreamData);
+          var sensor = new Sensor(sensorData);
+          sensor.service = service;
+          options.done(sensor);
+        });
       });
-
     },
 
     // Allow user to set a custom Data Service URL

@@ -33,24 +33,70 @@ $(document).ready(function() {
     }
   });
 
-  test('responds on success', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
+  test('makes a request for the sensor', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
 
-    var callback = this.spy();
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
 
     // Retrieve sensor
     Geocens.DataService.getSensor({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
-      datastream_id: this.datastream_id,
-      done: callback
+      datastream_id: this.datastream_id
     });
 
-    this.server.respond();
+    // Return sensor
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
 
-    ok(callback.called, "Done was not called");
+    // Return datastream
+    requests[1].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    equal(requests.length, 2, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var sensor_path = Geocens.DataService.path + "sensors/" + this.sensor_id;
+
+    equal(request.url, sensor_path, "Request not made for sensor resource");
+
+    xhr.restore();
+  });
+
+  test('makes a request for the datastream', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensor
+    Geocens.DataService.getSensor({
+      api_key:       this.api_key,
+      sensor_id:     this.sensor_id,
+      datastream_id: this.datastream_id
+    });
+
+    // Return sensor
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    // Return datastream
+    requests[1].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    equal(requests.length, 2, "Fake server did not receive requests");
+
+    var request = requests[1];
+    var datastream_path = Geocens.DataService.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id;
+
+    equal(request.url, datastream_path, "Request not made for datastream resource");
+
+    xhr.restore();
   });
 
   test('sends the api key', 2, function() {
@@ -79,10 +125,6 @@ $(document).ready(function() {
   });
 
   test('returns a "Sensor" object', 2, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
-
     var newSensor;
 
     // Retrieve sensor
@@ -95,6 +137,11 @@ $(document).ready(function() {
       }
     });
 
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
     ok(newSensor !== undefined, "Sensor was not defined");
@@ -103,10 +150,6 @@ $(document).ready(function() {
   });
 
   test('sets the `service` property for the Sensor returned', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
-
     var newSensor;
 
     // Retrieve sensor
@@ -119,6 +162,11 @@ $(document).ready(function() {
       }
     });
 
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
     ok(newSensor.service !== undefined, "Sensor service was not defined");
@@ -141,29 +189,6 @@ $(document).ready(function() {
     }
   });
 
-  test('responds on success', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
-
-    var callback = this.spy();
-
-    // Retrieve sensor
-    var source = new Geocens.DataService({
-      api_key: this.api_key
-    });
-
-    source.getSensor({
-      sensor_id:     this.sensor_id,
-      datastream_id: this.datastream_id,
-      done: callback
-    });
-
-    this.server.respond();
-
-    ok(callback.called, "Done was not called");
-  });
-
   test('sends the api key', 2, function() {
     var xhr = sinon.useFakeXMLHttpRequest();
     var requests = [];
@@ -182,7 +207,15 @@ $(document).ready(function() {
       datastream_id: this.datastream_id
     });
 
-    equal(1, requests.length, "Fake server did not receive request");
+    // Return sensor
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    // Return datastream
+    requests[1].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    equal(requests.length, 2, "Fake server did not receive request");
 
     var request = requests[0];
 
@@ -190,10 +223,6 @@ $(document).ready(function() {
   });
 
   test('returns a "Sensor" object', 2, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
-
     var newSensor;
 
     // Retrieve sensor
@@ -209,6 +238,11 @@ $(document).ready(function() {
       }
     });
 
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
     ok(newSensor !== undefined, "Sensor was not defined");
@@ -217,10 +251,6 @@ $(document).ready(function() {
   });
 
   test('sets the `service` property for the Sensor returned', 1, function() {
-    this.server.respondWith("GET", this.api_path,
-                       [200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.Sensor)]);
-
     var newSensor;
 
     // Retrieve sensor
@@ -236,6 +266,11 @@ $(document).ready(function() {
       }
     });
 
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
     ok(newSensor.service !== undefined, "Sensor service was not defined");
