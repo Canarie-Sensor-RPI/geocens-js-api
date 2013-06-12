@@ -142,19 +142,19 @@ $(document).ready(function() {
 
   module("Sensor seriesData", {
     setup: function () {
-      var api_key = "your_32_character_api_key",
-          sensor_id = "32_character_sensor_id",
+      var api_key       = "your_32_character_api_key",
+          sensor_id     = "32_character_sensor_id",
           datastream_id = "32_character_datastream_id";
 
       // Path to resource on Data Service
-      var basePath = Geocens.DataService.path;
+      var basePath  = Geocens.DataService.path;
       this.api_path = basePath + "datastreams/" + datastream_id + "/records";
 
       // Create service, sensor
       var service = new Geocens.DataService({ api_key: api_key });
       this.sensor = new Geocens.Sensor({
-        sensor_type: "DataService",
-        sensor_id: sensor_id,
+        sensor_type:   "DataService",
+        sensor_id:     sensor_id,
         datastream_id: datastream_id
       });
       this.sensor.service = service;
