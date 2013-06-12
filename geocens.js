@@ -135,7 +135,7 @@
           url: options.path,
           type: 'GET',
           headers: {
-            "x-api-key": options.api_key || service.api_key
+            "x-api-key": options.api_key
           }
         });
       }
@@ -145,17 +145,18 @@
       if (options === undefined) {
         options = {};
       }
+      var service = this;
 
       options.done = options.done || function() {};
+      options.api_key = options.api_key || service.api_key;
 
-      var service = this;
       var sensor_path = this.path + "sensors/" + options.sensor_id;
       var datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
 
       // Retrieve sensor resource
       service.ajax.get({
         path: sensor_path,
-        api_key: options.api_key || service.api_key
+        api_key: options.api_key
       }).done(function (sensorData) {
 
         // Retrieve datastream resource
