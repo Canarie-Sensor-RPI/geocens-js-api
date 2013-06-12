@@ -140,7 +140,15 @@ $(document).ready(function() {
   });
 
 
-  module("Sensor seriesData");
+  module("Sensor seriesData", {
+    setup: function () {
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
 
   test('returns no data when no time series data has been retrieved', 2, function() {
     var api_key = "your_32_character_api_key",
@@ -168,11 +176,10 @@ $(document).ready(function() {
         sensor_id = "32_character_sensor_id",
         datastream_id = "32_character_datastream_id";
 
-    var server = this.sandbox.useFakeServer();
     var basePath = Geocens.DataService.path;
     var path = basePath + "datastreams/" + datastream_id + "/records";
 
-    server.respondWith("GET", path,
+    this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
@@ -188,13 +195,11 @@ $(document).ready(function() {
     // Retrieve time series
     sensor.getTimeSeries();
 
-    server.respond();
+    this.server.respond();
 
     var data = sensor.seriesData();
 
     equal(data.length, 2, 'seriesData is empty');
-
-    server.restore();
   });
 
 test('returns data when time series data has been retrieved multiple times', 2, function() {
@@ -202,7 +207,6 @@ test('returns data when time series data has been retrieved multiple times', 2, 
         sensor_id = "32_character_sensor_id",
         datastream_id = "32_character_datastream_id";
 
-    var server = this.sandbox.useFakeServer();
     var basePath = Geocens.DataService.path;
     var path = basePath + "datastreams/" + datastream_id + "/records";
 
@@ -216,25 +220,24 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     sensor.service = service;
 
     // Retrieve first time series
-    server.respondWith("GET", path,
+    this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
     sensor.getTimeSeries({
       start: new Date("2013-01-01 00:00:00Z"),
       end:   new Date("2013-05-28 00:00:00Z")
     });
-    server.respond();
+    this.server.respond();
 
     // Retrieve second time series
-    server = this.sandbox.useFakeServer();
-    server.respondWith("GET", path,
+    this.server.respondWith("GET", path,
                        [200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[1])]);
     sensor.getTimeSeries({
       start: new Date("2012-01-01 00:00:00Z"),
       end:   new Date("2012-05-28 00:00:00Z")
     });
-    server.respond();
+    this.server.respond();
 
     var data = sensor.seriesData();
 
@@ -252,8 +255,6 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     });
 
     deepEqual(data, sortedData, 'seriesData is not sorted by date');
-
-    server.restore();
   });
 
 });
