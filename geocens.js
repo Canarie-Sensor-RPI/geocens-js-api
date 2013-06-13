@@ -85,11 +85,6 @@
         type: 'GET',
         headers: {
           "x-api-key": options.api_key || this.service.api_key
-        },
-        data: {
-          start: null,
-          end: null,
-          limit: null
         }
       }).done(function (data) {
         var convertedData = $.map(data, function(index, value) {

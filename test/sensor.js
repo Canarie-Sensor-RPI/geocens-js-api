@@ -111,26 +111,6 @@ $(document).ready(function() {
     ok(firstPair.value !== undefined, "value property is undefined");
   });
 
-  test('uses defaults for start/end times', 1, function() {
-    var xhr = sinon.useFakeXMLHttpRequest();
-    var requests = [];
-
-    xhr.onCreate = function (request) {
-      requests.push(request);
-    };
-
-    // Retrieve time series
-    this.sensor.getTimeSeries({
-      start: new Date()
-    });
-
-    equal(1, requests.length, "Fake server did not receive request");
-
-    var request = requests[0];
-
-    xhr.restore();
-  });
-
   module("Sensor seriesData", {
     setup: function () {
       var api_key       = "your_32_character_api_key",

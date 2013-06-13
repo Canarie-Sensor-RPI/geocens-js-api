@@ -54,7 +54,7 @@ We can also use the Sensor object to retrieve the latest time series observation
 			}
 		});
 
-If no other options are passed into `getTimeSeries()`, then it will default to retrieving the latest 24 hours of data, capped at 1000 points. See the USAGE section below for instructions on overriding this.
+By default, `getTimeSeries()` will retrieve all observation values from the Data Service. (Support for filters is coming soon.)
 
 The `getTimeSeries()` method will cache the results in the Sensor object, and return an array of objects:
 
@@ -194,33 +194,16 @@ For Data Service Sensors, the method is a no-op:
 For all Sensors, the time series observations can be retrieved:
 
 		sensor.getTimeSeries({
-			start: new Date("2013-01-01 00:00:00Z"),
-			end:   new Date("2013-05-28 00:00:00Z"),
-			limit: 1000,
 			done: function (seriesData) {
 				window.seriesData = seriesData;
 			}
 		});
 
-There are four options that can be specified.
+Support for filtering based on start and end dates or limits is coming soon.
 
 #### done
 
 This callback function will return the series data as the first parameter after it has been retrieved.
-
-##### start
-
-The start date is the earliest point to retrieve observation data. Only data after this date will be retrieved. If the property is omitted, it will default to 24 hours before the current time.
-
-Major warning: Be very mindful of timezones. By default, a Date object will default to the current browser's time zone. Parsing an [RFC2822 or ISO8601 formatted string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse) is recommended.
-
-##### end
-
-The end date is the latest point to retrieve observation data. Only data before this date will be retrieved. If the property is omitted, it will default to the current time.
-
-##### limit
-
-The maximum number of results to return. Will default to 1000 if omitted. For SOS sensors, this setting will be ignored.
 
 ##### Result
 
