@@ -39,6 +39,8 @@
     }
 
     this._attributes = options;
+    this.sensor_id = options.sensor_id;
+    this.datastream_id = options.datastream_id;
     this._data = [];
   };
 
@@ -78,7 +80,7 @@
 
       options.done = options.done || function() {};
 
-      var path = this.service.path + "datastreams/" + this._attributes.datastream_id + "/records";
+      var path = this.service.path + "datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
         url: path,
@@ -165,7 +167,10 @@
           api_key: options.api_key
         }).done(function (datastreamData) {
           // Merge data responses
-          $.extend(sensorData, datastreamData);
+          $.extend(sensorData, datastreamData, {
+            datastream_id: options.datastream_id,
+            sensor_id:     options.sensor_id
+          });
           var sensor = new Sensor(sensorData);
           sensor.service = service;
           options.done(sensor);

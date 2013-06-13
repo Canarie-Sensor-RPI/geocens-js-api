@@ -172,6 +172,32 @@ $(document).ready(function() {
     ok(newSensor.service !== undefined, "Sensor service was not defined");
   });
 
+  test('sets the `datastream_id` and `sensor_id` properties for the Sensor returned', 2, function() {
+    var newSensor;
+
+    // Retrieve sensor
+    Geocens.DataService.getSensor({
+      api_key:       this.api_key,
+      sensor_id:     this.sensor_id,
+      datastream_id: this.datastream_id,
+      done: function (sensor) {
+        newSensor = sensor;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
+    this.server.respond();
+
+    equal(newSensor.datastream_id, this.datastream_id, "Sensor datastream id was not defined");
+    equal(newSensor.sensor_id, this.sensor_id, "Sensor id was not defined");
+  });
+
+
+
   module("Init Data Service, then getSensor", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
