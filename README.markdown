@@ -84,28 +84,7 @@ The library can load data from either an [OGC SOS compatible service](http://www
 
 #### Geocens.SOS
 
-Define an SOS service object:
-
-		var sosSource = new Geocens.SOS({
-			service_url: "http://example.com/sos"
-		});
-
-#### Geocens.SOS.getSensors
-
-Use an SOS service object to retrieve an array of Sensors for a given Offering and Observed Property:
-
-		var sosSensors = sosSource.getSensors({
-			offering: "temperature",
-			property: "urn:ogc:def:property:noaa:ndbc:water temperature"
-		});
-
-These can be combined:
-
-		var sosSensors = Geocens.SOS.getSensors({
-			service_url: "http://example.com/sos",
-			offering: "temperature",
-			property: "urn:ogc:def:property:noaa:ndbc:water temperature"
-		});
+Coming soon.
 
 #### Geocens.DataService
 
@@ -146,19 +125,6 @@ With a Sensor object, the basic metadata properties can be retrieved:
 
 		sensor.attributes();
 
-Example attributes for a sensor from OGC SOS:
-
-		{
-			latitude: 51.000,
-			longitude: -114.000,
-			offering: "temperature",
-			property: "urn:ogc:def:property:noaa:ndbc:water temperature",
-			sensor_id: "snr_301",
-			sensor_type: "SOS",
-			service_url: "http://example.com/sos",
-			unit: "celcius"
-		}
-
 Example attributes for a sensor from GeoCENS Data Service:
 
 		{
@@ -175,14 +141,6 @@ Example attributes for a sensor from GeoCENS Data Service:
 		}
 
 #### Sensor.metadata
-
-For SOS Sensors, the [sensorML document](http://www.opengeospatial.org/standards/sensorml) can be retrieved for additional metadata. It is then possible to use [jQuery's traversal API](http://api.jquery.com/category/traversing/) to navigate the result.
-
-		var sensorMetadata = sensor.metadata();
-		var intendedApp = sensorMetadata.find("classifier[name~='intendedApplication']").text();
-		// "water temperature monitoring"
-
-Note that the sensorML document may or may not include the `classifier` element; it is up to the user to determine useful data from the sensorML document.
 
 For Data Service Sensors, the method is a no-op:
 
@@ -225,14 +183,6 @@ If the `getTimeSeries` method is called multiple times (with the same or differe
 #### Sensor.seriesData
 
 Retrieve a sorted array of timeseries objects for a Sensor, based on data already retrieved by `getTimeSeries()` operations. If `getTimeSeries()` has not yet been called, `seriesData()` will return an empty array.
-
-#### Translation Engine Customization
-
-The Translation Engine URL is hard-coded into the library. It is a GeoCENS proxy service that retrieves data from OGC SOS and provides easily-consumed data. Users can optionally override it:
-
-		Geocens.TranslationEngine.setPath("http://example.com/translation-engine/");
-
-After override, all new requests will use the new Translation Engine path.
 
 #### Data Service Customization
 
