@@ -91,7 +91,7 @@ $(document).ready(function() {
 
   });
 
-  test('returns timestamp/value array', 3, function() {
+  test('returns timestamp/value array', 5, function() {
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
@@ -109,6 +109,9 @@ $(document).ready(function() {
     var firstPair = seriesData[0];
     ok(firstPair.timestamp !== undefined, "timestamp property is undefined");
     ok(firstPair.value !== undefined, "value property is undefined");
+
+    ok(!isNaN(firstPair.timestamp), "timestamp is NaN");
+    ok(!isNaN(firstPair.value), "value is NaN");
   });
 
   module("Sensor seriesData", {

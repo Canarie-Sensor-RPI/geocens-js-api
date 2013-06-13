@@ -87,7 +87,7 @@
           "x-api-key": options.api_key || this.service.api_key
         }
       }).done(function (data) {
-        var convertedData = $.map(data, function(index, value) {
+        var convertedData = $.map(data, function(value, index) {
           return {
             timestamp: Date.parse(value.id),
             value: parseFloat(value.reading)
