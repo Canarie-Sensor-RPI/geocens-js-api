@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GeoCENS JS API Test Example</title>
+  <style>
+    body {
+      width: 50%;
+      margin: 0 auto;
+      padding-bottom: 5em;
+    }
+
+    .code {
+      border: 1px solid #555;
+      background-color: #FFE;
+      display: block;
+      max-width: 80%;
+    }
+  </style>
+</head>
+<body>
+<h1>GeoCENS JS API Interactive Tutorial</h1>
+
+<p>The GeoCENS JavaScript API allows developers to retrieve data from the GeoCENS Data Service. Here are a few interactive examples.</p>
+
+<p>Note: This tutorial may stop working if the API key is revoked or the data is moved.</p>
+
+<h2>Include the Libraries</h2>
+
+<p>The JS API requires jQuery 1.10.1 or newer. Be sure to include it before including the GeoCENS JS API.</p>
+
+<pre class="code">
+
+  &lt;script src="jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+  &lt;script src="geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+
+</pre>
+
+<script src="../test/vendor/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="../geocens.js" type="text/javascript" charset="utf-8"></script>
+
+
+<h2>Create a Service Object</h2>
+
+<p>A service object allows you to retrieve specific sensors from the GeoCENS Data Service. You will need an account with the GeoCENS Data Service to generate an API token key; this key allows you to retrieve data from the Restful API. A registration page for the Data Service is coming soon.</p>
+
+<p>Creating a service object is simple:</p>
+
+<pre class="code">
+
+  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+  var service = new Geocens.DataService({
+    api_key: api_key
+  });
+
+</pre>
+<button id="example_one">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_one").on("click", function() {
+      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      console.log("Example One", service);
+
+      alert("service: " + service.path + "\n"
+        + "key: " + service.api_key);
+    });
+  }());
+</script>
+
+<h2>Retrieve a Sensor</h2>
+
+<p>With a Service object, we can now retrieve a sensor. There are two identifiers for each sensor: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the sensor.</p>
+
+<p>Once we have the sensor, we can get the sensor attributes using the <code>attributes()</code> method.</p>
+
+<pre class="code">
+
+  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+  var service = new Geocens.DataService({
+    api_key: api_key
+  });
+
+  service.getSensor({
+    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    done: function(sensor) {
+      console.log("Example Two", sensor);
+      alert(JSON.stringify(sensor.attributes()));
+    }
+  });
+
+</pre>
+<button id="example_two">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_two").on("click", function() {
+      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getSensor({
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: function(sensor) {
+          console.log("Example Two", sensor);
+          alert(JSON.stringify(sensor.attributes()));
+        }
+      });
+    });
+  }());
+</script>
+
+<h2>Retrieve a Sensor Time Series</h2>
+
+<p>The main use case of the JS API is retrieving observations from sensors, and this can be done using the <code>getTimeSeries()</code> method.</p>
+
+<pre class="code">
+
+  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+  var goGetObservations = function(sensor) {
+    sensor.getTimeSeries({
+      done: function(seriesData) {
+        console.log("Example Three", seriesData);
+        alert(JSON.stringify(seriesData));
+      }
+    });
+  };
+
+  var service = new Geocens.DataService({
+    api_key: api_key
+  });
+
+  service.getSensor({
+    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    done: goGetObservations
+  });
+
+</pre>
+<button id="example_three">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_three").on("click", function() {
+
+      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+      var goGetObservations = function(sensor) {
+        sensor.getTimeSeries({
+          done: function(seriesData) {
+            console.log("Example Three", seriesData);
+            alert(JSON.stringify(seriesData));
+          }
+        });
+      };
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getSensor({
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: goGetObservations
+      });
+
+    });
+  }());
+</script>
+
+</body>
+</html>
