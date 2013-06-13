@@ -30,19 +30,19 @@ $(document).ready(function() {
   module("Sensor GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";
-      var sensor_id     = "32_character_sensor_id",
-          datastream_id = "32_character_datastream_id";
+      this.sensor_id     = "32_character_sensor_id";
+      this.datastream_id = "32_character_datastream_id";
 
       // Path to resource on Data Service
       var basePath  = Geocens.DataService.path;
-      this.api_path = basePath + "datastreams/" + datastream_id + "/records";
+      this.api_path = basePath + "datastreams/" + this.datastream_id + "/records";
 
       // Create service, sensor
       var service = new Geocens.DataService({ api_key: this.api_key });
       this.sensor = new Geocens.Sensor({
         sensor_type:   "DataService",
-        sensor_id:     sensor_id,
-        datastream_id: datastream_id
+        sensor_id:     this.sensor_id,
+        datastream_id: this.datastream_id
       });
       this.sensor.service = service;
 
@@ -89,6 +89,31 @@ $(document).ready(function() {
 
     xhr.restore();
 
+  });
+
+  test('makes a request for the records', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.sensor.getTimeSeries();
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0]));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var records_path = Geocens.DataService.path + "datastreams/" + this.datastream_id + "/records";
+
+    equal(request.url, records_path, "Request not made for records resource");
+
+    xhr.restore();
   });
 
   test('returns timestamp/value array', 5, function() {
