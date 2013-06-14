@@ -1,11 +1,10 @@
-// REMOVE
 $(document).ready(function() {
 
-  module("Sensor");
+  module("Datastream");
 
   test("returns attributes object", 1, function() {
-    var sensor = new Geocens.Sensor();
-    ok(sensor.attributes() instanceof Object, "attributes is not object");
+    var datastream = new Geocens.Datastream();
+    ok(datastream.attributes() instanceof Object, "attributes is not object");
   });
 
   test("attributes returns initialization options", 2, function() {
@@ -13,22 +12,14 @@ $(document).ready(function() {
       unit: "celcius",
       phenName: "airtemperature"
     };
-    var sensor = new Geocens.Sensor(options);
-    var attributes = sensor.attributes();
+    var datastream = new Geocens.Datastream(options);
+    var attributes = datastream.attributes();
 
     equal(attributes.unit, options.unit);
     equal(attributes.phenName, options.phenName);
   });
 
-  test("metadata is no-op for data service sensors", 1, function() {
-    var sensor = new Geocens.Sensor({
-      sensor_type: "DataService"
-    });
-
-    equal(sensor.metadata(), undefined, "Data Service sensor metadata is not a no-op");
-  });
-
-  module("Sensor GetTimeSeries", {
+  module("Datastream GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";
       this.sensor_id     = "32_character_sensor_id";
@@ -38,14 +29,13 @@ $(document).ready(function() {
       var basePath  = Geocens.DataService.path;
       this.api_path = basePath + "datastreams/" + this.datastream_id + "/records";
 
-      // Create service, sensor
+      // Create service, datastream
       var service = new Geocens.DataService({ api_key: this.api_key });
-      this.sensor = new Geocens.Sensor({
-        sensor_type:   "DataService",
+      this.datastream = new Geocens.Datastream({
         sensor_id:     this.sensor_id,
         datastream_id: this.datastream_id
       });
-      this.sensor.service = service;
+      this.datastream.service = service;
 
       this.server = sinon.fakeServer.create();
     },
@@ -62,7 +52,7 @@ $(document).ready(function() {
     var callback = this.spy();
 
     // Retrieve time series
-    this.sensor.getTimeSeries({
+    this.datastream.getTimeSeries({
       done: callback
     });
 
@@ -80,7 +70,7 @@ $(document).ready(function() {
     };
 
     // Retrieve time series
-    this.sensor.getTimeSeries();
+    this.datastream.getTimeSeries();
 
     equal(1, requests.length, "Fake server did not receive request");
 
@@ -101,7 +91,7 @@ $(document).ready(function() {
     };
 
     // Retrieve time series
-    this.sensor.getTimeSeries();
+    this.datastream.getTimeSeries();
 
     // Return records
     requests[0].respond(200, { "Content-Type": "application/json" },
@@ -124,7 +114,7 @@ $(document).ready(function() {
     var seriesData;
 
     // Retrieve time series
-    this.sensor.getTimeSeries({
+    this.datastream.getTimeSeries({
       done: function(data) { seriesData = data; }
     });
 
@@ -140,7 +130,7 @@ $(document).ready(function() {
     ok(!isNaN(firstPair.value), "value is NaN");
   });
 
-  module("Sensor seriesData", {
+  module("Datastream seriesData", {
     setup: function () {
       var api_key       = "your_32_character_api_key",
           sensor_id     = "32_character_sensor_id",
@@ -150,14 +140,13 @@ $(document).ready(function() {
       var basePath  = Geocens.DataService.path;
       this.api_path = basePath + "datastreams/" + datastream_id + "/records";
 
-      // Create service, sensor
+      // Create service, datastream
       var service = new Geocens.DataService({ api_key: api_key });
-      this.sensor = new Geocens.Sensor({
-        sensor_type:   "DataService",
+      this.datastream = new Geocens.Datastream({
         sensor_id:     sensor_id,
         datastream_id: datastream_id
       });
-      this.sensor.service = service;
+      this.datastream.service = service;
 
       this.server = sinon.fakeServer.create();
     },
@@ -168,7 +157,7 @@ $(document).ready(function() {
   });
 
   test('returns no data when no time series data has been retrieved', 2, function() {
-    var data = this.sensor.seriesData();
+    var data = this.datastream.seriesData();
 
     ok(data instanceof Array, 'seriesData is not an array');
     equal(data.length, 0, 'seriesData is not empty');
@@ -180,11 +169,11 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.TimeSeries[0])]);
 
     // Retrieve time series
-    this.sensor.getTimeSeries();
+    this.datastream.getTimeSeries();
 
     this.server.respond();
 
-    var data = this.sensor.seriesData();
+    var data = this.datastream.seriesData();
 
     equal(data.length, 2, 'seriesData is empty');
   });
@@ -193,7 +182,7 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     // Retrieve first time series
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
-    this.sensor.getTimeSeries({
+    this.datastream.getTimeSeries({
       start: new Date("2013-01-01 00:00:00Z"),
       end:   new Date("2013-05-28 00:00:00Z")
     });
@@ -202,13 +191,13 @@ test('returns data when time series data has been retrieved multiple times', 2, 
     // Retrieve second time series
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[1])]);
-    this.sensor.getTimeSeries({
+    this.datastream.getTimeSeries({
       start: new Date("2012-01-01 00:00:00Z"),
       end:   new Date("2012-05-28 00:00:00Z")
     });
     this.server.respond();
 
-    var data = this.sensor.seriesData();
+    var data = this.datastream.seriesData();
 
     equal(data.length, 4, 'seriesData is empty');
 
