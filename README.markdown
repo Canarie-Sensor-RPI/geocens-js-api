@@ -16,39 +16,54 @@ For a web page, include the `geocens.js` file in a script tag:
 
 Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service.
 
-In this example, we will retrieve data from a sensor. First, we connect to the Data Service and download the sensor information:
+In this example, we will retrieve a datastream. First, we connect to the Data Service and download the datastream information:
 
-		Geocens.DataService.getSensor({
+		Geocens.DataService.getDatastream({
 			api_key: api_key,
 			sensor_id: sensor_id,
 			datastream_id: datastream_id,
-			done: function (sensor) {
-				window.newSensor = sensor;
+			done: function (datastream) {
+				window.newDatastream = datastream;
 			}
 		});
 
-This provides us with a `Sensor` object in the `done` callback. We can retrieve properties for the Sensor:
+This provides us with a `Datastream` object in the `done` callback. We can retrieve properties for the Datastream:
 
-		sensor.attributes();
+		datastream.attributes();
 
 Which returns an object with the properties:
 
 		{
-			datastream_id: "4e1552900482a04b8850e4c4b097b690",
-			latitude: 51.000,
-			longitude: -114.000,
-			property: "airtemperature",
-			sensor_id: "d0bcf2894edc50a5160c52a4015bc768",
-			sensor_type: "DataService",
-			service_url: "http://example.com/data_service",
-			unit: "celcius",
-			user: "bob@example.com",
-			user_id: "4b9bb80620f03eb3719e0a061c14283d"
+			uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+			id: "carbonMonoxide",
+			sensor: {
+				id: "5C-86-4A-00-2C-9E",
+				user: "bob@example.com",
+				uid: "4ddecd5124661f9442cfca8be23f8dda",
+				altitude: 1100,
+				samplingrate: 0,
+				loc: [51,-114],
+				title: "Our first integration Testing",
+				height: 0,
+				nickName: "Alpha",
+				description: "",
+				last_time_online: "2012-09-18T21:04:40",
+				phens: [
+					"airtemperature",
+					"relatedhumidity",
+					"airquality",
+					"hydrogentest",
+					"hydrogentest1Name"
+				]
+			},
+			unit: "ppm",
+			phenName: "airquality",
+			user: "bob@example.com"
 		}
 
-We can also use the Sensor object to retrieve the latest time series observations:
+We can also use the Datastream object to retrieve the latest time series records:
 
-		sensor.getTimeSeries({
+		datastream.getTimeSeries({
 			done: function (seriesData) {
 				window.seriesData = seriesData;
 			}
@@ -56,7 +71,7 @@ We can also use the Sensor object to retrieve the latest time series observation
 
 By default, `getTimeSeries()` will retrieve all observation values from the Data Service. (Support for filters is coming soon.)
 
-The `getTimeSeries()` method will cache the results in the Sensor object, and return an array of objects:
+The `getTimeSeries()` method will cache the results in the Datastream object, and return an array of objects:
 
 		[{
 			timestamp: 1356998400000,
@@ -94,64 +109,72 @@ Define a Data Service object with your Data Service API key:
 			api_key: "your_32_character_api_key"
 		});
 
-#### Geocens.DataService.getSensor
+#### Geocens.DataService.getDatastream
 
-Use a Data Service object to retrieve a singular sensor with its sensor ID and datastream ID:
+Use a Data Service object to retrieve a singular datastream with its sensor ID and datastream ID:
 
-		dsSource.getSensor({
+		dsSource.getDatastream({
 			sensor_id: "32_character_sensor_id",
 			datastream_id: "32_character_datastream_id",
-			done: function (sensor) {
-				window.sensor = sensor;
+			done: function (datastream) {
+				window.datastream = datastream;
 			}
 		});
 
 These can be combined:
 
-		Geocens.DataService.getSensor({
+		Geocens.DataService.getDatastream({
 			api_key: "your_32_character_api_key",
 			sensor_id: "32_character_sensor_id",
 			datastream_id: "32_character_datastream_id",
-			done: function (sensor) {
-				window.sensor = sensor;
+			done: function (datastream) {
+				window.datastream = datastream;
 			}
 		});
 
-The `done` option will return the Sensor object as the first parameter after the metadata has been retrieved.
+The `done` option will return the Datastream object as the first parameter after the metadata has been retrieved.
 
-#### Sensor.attributes
+#### Datastream.attributes
 
-With a Sensor object, the basic metadata properties can be retrieved:
+With a Datastream object, the basic metadata properties can be retrieved:
 
-		sensor.attributes();
+		datastream.attributes();
 
-Example attributes for a sensor from GeoCENS Data Service:
+Example attributes for a datastream from GeoCENS Data Service:
 
 		{
-			datastream_id: "4e1552900482a04b8850e4c4b097b690",
-			latitude: 51.000,
-			longitude: -114.000,
-			property: "airtemperature",
-			sensor_id: "d0bcf2894edc50a5160c52a4015bc768",
-			sensor_type: "DataService",
-			service_url: "http://example.com/data_service",
-			unit: "celcius",
-			user: "bob@example.com",
-			user_id: "4b9bb80620f03eb3719e0a061c14283d"
+			uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+			id: "carbonMonoxide",
+			sensor: {
+				id: "5C-86-4A-00-2C-9E",
+				user: "bob@example.com",
+				uid: "4ddecd5124661f9442cfca8be23f8dda",
+				altitude: 1100,
+				samplingrate: 0,
+				loc: [51,-114],
+				title: "Our first integration Testing",
+				height: 0,
+				nickName: "Alpha",
+				description: "",
+				last_time_online: "2012-09-18T21:04:40",
+				phens: [
+					"airtemperature",
+					"relatedhumidity",
+					"airquality",
+					"hydrogentest",
+					"hydrogentest1Name"
+				]
+			},
+			unit: "ppm",
+			phenName: "airquality",
+			user: "bob@example.com"
 		}
 
-#### Sensor.metadata
+#### Datastream.getTimeSeries
 
-For Data Service Sensors, the method is a no-op:
+The time series observations can be retrieved:
 
-		var sensorMetadata = sensor.metadata();
-		// null
-
-#### Sensor.getTimeSeries
-
-For all Sensors, the time series observations can be retrieved:
-
-		sensor.getTimeSeries({
+		datastream.getTimeSeries({
 			done: function (seriesData) {
 				window.seriesData = seriesData;
 			}
@@ -178,11 +201,11 @@ The `getTimeSeries` method will return an array of time series objects:
 
 The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
 
-If the `getTimeSeries` method is called multiple times (with the same or different options) then the results will be merged and can be retrieved with `Sensor.seriesData()`.
+If the `getTimeSeries` method is called multiple times (with the same or different options) then the results will be merged and can be retrieved with `datastream.seriesData()`.
 
-#### Sensor.seriesData
+#### Datastream.seriesData
 
-Retrieve a sorted array of timeseries objects for a Sensor, based on data already retrieved by `getTimeSeries()` operations. If `getTimeSeries()` has not yet been called, `seriesData()` will return an empty array.
+Retrieve a sorted array of timeseries objects for a datastream, based on data already retrieved by `getTimeSeries()` operations. If `getTimeSeries()` has not yet been called, `seriesData()` will return an empty array.
 
 #### Data Service Customization
 
