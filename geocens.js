@@ -17,7 +17,7 @@
   Geocens = root.Geocens = {};
 
   // Current library version
-  Geocens.VERSION = 'alpha1';
+  Geocens.VERSION = '0.1';
 
   // Require jQuery into `$` variable
   Geocens.$ = root.jQuery || root.$;
