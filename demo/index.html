@@ -73,11 +73,11 @@
   }());
 </script>
 
-<h2>Retrieve a Sensor</h2>
+<h2>Retrieve a Datastream</h2>
 
-<p>With a Service object, we can now retrieve a sensor. There are two identifiers for each sensor: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the sensor.</p>
+<p>With a Datastream object, we can now retrieve a datastream. There are two identifiers for each datastream: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the datastream.</p>
 
-<p>Once we have the sensor, we can get the sensor attributes using the <code>attributes()</code> method.</p>
+<p>Once we have the datastream, we can get the datastream attributes using the <code>attributes()</code> method.</p>
 
 <pre class="code">
 
@@ -87,12 +87,12 @@
     api_key: api_key
   });
 
-  service.getSensor({
+  service.getDatastream({
     sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
     datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
-    done: function(sensor) {
-      console.log("Example Two", sensor);
-      alert(JSON.stringify(sensor.attributes()));
+    done: function(datastream) {
+      console.log("Example Two", datastream);
+      alert(JSON.stringify(datastream.attributes()));
     }
   });
 
@@ -107,19 +107,19 @@
         api_key: api_key
       });
 
-      service.getSensor({
+      service.getDatastream({
         sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
         datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
-        done: function(sensor) {
-          console.log("Example Two", sensor);
-          alert(JSON.stringify(sensor.attributes()));
+        done: function(datastream) {
+          console.log("Example Two", datastream);
+          alert(JSON.stringify(datastream.attributes()));
         }
       });
     });
   }());
 </script>
 
-<h2>Retrieve a Sensor Time Series</h2>
+<h2>Retrieve a Datastream Time Series</h2>
 
 <p>The main use case of the JS API is retrieving observations from sensors, and this can be done using the <code>getTimeSeries()</code> method.</p>
 
@@ -127,8 +127,8 @@
 
   var api_key = "57378dc18d74bef1051312e29a26f0b3";
 
-  var goGetObservations = function(sensor) {
-    sensor.getTimeSeries({
+  var goGetObservations = function(datastream) {
+    datastream.getTimeSeries({
       done: function(seriesData) {
         console.log("Example Three", seriesData);
         alert(JSON.stringify(seriesData));
@@ -140,7 +140,7 @@
     api_key: api_key
   });
 
-  service.getSensor({
+  service.getDatastream({
     sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
     datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
     done: goGetObservations
@@ -154,8 +154,8 @@
 
       var api_key = "57378dc18d74bef1051312e29a26f0b3";
 
-      var goGetObservations = function(sensor) {
-        sensor.getTimeSeries({
+      var goGetObservations = function(datastream) {
+        datastream.getTimeSeries({
           done: function(seriesData) {
             console.log("Example Three", seriesData);
             alert(JSON.stringify(seriesData));
@@ -167,7 +167,7 @@
         api_key: api_key
       });
 
-      service.getSensor({
+      service.getDatastream({
         sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
         datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
         done: goGetObservations
