@@ -223,6 +223,42 @@
       }
     },
 
+    getDatastream: function(options) {
+      if (options === undefined) {
+        options = {};
+      }
+      var service = this;
+
+      options.done = options.done || function() {};
+      options.api_key = options.api_key || service.api_key;
+
+      var sensor_path = this.path + "sensors/" + options.sensor_id;
+      var datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
+
+      // Retrieve sensor resource
+      service.ajax.get({
+        path: sensor_path,
+        api_key: options.api_key
+      }).done(function (sensorData) {
+
+        // Retrieve datastream resource
+        service.ajax.get({
+          path: datastream_path,
+          api_key: options.api_key
+        }).done(function (datastreamData) {
+          // Merge data responses
+          $.extend(sensorData, datastreamData, {
+            datastream_id: options.datastream_id,
+            sensor_id:     options.sensor_id
+          });
+          var datastream = new Datastream(sensorData);
+          datastream.service = service;
+          options.done(datastream);
+        });
+      });
+    },
+
+    // REMOVE
     getSensor: function(options) {
       if (options === undefined) {
         options = {};
