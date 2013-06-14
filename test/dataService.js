@@ -16,7 +16,7 @@ $(document).ready(function() {
     Geocens.DataService.setPath(originalPath);
   });
 
-  module("Data Service with getSensor", {
+  module("Data Service with getDatastream", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
       this.sensor_id     = "32_character_sensor_id";
@@ -33,7 +33,7 @@ $(document).ready(function() {
     }
   });
 
-  test('makes a request for the sensor', 2, function() {
+  test('makes a request for the sensor resource', 2, function() {
     var xhr = sinon.useFakeXMLHttpRequest();
     var requests = [];
 
@@ -41,8 +41,8 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id
@@ -66,7 +66,7 @@ $(document).ready(function() {
     xhr.restore();
   });
 
-  test('makes a request for the datastream', 2, function() {
+  test('makes a request for the datastream resource', 2, function() {
     var xhr = sinon.useFakeXMLHttpRequest();
     var requests = [];
 
@@ -74,8 +74,8 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id
@@ -107,8 +107,8 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id
@@ -124,16 +124,16 @@ $(document).ready(function() {
 
   });
 
-  test('returns a "Sensor" object', 2, function() {
-    var newSensor;
+  test('returns a "Datastream" object', 2, function() {
+    var newDatastream;
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id,
-      done: function (sensor) {
-        newSensor = sensor;
+      done: function (datastream) {
+        newDatastream = datastream;
       }
     });
 
@@ -144,21 +144,21 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
-    ok(newSensor !== undefined, "Sensor was not defined");
-    // If it looks and acts like a Sensor object…
-    ok(newSensor.attributes !== undefined, "Sensor does not respond to attributes()");
+    ok(newDatastream !== undefined, "Datastream was not defined");
+    // If it looks and acts like a Datastream object…
+    ok(newDatastream.attributes !== undefined, "Datastream does not respond to attributes()");
   });
 
-  test('sets the `service` property for the Sensor returned', 1, function() {
-    var newSensor;
+  test('sets the `service` property for the Datastream returned', 1, function() {
+    var newDatastream;
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id,
-      done: function (sensor) {
-        newSensor = sensor;
+      done: function (datastream) {
+        newDatastream = datastream;
       }
     });
 
@@ -169,19 +169,19 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
-    ok(newSensor.service !== undefined, "Sensor service was not defined");
+    ok(newDatastream.service !== undefined, "Datastream service was not defined");
   });
 
-  test('sets the `datastream_id` and `sensor_id` properties for the Sensor returned', 2, function() {
-    var newSensor;
+  test('sets the `datastream_id` and `sensor_id` properties for the Datastream returned', 2, function() {
+    var newDatastream;
 
-    // Retrieve sensor
-    Geocens.DataService.getSensor({
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id,
-      done: function (sensor) {
-        newSensor = sensor;
+      done: function (datastream) {
+        newDatastream = datastream;
       }
     });
 
@@ -192,13 +192,11 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
-    equal(newSensor.datastream_id, this.datastream_id, "Sensor datastream id was not defined");
-    equal(newSensor.sensor_id, this.sensor_id, "Sensor id was not defined");
+    equal(newDatastream.datastream_id, this.datastream_id, "Datastream id was not defined");
+    equal(newDatastream.sensor_id, this.sensor_id, "Sensor id was not defined");
   });
 
-
-
-  module("Init Data Service, then getSensor", {
+  module("Init Data Service, then getDatastream", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
       this.sensor_id     = "32_character_sensor_id";
@@ -223,12 +221,12 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // Retrieve sensor
+    // Retrieve datastream
     var source = new Geocens.DataService({
       api_key: this.api_key
     });
 
-    source.getSensor({
+    source.getDatastream({
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id
     });
@@ -248,19 +246,19 @@ $(document).ready(function() {
     equal(request.requestHeaders["x-api-key"], this.api_key, "API mismatch");
   });
 
-  test('returns a "Sensor" object', 2, function() {
-    var newSensor;
+  test('returns a "Datastream" object', 2, function() {
+    var newDatastream;
 
-    // Retrieve sensor
+    // Retrieve datastream
     var source = new Geocens.DataService({
       api_key: this.api_key
     });
 
-    source.getSensor({
+    source.getDatastream({
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id,
-      done: function (sensor) {
-        newSensor = sensor;
+      done: function (datastream) {
+        newDatastream = datastream;
       }
     });
 
@@ -271,24 +269,24 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
-    ok(newSensor !== undefined, "Sensor was not defined");
-    // If it looks and acts like a Sensor object…
-    ok(newSensor.attributes !== undefined, "Sensor does not respond to attributes()");
+    ok(newDatastream !== undefined, "Datastream was not defined");
+    // If it looks and acts like a Datastream object…
+    ok(newDatastream.attributes !== undefined, "Datastream does not respond to attributes()");
   });
 
-  test('sets the `service` property for the Sensor returned', 1, function() {
-    var newSensor;
+  test('sets the `service` property for the Datastream returned', 1, function() {
+    var newDatastream;
 
-    // Retrieve sensor
+    // Retrieve datastream
     var source = new Geocens.DataService({
       api_key: this.api_key
     });
 
-    source.getSensor({
+    source.getDatastream({
       sensor_id:     this.sensor_id,
       datastream_id: this.datastream_id,
-      done: function (sensor) {
-        newSensor = sensor;
+      done: function (datastream) {
+        newDatastream = datastream;
       }
     });
 
@@ -299,7 +297,7 @@ $(document).ready(function() {
                         JSON.stringify(Fixtures.DataService.Datastream)]);
     this.server.respond();
 
-    ok(newSensor.service !== undefined, "Sensor service was not defined");
+    ok(newDatastream.service !== undefined, "Datastream service was not defined");
   });
 
 });

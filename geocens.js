@@ -17,7 +17,7 @@
   Geocens = root.Geocens = {};
 
   // Current library version
-  Geocens.VERSION = 'alpha1';
+  Geocens.VERSION = '0.1';
 
   // Require jQuery into `$` variable
   Geocens.$ = root.jQuery || root.$;
@@ -29,10 +29,10 @@
     return this;
   };
 
-  // Geocens.Sensor
-  // --------------
+  // Geocens.Datastream
+  // ------------------
   //
-  var Sensor = Geocens.Sensor = function(options) {
+  var Datastream = Geocens.Datastream = function(options) {
     // Handle undefined options
     if (options === undefined) {
       options = {};
@@ -44,15 +44,15 @@
     this._data = [];
   };
 
-  // Extend Sensor object (actually function) prototype with new methods and
+  // Extend Datasteam object (actually function) prototype with new methods and
   // properties
-  jQuery.extend(Sensor.prototype, {
+  jQuery.extend(Datastream.prototype, {
     // Respond to call for attributes
     attributes: function() {
       return this._attributes;
     },
 
-    // Merge an array into currently cached time series data for the sensor
+    // Merge an array into currently cached time series data for the datastream
     cache: function(data) {
       this._data = this._data.concat(data);
 
@@ -70,9 +70,9 @@
       return this._data;
     },
 
-    // Retrieve time series data for the sensor
+    // Retrieve time series data for the datastream
     getTimeSeries: function(options) {
-      var sensor = this;
+      var datastream = this;
 
       if (options === undefined) {
         options = {};
@@ -96,14 +96,11 @@
           };
         });
 
-        sensor.cache(convertedData);
+        datastream.cache(convertedData);
         options.done(convertedData);
       });
 
     },
-
-    // Return sensorML documents
-    metadata: function() {},
 
     // Return cached time series data
     seriesData: function() {
@@ -143,7 +140,7 @@
       }
     },
 
-    getSensor: function(options) {
+    getDatastream: function(options) {
       if (options === undefined) {
         options = {};
       }
@@ -171,9 +168,9 @@
             datastream_id: options.datastream_id,
             sensor_id:     options.sensor_id
           });
-          var sensor = new Sensor(sensorData);
-          sensor.service = service;
-          options.done(sensor);
+          var datastream = new Datastream(sensorData);
+          datastream.service = service;
+          options.done(datastream);
         });
       });
     },
