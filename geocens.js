@@ -80,6 +80,14 @@
 
       options.done = options.done || function() {};
 
+      var params = {
+        "detail": true
+      };
+
+      if (options.limit !== undefined && isFinite(options.limit)) {
+        params["limit"] = options.limit;
+      }
+
       var path = this.service.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
@@ -88,9 +96,7 @@
         headers: {
           "x-api-key": options.api_key || this.service.api_key
         },
-        data: {
-          "detail": true
-        }
+        data: params
       }).done(function (data) {
         var convertedData = $.map(data, function(value, index) {
           return {

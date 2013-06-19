@@ -107,6 +107,33 @@ $(document).ready(function() {
     xhr.restore();
   });
 
+  test('supports limits on requests', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.datastream.getTimeSeries({
+      limit: 1
+    });
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0]));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var matches = request.url.match("limit=1");
+
+    ok(matches !== null, "limit was not specified");
+
+    xhr.restore();
+  });
+
   test('returns timestamp/value array', 5, function() {
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);

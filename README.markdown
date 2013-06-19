@@ -175,16 +175,21 @@ Example attributes for a datastream from GeoCENS Data Service:
 The time series observations can be retrieved:
 
 		datastream.getTimeSeries({
+			limit: 100,
 			done: function (seriesData) {
 				window.seriesData = seriesData;
 			}
 		});
 
-Support for filtering based on start and end dates or limits is coming soon.
+Support for filtering based on start and end dates is coming soon.
 
 #### done
 
 This callback function will return the series data as the first parameter after it has been retrieved.
+
+#### limit
+
+The number of records retrieved can be limited to this integer value.
 
 ##### Result
 
