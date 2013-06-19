@@ -189,7 +189,7 @@ This callback function will return the series data as the first parameter after 
 
 #### limit
 
-The number of records retrieved can be limited to this integer value.
+The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the *latest* value in a time range, not the *earliest*.
 
 ##### Result
 
