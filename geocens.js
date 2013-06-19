@@ -80,7 +80,7 @@
 
       options.done = options.done || function() {};
 
-      var path = this.service.path + "datastreams/" + this.datastream_id + "/records";
+      var path = this.service.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
         url: path,
