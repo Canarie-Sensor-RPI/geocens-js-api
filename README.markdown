@@ -176,6 +176,7 @@ The time series observations can be retrieved:
 
 		datastream.getTimeSeries({
 			limit: 100,
+			skip: 100,
 			done: function (seriesData) {
 				window.seriesData = seriesData;
 			}
@@ -190,6 +191,10 @@ This callback function will return the series data as the first parameter after 
 #### limit
 
 The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the *latest* value in a time range, not the *earliest*.
+
+#### limit
+
+Skip the latest *n* records returned from the Data Service (it sorts date *descending*). Can be used with `limit` to emulate pagination.
 
 ##### Result
 

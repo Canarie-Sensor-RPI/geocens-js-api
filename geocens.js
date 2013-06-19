@@ -88,6 +88,10 @@
         params["limit"] = options.limit;
       }
 
+      if (options.skip !== undefined && isFinite(options.skip)) {
+        params["skip"] = options.skip;
+      }
+
       var path = this.service.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
