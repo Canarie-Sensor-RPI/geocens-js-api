@@ -159,9 +159,12 @@ Example attributes for an observation from an OGC SOS:
 
 For Observations, the [sensorML document](http://www.opengeospatial.org/standards/sensorml) can be retrieved for additional metadata. It is then possible to use [jQuery's traversal API](http://api.jquery.com/category/traversing/) to navigate the result.
 
-		var sensorMetadata = observation.describe();
-		var intendedApp = sensorMetadata.find("classifier[name~='intendedApplication']").text();
-		// "water temperature monitoring"
+		observation.describe({
+			done: function (sensorML) {
+				var intendedApp = sensorML.find("classifier[name~='intendedApplication']").text();
+				// "water temperature monitoring"
+			}
+		});
 
 Note that the sensorML document may or may not include the `classifier` element; it is up to the user to determine useful data from the sensorML document.
 
