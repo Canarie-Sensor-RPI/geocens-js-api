@@ -14,7 +14,7 @@ For a web page, include the `geocens.js` file in a script tag:
 
 ## Getting Started
 
-Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service.
+Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service. An interactive demo is available in the `demo` directory.
 
 In this example, we will retrieve a datastream. First, we connect to the Data Service and download the datastream information:
 
@@ -99,7 +99,93 @@ The library can load data from either an [OGC SOS compatible service](http://www
 
 #### Geocens.SOS
 
-Coming soon.
+Define an OGC SOS object with the SOS URL:
+
+		var sosSource = new Geocens.SOS({
+			service_url: "http://www.example.com/sos"
+		});
+
+### Geocens.SOS.getObservation
+
+Use an OGC SOS object to retrieve SOS observation data, as set out by the [Observation and Measurement specification](http://www.opengeospatial.org/standards/om). Results returned are procedure-observation pairs that exist within the filter criteria. Procedures that have no data within the filter will not be returned. Results are filtered by SOS Offering (required), Observed Property (required), and bounding box (optional).
+
+		sosSource.getObservation({
+			offering: "sos_offering",
+			observed_property: "sos_property",
+			northwest: [51, -114],
+			southeast: [-51, 114],
+			done: function (observations) {
+				window.observations = observations;
+			}
+		});
+
+These can be combined:
+
+		Geocens.SOS.getObservation({
+			service_url: "http://www.example.com/sos",
+			offering: "sos_offering",
+			observed_property: "sos_property",
+			northwest: [51, -114],
+			southeast: [-51, 114],
+			done: function (observations) {
+				window.observations = observations;
+			}
+		});
+
+The `done` option will return an array of observation objects as the first parameter.
+
+TODO: Explain options
+
+#### Observation.attributes
+
+With an Observation object, the basic metadata properties can be retrieved:
+
+		observation.attributes();
+
+Example attributes for an observation from an OGC SOS:
+
+		{
+			latitude: 51.000,
+			longitude: -114.000,
+			offering: "temperature",
+			property: "urn:ogc:def:property:noaa:ndbc:water temperature",
+			sensor_id: "snr_301",
+			sensor_type: "SOS",
+			service_url: "http://example.com/sos",
+			unit: "celcius"
+		}
+
+#### Observation.describe
+
+For Observations, the [sensorML document](http://www.opengeospatial.org/standards/sensorml) can be retrieved for additional metadata. It is then possible to use [jQuery's traversal API](http://api.jquery.com/category/traversing/) to navigate the result.
+
+		var sensorMetadata = observation.describe();
+		var intendedApp = sensorMetadata.find("classifier[name~='intendedApplication']").text();
+		// "water temperature monitoring"
+
+Note that the sensorML document may or may not include the `classifier` element; it is up to the user to determine useful data from the sensorML document.
+
+#### Observation.getTimeSeries
+
+The time series records can be retrieved:
+
+		observation.getTimeSeries({
+			start: new Date("2013-01-01 00:00:00Z"),
+			end:   new Date("2013-05-28 00:00:00Z"),
+			done:  function (seriesData) {
+				window.seriesData = seriesData;
+			}
+		});
+
+TODO: Explain return format, options
+
+#### Translation Engine Customization
+
+The Translation Engine URL is hard-coded into the library. It is a GeoCENS proxy service that retrieves data from OGC SOS and provides easily-consumed data. Users can optionally override it:
+
+		Geocens.TranslationEngine.setPath("http://example.com/translation-engine/");
+
+After override, all new requests will use the new Translation Engine path.
 
 #### Geocens.DataService
 
