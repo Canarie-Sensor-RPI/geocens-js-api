@@ -177,5 +177,181 @@
   }());
 </script>
 
+<h2>Create an OGC SOS Service Object</h2>
+
+<p>OGC SOS Service Objects allow you to retrieve observation data.</p>
+
+<p>Creating an OGC SOS service object is simple:</p>
+
+<pre class="code">
+
+  var service = new Geocens.SOS({
+    service_url: "http://app.geocens.ca:8171/sos"
+  });
+
+</pre>
+<button id="example_four">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_four").on("click", function() {
+      var service = new Geocens.SOS({
+        service_url: "http://app.geocens.ca:8171/sos"
+      });
+
+      console.log("Example Four", service);
+
+      alert("service: " + service.path);
+    });
+  }());
+</script>
+
+<h2>Retrieve SOS Observations</h2>
+
+<p>Once we have a service object for the SOS, we can retrieve the SOS Observations for an Offering and Observed Property.</p>
+
+<pre class="code">
+
+  var service = new Geocens.SOS({
+    service_url: "http://app.geocens.ca:8171/sos"
+  });
+
+  service.getObservation({
+    offering: "Temperature",
+    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    done: function (observations) {
+      console.log("Example Five", observations);
+      alert(JSON.stringify(observations[0].attributes()));
+    }
+  });
+
+</pre>
+<button id="example_five">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_five").on("click", function() {
+      var service = new Geocens.SOS({
+        service_url: "http://app.geocens.ca:8171/sos"
+      });
+
+      service.getObservation({
+        offering: "Temperature",
+        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: function (observations) {
+          console.log("Example Five", observations);
+          alert(JSON.stringify(observations[0].attributes()));
+        }
+      });
+    });
+  }());
+</script>
+
+<h2>Retrieve an Observation Time Series</h2>
+
+<p>Each Observation object has a method for retrieving the series records.</p>
+
+<pre class="code">
+
+  var goGetRecords = function(observations) {
+    observations[0].getTimeSeries({
+      done: function(seriesData) {
+        console.log("Example Six", seriesData);
+        alert(JSON.stringify(seriesData));
+      }
+    });
+  };
+
+  var service = new Geocens.SOS({
+    service_url: "http://app.geocens.ca:8171/sos"
+  });
+
+  service.getObservation({
+    offering: "Temperature",
+    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    done: goGetRecords
+  });
+
+</pre>
+<button id="example_six">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_six").on("click", function() {
+
+      var goGetRecords = function(observations) {
+        observations[0].getTimeSeries({
+          done: function(seriesData) {
+            console.log("Example Six", seriesData);
+            alert(JSON.stringify(seriesData));
+          }
+        });
+      };
+
+      var service = new Geocens.SOS({
+        service_url: "http://app.geocens.ca:8171/sos"
+      });
+
+      service.getObservation({
+        offering: "Temperature",
+        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: goGetRecords
+      });
+
+    });
+  }());
+</script>
+
+<h2>Retrieve an Observation Sensor Descriptoin</h2>
+
+<p>Each Observation object has a method for retrieving the sensorML document for its procedure.</p>
+
+<pre class="code">
+
+  var goGetDescription = function(observations) {
+    observations[0].describe({
+      done: function(sensorML) {
+        console.log("Example Seven", sensorML);
+        alert(JSON.stringify(sensorML));
+      }
+    });
+  };
+
+  var service = new Geocens.SOS({
+    service_url: "http://app.geocens.ca:8171/sos"
+  });
+
+  service.getObservation({
+    offering: "Temperature",
+    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    done: goGetDescription
+  });
+
+</pre>
+<button id="example_seven">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_seven").on("click", function() {
+
+      var goGetDescription = function(observations) {
+        observations[0].describe({
+          done: function(sensorML) {
+            console.log("Example Seven", sensorML);
+            alert(JSON.stringify(sensorML));
+          }
+        });
+      };
+
+      var service = new Geocens.SOS({
+        service_url: "http://app.geocens.ca:8171/sos"
+      });
+
+      service.getObservation({
+        offering: "Temperature",
+        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: goGetDescription
+      });
+
+    });
+  }());
+</script>
+
 </body>
 </html>
