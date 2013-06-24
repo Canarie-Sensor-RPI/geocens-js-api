@@ -217,7 +217,7 @@
 
   service.getObservation({
     offering: "Temperature",
-    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
     done: function (observations) {
       console.log("Example Five", observations);
       alert(JSON.stringify(observations[0].attributes()));
@@ -235,7 +235,7 @@
 
       service.getObservation({
         offering: "Temperature",
-        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
         done: function (observations) {
           console.log("Example Five", observations);
           alert(JSON.stringify(observations[0].attributes()));
