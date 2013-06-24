@@ -107,12 +107,63 @@ $(document).ready(function() {
     equal(first.property, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Observed Property incorrect");
   });
 
-  module("Init OGC SOS, then getObservation", {});
+  module("Init OGC SOS, then getObservation", {
+    setup: function () {
+      this.server = sinon.fakeServer.create();
+    },
 
-  test('returns an array of "Observation" objects', 2, function() {
+    teardown: function () {
+      this.server.restore();
+    }
   });
 
-  test('sets the `service` property for the Observations returned', 1, function() {
+  test('returns an array of "Observation" objects', 1, function() {
+    var newObservations, service;
+
+    service = new Geocens.SOS({
+      service_url: "http://www.example.com/sos"
+    });
+
+    // Retrieve observation data
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: function (observations) {
+        newObservations = observations;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0])]);
+    this.server.respond();
+
+    ok(newObservations instanceof Array, "Data is not an array");
+  });
+
+  test('sets the `service` property for the Observations returned', 2, function() {
+    var newObservations, service;
+
+    service = new Geocens.SOS({
+      service_url: "http://www.example.com/sos"
+    });
+
+    // Retrieve observation data
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: function (observations) {
+        newObservations = observations;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0])]);
+    this.server.respond();
+
+    var first = newObservations[0];
+
+    ok(first !== undefined, "No observations returned");
+    ok(first.service !== undefined, "Observation service was not defined");
   });
 
 });
