@@ -221,6 +221,24 @@
       return this._attributes;
     },
 
+    // Merge an array into currently cached time series data for the observation
+    cache: function(data) {
+      this._data = this._data.concat(data);
+
+      // sort by timestamp
+      this._data.sort(function(a, b) {
+        if (a.timestamp < b.timestamp) {
+          return -1;
+        } else if (a.timestamp > b.timestamp) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      return this._data;
+    },
+
     // Convert Translation Engine output to array of values.
     // Example Series Data:
     //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
@@ -331,13 +349,20 @@
           traceHours: traceHours
         }
       }).done(function (data) {
-        options.done(observation.convertSeriesData(data));
+        var convertedData = observation.convertSeriesData(data);
+        observation.cache(convertedData);
+        options.done(convertedData);
       });
     },
 
     // Return most recent reading
     latest: function() {
       return this._data[this._data.length - 1];
+    },
+
+    // Return cached time series data
+    seriesData: function() {
+      return this._data;
     }
   });
 

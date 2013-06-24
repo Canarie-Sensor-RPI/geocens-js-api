@@ -500,4 +500,84 @@ $(document).ready(function() {
     ok(match !== -1, "lon was not specified");
   });
 
+  module("SOS Observation seriesData", {
+    setup: function () {
+      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+
+      this.observation = new Geocens.Observation({
+        service: service,
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        latitude: "51.07993",
+        longitude: "-114.131802",
+        procedure_id: "sensor 1"
+      });
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
+
+  test('returns no data when no time series data has been retrieved', 2, function() {
+    var data = this.observation.seriesData();
+
+    ok(data instanceof Array, 'seriesData is not an array');
+    equal(data.length, 0, 'seriesData is not empty');
+
+  });
+
+  test('returns data when time series data has been retrieved', 1, function() {
+    // Retrieve time series
+    this.observation.getTimeSeries();
+
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]]);
+    this.server.respond();
+
+    var data = this.observation.seriesData();
+
+    equal(data.length, 6, 'seriesData is empty');
+  });
+
+test('returns data when time series data has been retrieved multiple times', 2, function() {
+    // Retrieve first time series
+    this.observation.getTimeSeries({
+      start: new Date("2013-01-01 00:00:00Z"),
+      end:   new Date("2013-05-28 00:00:00Z")
+    });
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]]);
+    this.server.respond();
+
+    // Retrieve second time series
+
+    this.observation.getTimeSeries({
+      start: new Date("2012-01-01 00:00:00Z"),
+      end:   new Date("2012-05-28 00:00:00Z")
+    });
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[1]]);
+    this.server.respond();
+
+    var data = this.observation.seriesData();
+
+    equal(data.length, 12, 'seriesData is empty');
+
+    var sortedData = data.slice();
+    sortedData.sort(function(a, b) {
+      if (a.timestamp < b.timestamp) {
+        return -1;
+      } else if (a.timestamp > b.timestamp) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    deepEqual(data, sortedData, 'seriesData is not sorted by date');
+  });
+
 });

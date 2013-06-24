@@ -182,6 +182,11 @@ The time series records can be retrieved:
 
 TODO: Explain return format, options
 
+#### Observation.seriesData
+
+Retrieve a sorted array of timeseries objects for an SOS Observation, based on data already retrieved by `getTimeSeries()` operations. If `getTimeSeries()` has not yet been called, `seriesData()` will return an empty array.
+
+
 #### Translation Engine Customization
 
 The Translation Engine URL is hard-coded into the library. It is a GeoCENS proxy service that retrieves data from OGC SOS and provides easily-consumed data. Users can optionally override it:
