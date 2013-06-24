@@ -83,6 +83,35 @@ $(document).ready(function() {
     ok(callback.called, "Done was not called");
   });
 
+  test('sends the service URL', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      done: function() {}
+    });
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]);
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var matches = request.url.match($.param({
+      service: "http://www.example.com/sos"
+    }));
+
+    ok(matches !== null, "service was not specified");
+
+    xhr.restore();
+  });
+
 
 
 });

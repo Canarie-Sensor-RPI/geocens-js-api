@@ -238,7 +238,9 @@
       $.ajax({
         url: observation.service.path + "GetTimeSeries",
         type: 'GET',
-        data: {}
+        data: {
+          service: observation.service.service_url
+        }
       }).done(function (data) {
         options.done(observation.convertSeriesData(data));
       });
