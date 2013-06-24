@@ -68,6 +68,11 @@ window.Fixtures = {
       "number_response_sensor": "1",
       "number_all_sensor": "85"
     }
+    ],
+
+    TimeSeries: [
+    // 0
+    "Pressure,urn:ogc:def:property:noaa:ndbc:Atmospheric Pressure,snr_32st0,-19.713,-85.585,mb,2011|12|22|4|0|0|0|1015.0*2011|12|22|7|0|0|0|1014.0*2011|12|22|13|0|0|0|1016.0*2011|12|22|19|0|0|0|1015.0*2011|12|23|1|0|0|0|1016.0*2011|12|23|4|0|0|0|1016.0"
     ]
   },
 

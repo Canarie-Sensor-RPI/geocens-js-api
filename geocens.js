@@ -221,6 +221,29 @@
       return this._attributes;
     },
 
+    // Convert Translation Engine output to array of values
+    convertSeriesData: function(data) {
+      return [];
+    },
+
+    getTimeSeries: function(options) {
+      var observation = this;
+
+      if (options === undefined) {
+        options = {};
+      }
+
+      options.done = options.done || function() {};
+
+      $.ajax({
+        url: observation.service.path + "GetTimeSeries",
+        type: 'GET',
+        data: {}
+      }).done(function (data) {
+        options.done(observation.convertSeriesData(data));
+      });
+    },
+
     // Return most recent reading
     latest: function() {
       return this._data[this._data.length - 1];
