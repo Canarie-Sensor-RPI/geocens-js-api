@@ -197,4 +197,24 @@
 
   jQuery.extend(DataService.prototype, DataService);
 
+  // Geocens.SOS
+  // -------------------
+  //
+  var SOS = Geocens.SOS = function(options) {
+    // Handle undefined options
+    if (options === undefined) {
+      options = {};
+    }
+  };
+
+  jQuery.extend(SOS, {
+    // Default Translation Engine URL
+    path: "http://dataservice.geocens.ca/translation_engine/",
+
+    getObservation: function(options) {
+    }
+  });
+
+  jQuery.extend(SOS.prototype, SOS);
+
 }).call(this);
