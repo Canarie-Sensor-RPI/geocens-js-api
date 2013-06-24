@@ -63,7 +63,26 @@ $(document).ready(function() {
     ok(newObservations instanceof Array, "Data is not an array");
   });
 
-  test('sets the `service` property for the Observations returned', 1, function() {
+  test('sets the `service` property for the Observations returned', 2, function() {
+    var newObservations;
+
+    // Retrieve observation data
+    Geocens.SOS.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: function (observations) {
+        newObservations = observations;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0])]);
+    this.server.respond();
+
+    var first = newObservations[0];
+
+    ok(first !== undefined, "No observations returned");
+    ok(first.service !== undefined, "Observation service was not defined");
   });
 
   test('sets the `offering` and `observed_property` properties for the Observations returned', 2, function() {

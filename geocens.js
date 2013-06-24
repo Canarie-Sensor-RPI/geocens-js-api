@@ -212,8 +212,22 @@
     path: "http://dataservice.geocens.ca/translation_engine/",
 
     // Convert Translation Engine output to Objects
-    decode: function(observations) {
-      return [];
+    decode: function(data) {
+      var service = this;
+      var observations = data.observations[0];
+
+      var offeringIndex = observations.offeringIndex;
+      var propertyIndex = observations.propertyIndex;
+
+      var observationData = observations.data;
+
+      var obs = $.map(observationData, function (sensor) {
+        return {
+          service: service
+        };
+      });
+
+      return obs;
     },
 
     getObservation: function(options) {
@@ -228,8 +242,8 @@
       $.ajax({
         type: 'GET',
         url: this.path + "GetObservations"
-      }).done(function (observations) {
-        var converted = service.decode(observations);
+      }).done(function (data) {
+        var converted = service.decode(data);
         options.done(converted);
       });
     }
