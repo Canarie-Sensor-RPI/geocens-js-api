@@ -198,7 +198,7 @@
   jQuery.extend(DataService.prototype, DataService);
 
   // Geocens.Observation
-  // ------------------
+  // -------------------
   //
   var Observation = Geocens.Observation = function(options) {
     // Handle undefined options
@@ -267,11 +267,13 @@
           value:  parseFloat(pieces[7])
         };
 
-        var date = Date.UTC(observation.year, observation.month, observation.day, observation.hour, observation.minute, observation.second);
+        var date = Date.UTC(observation.year, observation.month,
+                            observation.day, observation.hour,
+                            observation.minute, observation.second);
 
         return {
           timestamp: date,
-          value: observation.value
+          value:     observation.value
         };
       });
 
@@ -339,14 +341,14 @@
         type: 'GET',
         dataType: 'text',
         data: {
-          lat: observation._attributes.latitude,
-          lon: observation._attributes.longitude,
-          offeringID: observation.offering,
-          procedureID: observation._attributes.procedure_id,
+          lat:          observation._attributes.latitude,
+          lon:          observation._attributes.longitude,
+          offeringID:   observation.offering,
+          procedureID:  observation._attributes.procedure_id,
           propertyName: observation.property,
-          service: observation.service.service_url,
-          time: time,
-          traceHours: traceHours
+          service:      observation.service.service_url,
+          time:         time,
+          traceHours:   traceHours
         }
       }).done(function (data) {
         var convertedData = observation.convertSeriesData(data);
@@ -387,29 +389,29 @@
     convertReadings: function(readings) {
       return $.map(readings, function(reading) {
         var time = new Date(reading.time);
+
         return {
           timestamp: time.getTime(),
-          value: parseFloat(reading.value)
+          value:     parseFloat(reading.value)
         };
       });
     },
 
     // Convert Translation Engine output to Objects
     decode: function(data) {
-      var service = this;
-      var observations = data.observations[0];
-
+      var service         = this;
+      var observations    = data.observations[0];
       var observationData = observations.data;
 
       var obs = $.map(observationData, function (data) {
         return new Geocens.Observation({
-          latitude: data.lat,
-          longitude: data.lon,
-          offering: observations.offeringID,
+          latitude:     data.lat,
+          longitude:    data.lon,
+          offering:     observations.offeringID,
           procedure_id: data.id,
-          property: observations.propertyName,
-          readings: service.convertReadings(data.readings),
-          service: service
+          property:     observations.propertyName,
+          readings:     service.convertReadings(data.readings),
+          service:      service
         });
       });
 
@@ -417,25 +419,26 @@
     },
 
     getObservation: function(options) {
+      var service = this;
+
       if (options === undefined) {
         options = {};
       }
-      var service = this;
 
-      options.done = options.done || function() {};
+      options.done        = options.done || function() {};
       options.service_url = options.service_url || service.service_url;
-      options.northwest = options.northwest || [90, -180];
-      options.southeast = options.southeast || [-90, 180];
+      options.northwest   = options.northwest || [90, -180];
+      options.southeast   = options.southeast || [-90, 180];
 
       // Retrieve sensor resource
       $.ajax({
         type: 'GET',
         url: this.path + "GetObservations",
         data: {
-          maxReturn: 10000,
-          offeringID: options.offering,
-          propertyName: options.property,
-          service: options.service_url,
+          maxReturn:      10000,
+          offeringID:     options.offering,
+          propertyName:   options.property,
+          service:        options.service_url,
           topleftLat:     options.northwest[0],
           topleftLon:     options.northwest[1],
           bottomrightLat: options.southeast[0],
