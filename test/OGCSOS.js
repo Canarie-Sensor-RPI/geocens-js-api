@@ -16,24 +16,23 @@ $(document).ready(function() {
     Geocens.SOS.setPath(originalPath);
   });
 
-  module("Data Service with getObservation", {
+  module("Data Service with getObservation xhr", {
     setup: function () {
-      this.server = sinon.fakeServer.create();
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
+
+      this.xhr.onCreate = function(request) {
+        requests.push(request);
+      };
     },
 
     teardown: function () {
-      this.server.restore();
+      this.xhr.restore();
     }
   });
 
-  test('makes a request for the observations', 10, function() {
-    var xhr = sinon.useFakeXMLHttpRequest();
-    var requests = [];
+  test('requests the observations', 10, function() {
     var ajaxSpy = sinon.spy($, 'ajax');
-
-    xhr.onCreate = function (request) {
-      requests.push(request);
-    };
 
     // Retrieve observations
     Geocens.SOS.getObservation({
@@ -43,12 +42,12 @@ $(document).ready(function() {
     });
 
     // Return observation data
-    requests[0].respond(200, { "Content-Type": "application/json" },
+    this.requests[0].respond(200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.SOS.Observations[0]));
 
-    equal(requests.length, 1, "Fake server did not receive request");
+    equal(this.requests.length, 1, "Fake server did not receive request");
 
-    var request = requests[0];
+    var request = this.requests[0];
     var observationsPath = Geocens.SOS.path + "GetObservations";
     var baseRequestUrl = request.url.split('?')[0];
 
@@ -65,18 +64,11 @@ $(document).ready(function() {
     equal(args.bottomrightLon, 180, "bottomrightLon mismatch");
     equal(args.maxReturn, 10000, "maxReturn mismatch");
 
-    xhr.restore();
     ajaxSpy.restore();
   });
 
-  test('makes a request for the observations with a bounding box', 6, function() {
-    var xhr = sinon.useFakeXMLHttpRequest();
-    var requests = [];
+  test('requests the observations with a bounding box', 6, function() {
     var ajaxSpy = sinon.spy($, 'ajax');
-
-    xhr.onCreate = function (request) {
-      requests.push(request);
-    };
 
     // Retrieve observations
     Geocens.SOS.getObservation({
@@ -88,12 +80,12 @@ $(document).ready(function() {
     });
 
     // Return observation data
-    requests[0].respond(200, { "Content-Type": "application/json" },
+    this.requests[0].respond(200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.SOS.Observations[0]));
 
-    equal(requests.length, 1, "Fake server did not receive request");
+    equal(this.requests.length, 1, "Fake server did not receive request");
 
-    var request = requests[0];
+    var request = this.requests[0];
     var observationsPath = Geocens.SOS.path + "GetObservations";
     var baseRequestUrl = request.url.split('?')[0];
 
@@ -106,8 +98,17 @@ $(document).ready(function() {
     equal(args.bottomrightLat, 40, "bottomrightLat mismatch");
     equal(args.bottomrightLon, -80, "bottomrightLon mismatch");
 
-    xhr.restore();
     ajaxSpy.restore();
+  });
+
+  module("Data Service with getObservation", {
+    setup: function () {
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
   });
 
   test('returns an array of "Observation" objects', 1, function() {
@@ -204,24 +205,23 @@ $(document).ready(function() {
     equal(latest.value, 39.859, "Value incorrect");
   });
 
-  module("Init OGC SOS, then getObservation", {
+  module("Init OGC SOS, then getObservation xhr", {
     setup: function () {
-      this.server = sinon.fakeServer.create();
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
+
+      this.xhr.onCreate = function(request) {
+        requests.push(request);
+      };
     },
 
     teardown: function () {
-      this.server.restore();
+      this.xhr.restore();
     }
   });
 
   test('makes a request for the observations', 10, function() {
-    var xhr = sinon.useFakeXMLHttpRequest();
-    var requests = [];
     var ajaxSpy = sinon.spy($, 'ajax');
-
-    xhr.onCreate = function (request) {
-      requests.push(request);
-    };
 
     var service;
 
@@ -236,12 +236,12 @@ $(document).ready(function() {
     });
 
     // Return observation data
-    requests[0].respond(200, { "Content-Type": "application/json" },
+    this.requests[0].respond(200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.SOS.Observations[0]));
 
-    equal(requests.length, 1, "Fake server did not receive request");
+    equal(this.requests.length, 1, "Fake server did not receive request");
 
-    var request = requests[0];
+    var request = this.requests[0];
     var observationsPath = Geocens.SOS.path + "GetObservations";
     var baseRequestUrl = request.url.split('?')[0];
 
@@ -258,8 +258,17 @@ $(document).ready(function() {
     equal(args.bottomrightLon, 180, "bottomrightLon mismatch");
     equal(args.maxReturn, 10000, "maxReturn mismatch");
 
-    xhr.restore();
     ajaxSpy.restore();
+  });
+
+  module("Init OGC SOS, then getObservation", {
+    setup: function () {
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
   });
 
   test('returns an array of "Observation" objects', 1, function() {
