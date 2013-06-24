@@ -207,6 +207,9 @@
     }
 
     this._attributes = options;
+    this.service     = options.service;
+    this.offering    = options.offering;
+    this.property    = options.property;
   };
 
   // Extend Observation object (actually function) prototype with new methods
@@ -243,11 +246,11 @@
       var observationData = observations.data;
 
       var obs = $.map(observationData, function (sensor) {
-        return {
+        return new Geocens.Observation({
           offering: observations.offeringID,
           property: observations.propertyName,
           service: service
-        };
+        });
       });
 
       return obs;

@@ -19,4 +19,18 @@ $(document).ready(function() {
     equal(attributes.property, options.property);
   });
 
+  test("init sets the service, offering, and property properties", 3, function() {
+    var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+    var options = {
+      service: service,
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature"
+    };
+    var observation = new Geocens.Observation(options);
+
+    equal(observation.service, service);
+    equal(observation.offering, options.offering);
+    equal(observation.property, options.property);
+  });
+
 });
