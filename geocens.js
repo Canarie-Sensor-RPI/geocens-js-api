@@ -216,13 +216,12 @@
       var service = this;
       var observations = data.observations[0];
 
-      var offeringIndex = observations.offeringIndex;
-      var propertyIndex = observations.propertyIndex;
-
       var observationData = observations.data;
 
       var obs = $.map(observationData, function (sensor) {
         return {
+          offering: observations.offeringID,
+          property: observations.propertyName,
           service: service
         };
       });
