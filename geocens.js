@@ -262,6 +262,7 @@
       $.ajax({
         url: observation.service.path + "GetTimeSeries",
         type: 'GET',
+        dataType: 'text',
         data: {
           lat: observation._attributes.latitude,
           lon: observation._attributes.longitude,
