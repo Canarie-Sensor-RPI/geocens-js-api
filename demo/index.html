@@ -253,6 +253,8 @@
 
   var goGetRecords = function(observations) {
     observations[0].getTimeSeries({
+      start_time: new Date("2012-01-01T00:00:00Z"),
+      end_time: new Date("2012-06-01T00:00:00Z"),
       done: function(seriesData) {
         console.log("Example Six", seriesData);
         alert(JSON.stringify(seriesData));
@@ -266,7 +268,7 @@
 
   service.getObservation({
     offering: "Temperature",
-    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
     done: goGetRecords
   });
 
@@ -278,6 +280,8 @@
 
       var goGetRecords = function(observations) {
         observations[0].getTimeSeries({
+          start_time: new Date("2012-01-01T00:00:00Z"),
+          end_time: new Date("2012-06-01T00:00:00Z"),
           done: function(seriesData) {
             console.log("Example Six", seriesData);
             alert(JSON.stringify(seriesData));
@@ -291,7 +295,7 @@
 
       service.getObservation({
         offering: "Temperature",
-        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
         done: goGetRecords
       });
 
@@ -320,7 +324,7 @@
 
   service.getObservation({
     offering: "Temperature",
-    observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
     done: goGetDescription
   });
 
@@ -345,7 +349,7 @@
 
       service.getObservation({
         offering: "Temperature",
-        observed_property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
         done: goGetDescription
       });
 
