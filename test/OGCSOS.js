@@ -16,9 +16,10 @@ $(document).ready(function() {
     }
   });
 
-  test('makes a request for the observations', 2, function() {
+  test('makes a request for the observations', 10, function() {
     var xhr = sinon.useFakeXMLHttpRequest();
     var requests = [];
+    var ajaxSpy = sinon.spy($, 'ajax');
 
     xhr.onCreate = function (request) {
       requests.push(request);
@@ -26,6 +27,7 @@ $(document).ready(function() {
 
     // Retrieve observations
     Geocens.SOS.getObservation({
+      service_url: "http://www.example.com/sos",
       offering: "Temperature",
       property: "urn:ogc:def:property:noaa:ndbc:Water Temperature"
     });
@@ -38,10 +40,23 @@ $(document).ready(function() {
 
     var request = requests[0];
     var observationsPath = Geocens.SOS.path + "GetObservations";
+    var baseRequestUrl = request.url.split('?')[0];
 
-    equal(request.url, observationsPath, "Request not made for observations");
+    equal(baseRequestUrl, observationsPath, "Request not made for observations");
+
+    var args = ajaxSpy.args[0][0].data;
+
+    equal(args.service, "http://www.example.com/sos", "Service URL mismatch");
+    equal(args.offeringID, "Temperature", "Offering mismatch");
+    equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Property mismatch");
+    equal(args.topLeftLat, undefined, "topLeftLat mismatch");
+    equal(args.topLeftLon, undefined, "topLeftLon mismatch");
+    equal(args.bottomRightLat, undefined, "bottomRightLat mismatch");
+    equal(args.bottomRightLon, undefined, "bottomRightLon mismatch");
+    equal(args.maxReturn, 10000, "maxReturn mismatch");
 
     xhr.restore();
+    ajaxSpy.restore();
   });
 
   test('returns an array of "Observation" objects', 1, function() {

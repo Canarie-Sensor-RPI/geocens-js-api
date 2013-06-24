@@ -205,6 +205,9 @@
     if (options === undefined) {
       options = {};
     }
+
+    // Let user set service url once for data source
+    this.service_url = options.service_url;
   };
 
   jQuery.extend(SOS, {
@@ -236,11 +239,24 @@
       var service = this;
 
       options.done = options.done || function() {};
+      options.service_url = options.service_url || service.service_url;
+      options.northwest = options.northwest || [];
+      options.southeast = options.southeast || [];
 
       // Retrieve sensor resource
       $.ajax({
         type: 'GET',
-        url: this.path + "GetObservations"
+        url: this.path + "GetObservations",
+        data: {
+          maxReturn: 10000,
+          offeringID: options.offering,
+          propertyName: options.property,
+          service: options.service_url,
+          topleftLat:     options.northwest[0],
+          topleftLon:     options.northwest[1],
+          bottomrightLat: options.southeast[0],
+          bottomrightLon: options.southeast[1]
+        }
       }).done(function (data) {
         var converted = service.decode(data);
         options.done(converted);
