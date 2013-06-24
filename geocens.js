@@ -212,6 +212,19 @@
     path: "http://dataservice.geocens.ca/translation_engine/",
 
     getObservation: function(options) {
+      if (options === undefined) {
+        options = {};
+      }
+      var service = this;
+
+      options.done = options.done || function() {};
+
+      // Retrieve sensor resource
+      $.ajax({
+        type: 'GET',
+        url: this.path + "GetObservations"
+      }).done(function (observations) {
+      });
     }
   });
 
