@@ -260,6 +260,29 @@
       return preparedObservations;
     },
 
+    describe: function(options) {
+      var observation = this;
+
+      if (options === undefined) {
+        options = {};
+      }
+
+      jQuery.ajax({
+        type: 'post',
+        data: {
+          service:     observation.service.service_url,
+          offeringID:  observation.offering,
+          procedureID: observation._attributes.procedure_id,
+          lat:         observation._attributes.latitude,
+          lon:         observation._attributes.longitude
+        },
+        url: observation.service.path + "DescribeSensor",
+        dataType: 'text'
+      }).done(function (sensorML) {
+        options.done(sensorML);
+      });
+    },
+
     getTimeSeries: function(options) {
       var observation = this;
       var time, traceHours;

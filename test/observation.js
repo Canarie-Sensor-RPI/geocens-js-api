@@ -108,31 +108,31 @@ $(document).ready(function() {
     ok(!isNaN(firstPair.value), "value is NaN");
   });
 
-module("SOS Observation getTimeSeries Request", {
-  setup: function() {
-    this.xhr = sinon.useFakeXMLHttpRequest();
-    var requests = this.requests = [];
+  module("SOS Observation getTimeSeries Request", {
+    setup: function() {
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
 
-    this.xhr.onCreate = function(request) {
-      requests.push(request);
-    };
+      this.xhr.onCreate = function(request) {
+        requests.push(request);
+      };
 
-    var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
 
-    this.observation = new Geocens.Observation({
-      service: service,
-      offering: "Temperature",
-      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
-      latitude: "51.07993",
-      longitude: "-114.131802",
-      procedure_id: "sensor 1"
-    });
-  },
+      this.observation = new Geocens.Observation({
+        service: service,
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        latitude: "51.07993",
+        longitude: "-114.131802",
+        procedure_id: "sensor 1"
+      });
+    },
 
-  teardown: function() {
-    this.xhr.restore();
-  }
-});
+    teardown: function() {
+      this.xhr.restore();
+    }
+  });
 
   test('sends the service URL', 2, function() {
     // Retrieve time series
@@ -372,6 +372,132 @@ module("SOS Observation getTimeSeries Request", {
 
     ok(match !== -1, "traceHours was not specified");
     clock.restore();
+  });
+
+  module("SOS Observation describe", {
+    setup: function() {
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
+
+      this.xhr.onCreate = function(request) {
+        requests.push(request);
+      };
+
+      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+
+      this.observation = new Geocens.Observation({
+        service: service,
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        latitude: "51.07993",
+        longitude: "-114.131802",
+        procedure_id: "sensor 1"
+      });
+    },
+
+    teardown: function() {
+      this.xhr.restore();
+    }
+  });
+
+  test('sends the service URL', 2, function() {
+    // Retrieve sensor description
+    this.observation.describe({
+      done: function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.Descriptions[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var match = request.requestBody.indexOf($.param({
+      service: "http://www.example.com/sos"
+    }));
+
+    ok(match !== -1, "service was not specified");
+  });
+
+  test('sends the offering ID', 2, function() {
+    // Retrieve sensor description
+    this.observation.describe({
+      done: function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.Descriptions[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var match = request.requestBody.indexOf($.param({
+      offeringID: "Temperature"
+    }));
+
+    ok(match !== -1, "offeringID was not specified");
+  });
+
+  test('sends the procedure ID', 2, function() {
+    // Retrieve sensor description
+    this.observation.describe({
+      done: function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.Descriptions[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var match = request.requestBody.indexOf($.param({
+      procedureID: "sensor 1"
+    }));
+
+    ok(match !== -1, "procedureID was not specified");
+  });
+
+  test('sends the latitude', 2, function() {
+    // Retrieve sensor description
+    this.observation.describe({
+      done: function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.Descriptions[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var match = request.requestBody.indexOf($.param({
+      lat: "51.07993"
+    }));
+
+    ok(match !== -1, "lat was not specified");
+  });
+
+  test('sends the longitude', 2, function() {
+    // Retrieve sensor description
+    this.observation.describe({
+      done: function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.Descriptions[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var match = request.requestBody.indexOf($.param({
+      lon: "-114.131802"
+    }));
+
+    ok(match !== -1, "lon was not specified");
   });
 
 });
