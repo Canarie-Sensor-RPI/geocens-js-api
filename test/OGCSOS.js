@@ -31,8 +31,8 @@ $(document).ready(function() {
     });
 
     // Return observation data
-    requests[0].respond(200, { "Content-Type": "text/plain" },
-                        Fixtures.SOS.Observations[0]);
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0]));
 
     equal(requests.length, 1, "Fake server did not receive request");
 
@@ -56,8 +56,8 @@ $(document).ready(function() {
       }
     });
 
-    this.server.respondWith([200, { "Content-Type": "text/plain" },
-                        Fixtures.SOS.Observations[0]]);
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0])]);
     this.server.respond();
 
     ok(newObservations instanceof Array, "Data is not an array");

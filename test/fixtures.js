@@ -36,7 +36,38 @@ window.Fixtures = {
   SOS: {
     Observations: [
     // 0
-    "Pressure,urn:ogc:def:property:noaa:ndbc:Atmospheric Pressure,snr_32st0,-19.713,-85.585,mb,2011|12|22|4|0|0|0|1015.0*2011|12|22|7|0|0|0|1014.0*2011|12|22|13|0|0|0|1016.0*2011|12|22|19|0|0|0|1015.0*2011|12|23|1|0|0|0|1016.0*2011|12|23|4|0|0|0|1016.0"
+    {
+      "observations": [
+        {
+          "serviceURI": "http://www.example.com/sos",
+          "offeringIndex": "13",
+          "propertyIndex": "48",
+          "offeringName": "Temperature",
+          "offeringID": "Temperature",
+          "propertyName": "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+          "topleftLat": "90.0",
+          "topleftLon": "-180.0",
+          "bottomrightLat": "-90.0",
+          "bottomrightLon": "180.0",
+          "data": [
+            {
+              "id": "sensor_1",
+              "lat": "51.07993",
+              "lon": "-114.131802",
+              "readings": [
+                {
+                  "time": "2013-06-19T18:00:00Z",
+                  "value": "39.859"
+                }
+              ]
+            }
+          ],
+          "unit": "Celcius"
+        }
+      ],
+      "number_response_sensor": "1",
+      "number_all_sensor": "85"
+    }
     ]
   },
 
