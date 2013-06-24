@@ -211,6 +211,11 @@
     // Default Translation Engine URL
     path: "http://dataservice.geocens.ca/translation_engine/",
 
+    // Convert Translation Engine output to Objects
+    decode: function(observations) {
+      return [];
+    },
+
     getObservation: function(options) {
       if (options === undefined) {
         options = {};
@@ -224,6 +229,8 @@
         type: 'GET',
         url: this.path + "GetObservations"
       }).done(function (observations) {
+        var converted = service.decode(observations);
+        options.done(converted);
       });
     }
   });
