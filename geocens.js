@@ -420,6 +420,12 @@
         var converted = service.decode(data);
         options.done(converted);
       });
+    },
+
+    // Allow user to set a custom Translation Engine URL
+    setPath: function(newPath) {
+      this.path = newPath;
+      return this;
     }
   });
 

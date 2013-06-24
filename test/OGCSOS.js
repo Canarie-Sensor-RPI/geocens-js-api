@@ -6,6 +6,16 @@ $(document).ready(function() {
     ok(Geocens.SOS !== undefined, "Geocens.SOS is not defined");
   });
 
+  test('can override translation engine path', 1, function() {
+    var originalPath = Geocens.SOS.path;
+
+    var newPath = "http://www.example.com/translation_engine/";
+    Geocens.SOS.setPath(newPath);
+    ok(Geocens.SOS.path === newPath, "Geocens Translation Engine path did not change");
+
+    Geocens.SOS.setPath(originalPath);
+  });
+
   module("Data Service with getObservation", {
     setup: function () {
       this.server = sinon.fakeServer.create();
