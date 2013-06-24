@@ -143,7 +143,7 @@ $(document).ready(function() {
     ok(first.service !== undefined, "Observation service was not defined");
   });
 
-  test('sets the `offering` and `property` properties for the Observations returned', 2, function() {
+  test('sets the `offering`, `property`, and sensor properties for the Observations returned', 5, function() {
     var newObservations;
 
     // Retrieve observation data
@@ -164,6 +164,34 @@ $(document).ready(function() {
 
     equal(first.offering, "Temperature", "Offering incorrect");
     equal(first.property, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Observed Property incorrect");
+
+    var attributes = first.attributes();
+    equal(attributes.procedure_id, "sensor_1", "Procedure ID incorrect");
+    equal(attributes.latitude, "51.07993", "Latitude incorrect");
+    equal(attributes.longitude, "-114.131802", "Longitude incorrect");
+  });
+
+  test('sets the latest value for the Observations returned', 2, function() {
+    var newObservations;
+
+    // Retrieve observation data
+    Geocens.SOS.getObservation({
+      service_url: "http://www.example.com/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: function (observations) {
+        newObservations = observations;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0])]);
+    this.server.respond();
+
+    var first = newObservations[0];
+    var latest = first.latest();
+    equal(latest.timestamp, 1371664800000, "Timestamp incorrect");
+    equal(latest.value, 39.859, "Value incorrect");
   });
 
   module("Init OGC SOS, then getObservation", {

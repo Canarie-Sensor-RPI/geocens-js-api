@@ -210,6 +210,7 @@
     this.service     = options.service;
     this.offering    = options.offering;
     this.property    = options.property;
+    this._data       = options.readings || [];
   };
 
   // Extend Observation object (actually function) prototype with new methods
@@ -218,6 +219,11 @@
     // Respond to call for attributes
     attributes: function() {
       return this._attributes;
+    },
+
+    // Return most recent reading
+    latest: function() {
+      return this._data[this._data.length - 1];
     }
   });
 
@@ -238,6 +244,17 @@
     // Default Translation Engine URL
     path: "http://dataservice.geocens.ca/translation_engine/",
 
+    // Convert Translation Engine Readings format
+    convertReadings: function(readings) {
+      return $.map(readings, function(reading) {
+        var time = new Date(reading.time);
+        return {
+          timestamp: time.getTime(),
+          value: parseFloat(reading.value)
+        };
+      });
+    },
+
     // Convert Translation Engine output to Objects
     decode: function(data) {
       var service = this;
@@ -245,10 +262,14 @@
 
       var observationData = observations.data;
 
-      var obs = $.map(observationData, function (sensor) {
+      var obs = $.map(observationData, function (data) {
         return new Geocens.Observation({
+          latitude: data.lat,
+          longitude: data.lon,
           offering: observations.offeringID,
+          procedure_id: data.id,
           property: observations.propertyName,
+          readings: service.convertReadings(data.readings),
           service: service
         });
       });

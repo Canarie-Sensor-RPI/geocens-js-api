@@ -33,4 +33,17 @@ $(document).ready(function() {
     equal(observation.property, options.property);
   });
 
+  test("latest returns the most recent reading", 1, function() {
+    var reading = {
+      timestamp: 1371664800000,
+      value: 39.859
+    };
+
+    var observation = new Geocens.Observation({
+      readings: [reading]
+    });
+
+    equal(observation.latest(), reading, "Reading not the latest");
+  });
+
 });
