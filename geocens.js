@@ -228,18 +228,49 @@
 
     getTimeSeries: function(options) {
       var observation = this;
+      var time, traceHours;
 
       if (options === undefined) {
         options = {};
       }
 
+      function ISODateString(d){
+        function pad(n){return n<10 ? '0'+n : n}
+        return d.getUTCFullYear()+'-'
+            + pad(d.getUTCMonth()+1)+'-'
+            + pad(d.getUTCDate())+'T'
+            + pad(d.getUTCHours())+':'
+            + pad(d.getUTCMinutes())+':'
+            + pad(d.getUTCSeconds())+'Z';
+      };
+
       options.done = options.done || function() {};
+
+      if (options.end_time !== undefined) {
+        time = ISODateString(options.end_time);
+      } else {
+        options.end_time = new Date();
+        time = ISODateString(new Date());
+      }
+
+      if (options.start_time !== undefined) {
+        traceHours = (options.end_time - options.start_time) / (1000 * 3600);
+      } else {
+        traceHours = 24;
+      }
 
       $.ajax({
         url: observation.service.path + "GetTimeSeries",
         type: 'GET',
         data: {
-          service: observation.service.service_url
+          lat: observation._attributes.latitude,
+          lon: observation._attributes.longitude,
+          offeringID: observation.offering,
+          procedureID: observation._attributes.procedure_id,
+          propertyName: observation.property,
+          service: observation.service.service_url,
+          time: time,
+          traceHours: traceHours
         }
       }).done(function (data) {
         options.done(observation.convertSeriesData(data));
