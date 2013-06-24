@@ -197,6 +197,27 @@
 
   jQuery.extend(DataService.prototype, DataService);
 
+  // Geocens.Observation
+  // ------------------
+  //
+  var Observation = Geocens.Observation = function(options) {
+    // Handle undefined options
+    if (options === undefined) {
+      options = {};
+    }
+
+    this._attributes = options;
+  };
+
+  // Extend Observation object (actually function) prototype with new methods
+  // and properties
+  jQuery.extend(Observation.prototype, {
+    // Respond to call for attributes
+    attributes: function() {
+      return this._attributes;
+    }
+  });
+
   // Geocens.SOS
   // -------------------
   //
