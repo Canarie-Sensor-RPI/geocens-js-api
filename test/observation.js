@@ -83,33 +83,50 @@ $(document).ready(function() {
     ok(callback.called, "Done was not called");
   });
 
-  test('sends the service URL', 2, function() {
-    var xhr = sinon.useFakeXMLHttpRequest();
-    var requests = [];
+module("SOS Observation getTimeSeries Request", {
+  setup: function() {
+    this.xhr = sinon.useFakeXMLHttpRequest();
+    var requests = this.requests = [];
 
-    xhr.onCreate = function (request) {
+    this.xhr.onCreate = function(request) {
       requests.push(request);
     };
 
+    var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+
+    this.observation = new Geocens.Observation({
+      service: service,
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      latitude: "51.07993",
+      longitude: "-114.131802",
+      procedure_id: "sensor 1"
+    });
+  },
+
+  teardown: function() {
+    this.xhr.restore();
+  }
+});
+
+  test('sends the service URL', 2, function() {
     // Retrieve time series
     this.observation.getTimeSeries({
       done: function() {}
     });
 
     // Return records
-    requests[0].respond(200, { "Content-Type": "text/plain" },
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
                         Fixtures.SOS.TimeSeries[0]);
 
-    equal(requests.length, 1, "Fake server did not receive requests");
+    equal(this.requests.length, 1, "Fake server did not receive requests");
 
-    var request = requests[0];
+    var request = this.requests[0];
     var matches = request.url.match($.param({
       service: "http://www.example.com/sos"
     }));
 
     ok(matches !== null, "service was not specified");
-
-    xhr.restore();
   });
 
 
