@@ -341,8 +341,8 @@
 
       options.done = options.done || function() {};
       options.service_url = options.service_url || service.service_url;
-      options.northwest = options.northwest || [];
-      options.southeast = options.southeast || [];
+      options.northwest = options.northwest || [90, -180];
+      options.southeast = options.southeast || [-90, 180];
 
       // Retrieve sensor resource
       $.ajax({
