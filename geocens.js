@@ -303,15 +303,15 @@
 
       options.done = options.done || function() {};
 
-      if (options.end_time !== undefined) {
-        time = ISODateString(options.end_time);
+      if (options.end !== undefined) {
+        time = ISODateString(options.end);
       } else {
-        options.end_time = new Date();
+        options.end = new Date();
         time = ISODateString(new Date());
       }
 
-      if (options.start_time !== undefined) {
-        traceHours = (options.end_time - options.start_time) / (1000 * 3600);
+      if (options.start !== undefined) {
+        traceHours = (options.end - options.start) / (1000 * 3600);
       } else {
         traceHours = 24;
       }

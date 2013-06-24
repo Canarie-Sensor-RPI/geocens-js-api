@@ -328,7 +328,7 @@ $(document).ready(function() {
 
     // Retrieve time series
     this.observation.getTimeSeries({
-      end_time: time,
+      end:  time,
       done: function() {}
     });
 
@@ -354,9 +354,9 @@ $(document).ready(function() {
 
     // Retrieve time series
     this.observation.getTimeSeries({
-      start_time: start,
-      end_time:   end,
-      done: function() {}
+      start: start,
+      end:   end,
+      done:  function() {}
     });
 
     // Return records
