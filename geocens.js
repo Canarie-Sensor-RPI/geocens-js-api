@@ -221,9 +221,43 @@
       return this._attributes;
     },
 
-    // Convert Translation Engine output to array of values
+    // Convert Translation Engine output to array of values.
+    // Example Series Data:
+    //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
     convertSeriesData: function(data) {
-      return [];
+      parts = data.split(',')
+
+      if (parts.length !== 7) {
+        console.warn("Series data may be malformed", data);
+      }
+
+      this._attributes.unit = parts[5];
+
+      // Split into raw observation pairs
+      var rawObservations = parts[6].split('*');
+
+      var preparedObservations = $.map(rawObservations, function(observationSet) {
+        var pieces = observationSet.split('|');
+        var observation = {
+          year:   pieces[0],
+          month:  pieces[1] - 1,
+          day:    pieces[2],
+          hour:   pieces[3] - 1,
+          minute: pieces[4],
+          second: pieces[5],
+          zone:   pieces[6],
+          value:  parseFloat(pieces[7])
+        };
+
+        var date = Date.UTC(observation.year, observation.month, observation.day, observation.hour, observation.minute, observation.second);
+
+        return {
+          timestamp: date,
+          value: observation.value
+        };
+      });
+
+      return preparedObservations;
     },
 
     getTimeSeries: function(options) {

@@ -83,6 +83,31 @@ $(document).ready(function() {
     ok(callback.called, "Done was not called");
   });
 
+  test('returns timestamp/value array', 5, function() {
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]]);
+
+    var seriesData;
+
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      done: function (data) {
+        seriesData = data;
+      }
+    });
+
+    this.server.respond();
+
+    ok(seriesData instanceof Array, "Data is not an array");
+
+    var firstPair = seriesData[0];
+    ok(firstPair.timestamp !== undefined, "timestamp property is undefined");
+    ok(firstPair.value !== undefined, "value property is undefined");
+
+    ok(!isNaN(firstPair.timestamp), "timestamp is NaN");
+    ok(!isNaN(firstPair.value), "value is NaN");
+  });
+
 module("SOS Observation getTimeSeries Request", {
   setup: function() {
     this.xhr = sinon.useFakeXMLHttpRequest();
