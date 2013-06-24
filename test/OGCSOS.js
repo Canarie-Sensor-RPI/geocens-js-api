@@ -49,10 +49,10 @@ $(document).ready(function() {
     equal(args.service, "http://www.example.com/sos", "Service URL mismatch");
     equal(args.offeringID, "Temperature", "Offering mismatch");
     equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Property mismatch");
-    equal(args.topleftLat, undefined, "topleftLat mismatch");
-    equal(args.topleftLon, undefined, "topleftLon mismatch");
-    equal(args.bottomrightLat, undefined, "bottomrightLat mismatch");
-    equal(args.bottomrightLon, undefined, "bottomrightLon mismatch");
+    equal(args.topleftLat, 90, "topleftLat mismatch");
+    equal(args.topleftLon, -180, "topleftLon mismatch");
+    equal(args.bottomrightLat, -90, "bottomrightLat mismatch");
+    equal(args.bottomrightLon, 180, "bottomrightLon mismatch");
     equal(args.maxReturn, 10000, "maxReturn mismatch");
 
     xhr.restore();
@@ -242,10 +242,10 @@ $(document).ready(function() {
     equal(args.service, "http://www.example.com/sos", "Service URL mismatch");
     equal(args.offeringID, "Temperature", "Offering mismatch");
     equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Property mismatch");
-    equal(args.topleftLat, undefined, "topleftLat mismatch");
-    equal(args.topleftLon, undefined, "topleftLon mismatch");
-    equal(args.bottomrightLat, undefined, "bottomrightLat mismatch");
-    equal(args.bottomrightLon, undefined, "bottomrightLon mismatch");
+    equal(args.topleftLat, 90, "topleftLat mismatch");
+    equal(args.topleftLon, -180, "topleftLon mismatch");
+    equal(args.bottomrightLat, -90, "bottomrightLat mismatch");
+    equal(args.bottomrightLon, 180, "bottomrightLon mismatch");
     equal(args.maxReturn, 10000, "maxReturn mismatch");
 
     xhr.restore();
