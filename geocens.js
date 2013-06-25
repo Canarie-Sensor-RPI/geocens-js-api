@@ -415,6 +415,10 @@
     shortProperty: function () {
       var parts = this.property.split(':');
       return parts[parts.length - 1];
+    },
+
+    units: function () {
+      return this._attributes.unit;
     }
   });
 

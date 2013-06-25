@@ -62,10 +62,11 @@ $(document).ready(function() {
       procedure_id: "sensor_1",
       property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
       readings: [],
-      service: service
+      service: service,
+      unit: "Celcius"
     });
 
-    equal(observation.shortProperty(), "Water Temperature");
+    equal(observation.units(), "Celcius");
   });
 
   test("name returns the shortened property + procedure id", 1, function() {
