@@ -402,6 +402,11 @@
     // Return cached time series data
     seriesData: function () {
       return this._data;
+    },
+
+    shortProperty: function () {
+      var parts = this.property.split(':');
+      return parts[parts.length - 1];
     }
   });
 
@@ -469,7 +474,7 @@
       options.northwest   = options.northwest || [90, -180];
       options.southeast   = options.southeast || [-90, 180];
 
-      // Retrieve sensor resource
+      // Retrieve observation resource
       $.ajax({
         type: 'GET',
         url: this.path + "GetObservations",
