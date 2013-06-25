@@ -17,7 +17,7 @@ $(document).ready(function() {
     Geocens.SOS.setPath(originalPath);
   });
 
-  module("Data Service with getObservation xhr", {
+  module("OGC SOS with getObservation xhr", {
     setup: function () {
       this.xhr = sinon.useFakeXMLHttpRequest();
       var requests = this.requests = [];
@@ -104,7 +104,31 @@ $(document).ready(function() {
     ajaxSpy.restore();
   });
 
-  module("Data Service with getObservation", {
+test('sets the observations service service_url', 1, function() {
+    var rawObservations;
+
+    // Retrieve observations
+    Geocens.SOS.getObservation({
+      service_url: "http://www.example.com/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      northwest: [80, -120],
+      southeast: [40, -80],
+      done: function (observations) {
+        rawObservations = observations;
+      }
+    });
+
+    // Return observation data
+    this.requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.SOS.Observations[0]));
+
+    var observationService = rawObservations[0].service;
+
+    equal(observationService.service_url, "http://www.example.com/sos", "Service url is not set");
+  });
+
+  module("OGC SOS with getObservation", {
     setup: function () {
       this.server = sinon.fakeServer.create();
     },

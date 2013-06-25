@@ -456,6 +456,10 @@
         options = {};
       }
 
+      if (self.service_url === undefined) {
+        self.service_url = options.service_url;
+      }
+
       options.done        = options.done || function () {};
       options.service_url = options.service_url || self.service_url;
       options.northwest   = options.northwest || [90, -180];
