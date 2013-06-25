@@ -72,7 +72,7 @@
 
     // Retrieve time series data for the datastream
     getTimeSeries: function(options) {
-      var datastream = this,
+      var self = this,
           params,
           path;
 
@@ -112,7 +112,7 @@
           };
         });
 
-        datastream._cache(convertedData);
+        self._cache(convertedData);
         options.done(convertedData);
       });
 
@@ -155,7 +155,7 @@
     },
 
     getDatastream: function(options) {
-      var service = this,
+      var self = this,
           sensor_path,
           datastream_path;
 
@@ -164,19 +164,19 @@
       }
 
       options.done = options.done || function() {};
-      options.api_key = options.api_key || service.api_key;
+      options.api_key = options.api_key || self.api_key;
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
       datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
 
       // Retrieve sensor resource
-      service._ajax.get({
+      self._ajax.get({
         path: sensor_path,
         api_key: options.api_key
       }).done(function (sensorData) {
 
         // Retrieve datastream resource
-        service._ajax.get({
+        self._ajax.get({
           path: datastream_path,
           api_key: options.api_key
         }).done(function (datastreamData) {
@@ -186,7 +186,7 @@
             sensor_id:     options.sensor_id
           });
           var datastream = new Datastream(sensorData);
-          datastream.service = service;
+          datastream.service = self;
           options.done(datastream);
         });
       });
@@ -287,7 +287,7 @@
     },
 
     describe: function(options) {
-      var observation = this;
+      var self = this;
 
       if (options === undefined) {
         options = {};
@@ -296,13 +296,13 @@
       jQuery.ajax({
         type: 'post',
         data: {
-          service:     observation.service.service_url,
-          offeringID:  observation.offering,
-          procedureID: observation._attributes.procedure_id,
-          lat:         observation._attributes.latitude,
-          lon:         observation._attributes.longitude
+          service:     self.service.service_url,
+          offeringID:  self.offering,
+          procedureID: self._attributes.procedure_id,
+          lat:         self._attributes.latitude,
+          lon:         self._attributes.longitude
         },
-        url: observation.service.path + "DescribeSensor",
+        url: self.service.path + "DescribeSensor",
         dataType: 'text'
       }).done(function (sensorML) {
         options.done(sensorML);
@@ -310,7 +310,7 @@
     },
 
     getTimeSeries: function(options) {
-      var observation = this,
+      var self = this,
           time, traceHours;
 
       if (options === undefined) {
@@ -343,22 +343,22 @@
       }
 
       $.ajax({
-        url: observation.service.path + "GetTimeSeries",
+        url: self.service.path + "GetTimeSeries",
         type: 'GET',
         dataType: 'text',
         data: {
-          lat:          observation._attributes.latitude,
-          lon:          observation._attributes.longitude,
-          offeringID:   observation.offering,
-          procedureID:  observation._attributes.procedure_id,
-          propertyName: observation.property,
-          service:      observation.service.service_url,
+          lat:          self._attributes.latitude,
+          lon:          self._attributes.longitude,
+          offeringID:   self.offering,
+          procedureID:  self._attributes.procedure_id,
+          propertyName: self.property,
+          service:      self.service.service_url,
           time:         time,
           traceHours:   traceHours
         }
       }).done(function (data) {
-        var convertedData = observation._convertSeriesData(data);
-        observation._cache(convertedData);
+        var convertedData = self._convertSeriesData(data);
+        self._cache(convertedData);
         options.done(convertedData);
       });
     },
@@ -405,7 +405,7 @@
 
     // Convert Translation Engine output to Objects
     _decode: function(data) {
-      var service         = this,
+      var self            = this,
           observations    = data.observations[0],
           observationData = observations.data;
 
@@ -416,21 +416,21 @@
           offering:     observations.offeringID,
           procedure_id: data.id,
           property:     observations.propertyName,
-          readings:     service._convertReadings(data.readings),
-          service:      service
+          readings:     self._convertReadings(data.readings),
+          service:      self
         });
       });
     },
 
     getObservation: function(options) {
-      var service = this;
+      var self = this;
 
       if (options === undefined) {
         options = {};
       }
 
       options.done        = options.done || function() {};
-      options.service_url = options.service_url || service.service_url;
+      options.service_url = options.service_url || self.service_url;
       options.northwest   = options.northwest || [90, -180];
       options.southeast   = options.southeast || [-90, 180];
 
@@ -449,7 +449,7 @@
           bottomrightLon: options.southeast[1]
         }
       }).done(function (data) {
-        var converted = service._decode(data);
+        var converted = self._decode(data);
         options.done(converted);
       });
     },
