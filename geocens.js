@@ -136,7 +136,7 @@
         });
 
         self._cache(convertedData);
-        options.done(convertedData);
+        options.done(convertedData, self);
       });
 
     },
@@ -386,7 +386,7 @@
       }).done(function (data) {
         var convertedData = self._convertSeriesData(data);
         self._cache(convertedData);
-        options.done(convertedData);
+        options.done(convertedData, self);
       });
     },
 
