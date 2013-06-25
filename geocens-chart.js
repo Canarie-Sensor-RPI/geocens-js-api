@@ -22,17 +22,19 @@
       console.warn("Warning: trying to graph empty time series");
     }
 
+    // Convert data format
     var seriesData = $.map(datasource.seriesData(), function(datapoint) {
       return [[datapoint.timestamp, datapoint.value]];
     });
 
-    var stockChart = new Highcharts.StockChart({
+    // Set out default chart options
+    var chartDefaults = {
       chart: {
-         renderTo: element
+        renderTo: element
       },
 
       title: {
-       text: datasource._attributes.id
+        text: datasource._attributes.id
       },
 
       tooltip: {
@@ -46,7 +48,7 @@
               }
 
               return "<strong>" + Highcharts.dateFormat(format, this.x) +
-                     "</strong><br>" + series.name + ":" + point.y + " " +
+                     "</strong><br>" + series.name + ": " + point.y + " " +
                      datasource._attributes.unit;
           }
       },
@@ -70,7 +72,10 @@
               text: datasource._attributes.unit
           }
       }
-    });
+    };
+
+    var chartOptions = $.extend({}, chartDefaults, settings.chart);
+    var stockChart = new Highcharts.StockChart(chartOptions);
 
     return stockChart;
   };
