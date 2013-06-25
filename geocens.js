@@ -189,6 +189,10 @@
       options.done = options.done || function () {};
       options.api_key = options.api_key || self.api_key;
 
+      if (self.api_key === undefined) {
+        self.api_key = options.api_key;
+      }
+
       sensor_path = this.path + "sensors/" + options.sensor_id;
       datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
 
