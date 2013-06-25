@@ -339,6 +339,7 @@ The tests can be run in a web browser by opening the `test/index.html` file. The
 
 Alternatively, the tests can be run from the command line if Node and NPM is installed.
 
+		$ npm install -g grunt-cli
 		$ npm install
 		$ grunt qunit
 
