@@ -14,7 +14,7 @@
       border: 1px solid #555;
       background-color: #FFE;
       display: block;
-      max-width: 80%;
+      max-width: 80em;
     }
   </style>
 </head>
@@ -25,7 +25,20 @@
 
 <p>Note: This tutorial may stop working if the API key is revoked or the data is moved.</p>
 
-<h2>Include the Libraries</h2>
+<h2>Table of Contents</h2>
+
+<ol>
+  <li><a href="#include">Include the Libraries</a></li>
+  <li><a href="#data_service_object">Create a Service Object</a></li>
+  <li><a href="#get_datastream">Retrieve a Datastream</a></li>
+  <li><a href="#datastream_time_series">Retrieve a Datastream Time Series</a></li>
+  <li><a href="#ogc_sos_object">Create an OGC SOS Service Object</a></li>
+  <li><a href="#get_observation">Retrieve SOS Observations</a></li>
+  <li><a href="#get_observation_time_series">Retrieve an Observation Time Series</a></li>
+  <li><a href="#get_observation_description">Retrieve an Observation Sensor Description</a></li>
+</ol>
+
+<h2 id="include">Include the Libraries</h2>
 
 <p>The JS API requires jQuery 1.10.1 or newer. Be sure to include it before including the GeoCENS JS API.</p>
 
@@ -40,7 +53,7 @@
 <script src="../geocens.js" type="text/javascript" charset="utf-8"></script>
 
 
-<h2>Create a Service Object</h2>
+<h2 id="data_service_object">Create a Service Object</h2>
 
 <p>A service object allows you to retrieve specific sensors from the GeoCENS Data Service. You will need an account with the GeoCENS Data Service to generate an API token key; this key allows you to retrieve data from the Restful API. A registration page for the Data Service is coming soon.</p>
 
@@ -73,7 +86,8 @@
   }());
 </script>
 
-<h2>Retrieve a Datastream</h2>
+
+<h2 id="get_datastream">Retrieve a Datastream</h2>
 
 <p>With a Datastream object, we can now retrieve a datastream. There are two identifiers for each datastream: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the datastream.</p>
 
@@ -119,7 +133,8 @@
   }());
 </script>
 
-<h2>Retrieve a Datastream Time Series</h2>
+
+<h2 id="datastream_time_series">Retrieve a Datastream Time Series</h2>
 
 <p>The main use case of the JS API is retrieving observations from sensors, and this can be done using the <code>getTimeSeries()</code> method.</p>
 
@@ -177,7 +192,8 @@
   }());
 </script>
 
-<h2>Create an OGC SOS Service Object</h2>
+
+<h2 id="ogc_sos_object">Create an OGC SOS Service Object</h2>
 
 <p>OGC SOS Service Objects allow you to retrieve observation data.</p>
 
@@ -205,7 +221,8 @@
   }());
 </script>
 
-<h2>Retrieve SOS Observations</h2>
+
+<h2 id="get_observation">Retrieve SOS Observations</h2>
 
 <p>Once we have a service object for the SOS, we can retrieve the SOS Observations for an Offering and Observed Property.</p>
 
@@ -245,7 +262,8 @@
   }());
 </script>
 
-<h2>Retrieve an Observation Time Series</h2>
+
+<h2 id="get_observation_time_series">Retrieve an Observation Time Series</h2>
 
 <p>Each Observation object has a method for retrieving the series records.</p>
 
@@ -303,7 +321,8 @@
   }());
 </script>
 
-<h2>Retrieve an Observation Sensor Description</h2>
+
+<h2 id="get_observation_description">Retrieve an Observation Sensor Description</h2>
 
 <p>Each Observation object has a method for retrieving the sensorML document for its procedure.</p>
 
