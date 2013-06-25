@@ -6,9 +6,14 @@
 
 (function($) {
   var root = this,
-      chart;
+      chart,
+      defaults;
+
+  defaults = root.defaults = {};
 
   chart = root.chart = function(element, options) {
+    var settings = $.extend({}, defaults, options);
+
     return this;
   };
 
