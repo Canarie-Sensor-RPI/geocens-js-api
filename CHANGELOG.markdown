@@ -1,3 +1,7 @@
+0.4.1 (June 25 2013)
+
+* Add support for custom start and end times for Data Service time series retrieval
+
 0.4.0 (June 24 2013)
 
 * Add support for retrieving data from OGC SOS compatible servers using the GeoCENS Translation Engine
