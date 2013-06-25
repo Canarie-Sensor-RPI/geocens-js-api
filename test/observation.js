@@ -68,6 +68,24 @@ $(document).ready(function() {
     equal(observation.shortProperty(), "Water Temperature");
   });
 
+  test("name returns the shortened property + procedure id", 1, function() {
+    var service = new Geocens.SOS({
+      service_url: "http://www.example.com/sos"
+    });
+
+    var observation = new Geocens.Observation({
+      latitude: 51.07993,
+      longitude: -114.131802,
+      offering: "Temperature",
+      procedure_id: "sensor_1",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      readings: [],
+      service: service
+    });
+
+    equal(observation.name(), "Water Temperature: sensor_1");
+  });
+
   module("SOS Observation getTimeSeries", {
     setup: function () {
       var service = new Geocens.SOS({

@@ -399,6 +399,10 @@
       return this._data[this._data.length - 1];
     },
 
+    name: function () {
+      return this.shortProperty() + ": " + this._attributes.procedure_id;
+    },
+
     // Return cached time series data
     seriesData: function () {
       return this._data;
