@@ -69,7 +69,7 @@ We can also use the Datastream object to retrieve the latest time series records
 			}
 		});
 
-By default, `getTimeSeries()` will retrieve all observation values from the Data Service. (Support for filters is coming soon.)
+By default, `getTimeSeries()` will retrieve 24 hours of observation values from the Data Service.
 
 The `getTimeSeries()` method will cache the results in the Datastream object, and return an array of objects:
 
@@ -309,13 +309,21 @@ The time series observations can be retrieved:
 
 		datastream.getTimeSeries({
 			limit: 100,
-			skip: 100,
-			done: function (seriesData) {
+			skip:  100,
+			start: new Date("2013-01-01 00:00:00Z"),
+			end:   new Date("2013-05-28 00:00:00Z"),
+			done:  function (seriesData) {
 				window.seriesData = seriesData;
 			}
 		});
 
-Support for filtering based on start and end dates is coming soon.
+##### option: start
+
+An optional Date object specifying the start limit of the time series.
+
+##### option: end
+
+An optional Date object specifying the end limit of the time series.
 
 #### done
 
