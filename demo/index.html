@@ -393,5 +393,69 @@
 <script src="../test/vendor/highstock.js" type="text/javascript" charset="utf-8"></script>
 <script src="../geocens-chart.js" type="text/javascript" charset="utf-8"></script>
 
+<p>Be sure to include HighStock <em>before</em> including the GeoCENS Chart module!</p>
+
+<h2 id="chart_datastream_series">Datastream Time Series Chart</h2>
+
+<p>The GeoCENS Chart module is a jQuery plugin, so it is invoked using a jQuery selector. By passing the data through the callbacks, the datastream time series can be customized before being plotted on the chart.</p>
+
+<pre class="code">
+
+  // Draw the chart after time series is returned
+  var drawChart = function(seriesData, datastream) {
+    var chart = $("#chart").Geocens.Chart({
+      datastream: datastream
+    });
+  };
+
+  // Retrieve the time series after datastream is returned
+  var getSeries = function(datastream) {
+    datastream.getTimeSeries({
+      done: drawChart
+    });
+  };
+
+  // Retrieve the datastream
+  Geocens.DataService.getDatastream({
+    api_key: "57378dc18d74bef1051312e29a26f0b3",
+    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    done: getSeries
+  });
+
+</pre>
+
+<div id="chart"></div>
+
+<button id="example_eight">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_eight").on("click", function() {
+
+      // Draw the chart after time series is returned
+      var drawChart = function(seriesData, datastream) {
+        var chart = $("#chart").Geocens.Chart({
+          datastream: datastream
+        });
+      };
+
+      // Retrieve the time series after datastream is returned
+      var getSeries = function(datastream) {
+        datastream.getTimeSeries({
+          done: drawChart
+        });
+      };
+
+      // Retrieve the datastream
+      Geocens.DataService.getDatastream({
+        api_key: "57378dc18d74bef1051312e29a26f0b3",
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: getSeries
+      });
+
+    });
+  }());
+</script>
 </body>
 </html>
