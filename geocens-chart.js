@@ -4,19 +4,19 @@
 //    All Rights Reserved.
 //    http://www.geocens.ca/
 
-(function () {
+(function($) {
+  var root = this,
+      chart;
 
-  // Reference to global object
-  var root = this;
-
-  var $Chart = function () {
-    // insert chart call here
+  chart = root.chart = function(element, options) {
+    return this;
   };
 
-  var $Geocens = $.fn.Geocens = function () {};
+  $.fn.GeocensChart = function () {
+    var options = arguments[0];
+    this.each(function () {
+      return new chart(this, options);
+    });
+  };
 
-  $.extend($Geocens, {
-    Chart: $Chart
-  });
-
-}).call(this);
+})(jQuery);
