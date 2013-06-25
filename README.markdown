@@ -105,13 +105,15 @@ Define an OGC SOS object with the SOS URL:
 			service_url: "http://www.example.com/sos"
 		});
 
-### Geocens.SOS.getObservation
+This object can be reused to use the same `service_url` for multiple `getObservation` invocations.
+
+#### Geocens.SOS.getObservation
 
 Use an OGC SOS object to retrieve SOS observation data, as set out by the [Observation and Measurement specification](http://www.opengeospatial.org/standards/om). Results returned are procedure-observation pairs that exist within the filter criteria. Procedures that have no data within the filter will not be returned. Results are filtered by SOS Offering (required), Observed Property (required), and bounding box (optional).
 
 		sosSource.getObservation({
 			offering: "sos_offering",
-			observed_property: "sos_property",
+			property: "sos_property",
 			northwest: [51, -114],
 			southeast: [-51, 114],
 			done: function (observations) {
@@ -124,7 +126,7 @@ These can be combined:
 		Geocens.SOS.getObservation({
 			service_url: "http://www.example.com/sos",
 			offering: "sos_offering",
-			observed_property: "sos_property",
+			property: "sos_property",
 			northwest: [51, -114],
 			southeast: [-51, 114],
 			done: function (observations) {
@@ -132,9 +134,27 @@ These can be combined:
 			}
 		});
 
-The `done` option will return an array of observation objects as the first parameter.
+##### option: offering
 
-TODO: Explain options
+The SOS Offering key. Can be used to filter into a logical group of observations. Is required.
+
+##### option: property
+
+The SOS Observed Property key. Can be used to filter observations by physical phenomena. Note that it is typically a [URN](http://en.wikipedia.org/wiki/Uniform_resource_name). Is required.
+
+##### option: northwest
+
+An optional pair of Float numbers representing the North West corner of the bounding box. Used in conjunction with `southeast`. Only observations inside the bounding box will be returned. Defaults to [90, -180] which is 90 degrees North, and 180 degrees West.
+
+##### option: southeast
+
+An optional pair of Float numbers representing the South East corner of the bounding box. Used in conjunction with `northwest`. Only observations inside the bounding box will be returned. Defaults to [-90, 180] which is 90 degrees South, and 180 degrees East.
+
+If both `northwest` and `southeast` are not provided, then the bounding box will encompass the entire world.
+
+##### option: done
+
+An optional callback function that will return an array of Observation objects as the first parameter.
 
 #### Observation.attributes
 
@@ -180,7 +200,26 @@ The time series records can be retrieved:
 			}
 		});
 
-TODO: Explain return format, options
+##### option: start
+
+An optional Date object specifying the start limit of the time series.
+
+##### option: end
+
+An optional Date object specifying the end limit of the time series.
+
+##### option: done
+
+An optional callback function that will return an array of Time Series objects as the first parameter. Example response:
+
+		[{
+			timestamp: 1356998400000,
+			value: 3.88
+		},
+		{
+			timestamp: 1369699200000,
+			value: 5.22
+		}] 
 
 #### Observation.seriesData
 
