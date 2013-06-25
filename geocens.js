@@ -94,6 +94,29 @@
         params.skip = options.skip;
       }
 
+      function ISODateString(d) {
+        function pad(n) { return n < 10 ? '0' + n : n; }
+        return d.getUTCFullYear()    + '-' +
+            pad(d.getUTCMonth() + 1) + '-' +
+            pad(d.getUTCDate())      + 'T' +
+            pad(d.getUTCHours())     + ':' +
+            pad(d.getUTCMinutes())   + ':' +
+            pad(d.getUTCSeconds())   + 'Z';
+      }
+
+      if (options.end !== undefined) {
+        params.end = ISODateString(options.end);
+      } else {
+        params.end = ISODateString(new Date());
+      }
+
+      if (options.start !== undefined) {
+        params.start = ISODateString(options.start);
+      } else {
+        var d = new Date();
+        params.start = ISODateString(new Date(d - (24 * 3600 * 1000)));
+      }
+
       path = this.service.path + "sensors/" + this.sensor_id +
               "/datastreams/" + this.datastream_id + "/records";
 

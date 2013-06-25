@@ -103,9 +103,11 @@ $(document).ready(function() {
     var request = requests[0];
     var records_path = Geocens.DataService.path + "sensors/" + this.sensor_id +
                        "/datastreams/" + this.datastream_id +
-                       "/records?detail=true";
+                       "/records";
 
-    equal(request.url, records_path, "Request not made for records resource");
+    var url = request.url.split('?')[0];
+
+    equal(url, records_path, "Request not made for records resource");
 
     xhr.restore();
   });
@@ -162,6 +164,37 @@ $(document).ready(function() {
     ok(matches !== null, "skip was not specified");
 
     xhr.restore();
+  });
+
+  test('defaults to current time for end time', 2, function() {
+    var time = new Date("2013-06-25T12:00:00Z");
+    var clock = sinon.useFakeTimers(time.getTime());
+
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.datastream.getTimeSeries();
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0]));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var match = request.url.indexOf($.param({
+      end: "2013-06-25T12:00:00Z"
+    }));
+
+    ok(match !== -1, "end time was not sent");
+
+    xhr.restore();
+    clock.restore();
   });
 
   test('returns timestamp/value array', 5, function() {
