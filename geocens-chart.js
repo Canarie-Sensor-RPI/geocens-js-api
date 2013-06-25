@@ -78,7 +78,9 @@
     var chartOptions = $.extend({}, chartDefaults, settings.chart);
     var stockChart = new Highcharts.StockChart(chartOptions);
 
-    return stockChart;
+    return {
+      chart: stockChart
+    };
   };
 
   $.fn.GeocensChart = function () {
