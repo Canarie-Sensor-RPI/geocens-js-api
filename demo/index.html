@@ -37,6 +37,8 @@
   <li><a href="#get_observation_time_series">Retrieve an Observation Time Series</a></li>
   <li><a href="#get_observation_description">Retrieve an Observation Sensor Description</a></li>
   <li><a href="#chart_include">Including the Chart Module</a></li>
+  <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
+  <li><a href="#chart_observation_series">Observation Time Series Chart</a></li>
 </ol>
 
 <h2 id="include">Include the Libraries</h2>
@@ -451,6 +453,74 @@
         api_key: "57378dc18d74bef1051312e29a26f0b3",
         sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
         datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: getSeries
+      });
+
+    });
+  }());
+</script>
+
+
+<h2 id="chart_observation_series">Observation Time Series Chart</h2>
+
+<p>Very similarly to the datastream chart, OGC SOS observation data is straight forward.</p>
+
+<pre class="code">
+
+  // Draw the chart after time series is returned
+  var drawChart = function(seriesData, observation) {
+    var chart = $("#chart2").Geocens.Chart({
+      observation: observation
+    });
+  };
+
+  // Retrieve the time series after observations is returned (note plural)
+  var getSeries = function(observations) {
+    observations[0].getTimeSeries({
+      start: new Date("2012-01-01T00:00:00Z"),
+      end:   new Date("2012-06-01T00:00:00Z"),
+      done:  drawChart
+    });
+  };
+
+  // Retrieve the observations
+  Geocens.SOS.getObservation({
+    service_url: "http://app.geocens.ca:8171/sos",
+    offering: "Temperature",
+    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    done: getSeries
+  });
+
+</pre>
+
+<div id="chart2"></div>
+
+<button id="example_nine">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_nine").on("click", function() {
+
+      // Draw the chart after time series is returned
+      var drawChart = function(seriesData, observation) {
+        var chart = $("#chart2").Geocens.Chart({
+          observation: observation
+        });
+      };
+
+      // Retrieve the time series after observations is returned (note plural)
+      var getSeries = function(observations) {
+        observations[0].getTimeSeries({
+          start: new Date("2012-01-01T00:00:00Z"),
+          end:   new Date("2012-06-01T00:00:00Z"),
+          done:  drawChart
+        });
+      };
+
+      // Retrieve the observations
+      Geocens.SOS.getObservation({
+        service_url: "http://app.geocens.ca:8171/sos",
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
         done: getSeries
       });
 
