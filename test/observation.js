@@ -19,8 +19,12 @@ $(document).ready(function() {
     equal(attributes.property, options.property);
   });
 
-  test("init sets the service, offering, and property properties", 3, function() {
-    var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+  test("init sets the service, offering, and property properties", 3,
+    function() {
+    var service = new Geocens.SOS({
+      service_url: "http://www.example.com/sos"
+    });
+
     var options = {
       service: service,
       offering: "Temperature",
@@ -48,7 +52,9 @@ $(document).ready(function() {
 
   module("SOS Observation getTimeSeries", {
     setup: function () {
-      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+      var service = new Geocens.SOS({
+        service_url: "http://www.example.com/sos"
+      });
 
       this.observation = new Geocens.Observation({
         service: service,
@@ -117,7 +123,9 @@ $(document).ready(function() {
         requests.push(request);
       };
 
-      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+      var service = new Geocens.SOS({
+        service_url: "http://www.example.com/sos"
+      });
 
       this.observation = new Geocens.Observation({
         service: service,
@@ -288,7 +296,8 @@ $(document).ready(function() {
     clock.restore();
   });
 
-  test('sends the current time - 24 hours as the default start time', 2, function() {
+  test('sends the current time - 24 hours as the default start time', 2,
+    function() {
     var time = new Date();
     var clock = sinon.useFakeTimers(time.getTime());
 
@@ -383,7 +392,9 @@ $(document).ready(function() {
         requests.push(request);
       };
 
-      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+      var service = new Geocens.SOS({
+        service_url: "http://www.example.com/sos"
+      });
 
       this.observation = new Geocens.Observation({
         service: service,
@@ -502,7 +513,9 @@ $(document).ready(function() {
 
   module("SOS Observation seriesData", {
     setup: function () {
-      var service = new Geocens.SOS({ service_url: "http://www.example.com/sos" });
+      var service = new Geocens.SOS({
+        service_url: "http://www.example.com/sos"
+      });
 
       this.observation = new Geocens.Observation({
         service: service,
@@ -521,7 +534,8 @@ $(document).ready(function() {
     }
   });
 
-  test('returns no data when no time series data has been retrieved', 2, function() {
+  test('returns no data when no time series data has been retrieved', 2,
+    function() {
     var data = this.observation.seriesData();
 
     ok(data instanceof Array, 'seriesData is not an array');
@@ -542,7 +556,8 @@ $(document).ready(function() {
     equal(data.length, 6, 'seriesData is empty');
   });
 
-test('returns data when time series data has been retrieved multiple times', 2, function() {
+test('returns data when time series data has been retrieved multiple times', 2,
+  function() {
     // Retrieve first time series
     this.observation.getTimeSeries({
       start: new Date("2013-01-01 00:00:00Z"),

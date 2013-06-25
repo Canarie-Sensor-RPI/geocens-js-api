@@ -92,7 +92,8 @@
         params.skip = options.skip;
       }
 
-      var path = this.service.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records";
+      var path = this.service.path + "sensors/" + this.sensor_id +
+                  "/datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
         url: path,
@@ -163,7 +164,8 @@
       options.api_key = options.api_key || service.api_key;
 
       var sensor_path = this.path + "sensors/" + options.sensor_id;
-      var datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
+      var datastream_path = sensor_path + "/datastreams/" +
+                            options.datastream_id;
 
       // Retrieve sensor resource
       service.ajax.get({
@@ -254,7 +256,7 @@
       // Split into raw observation pairs
       var rawObservations = parts[6].split('*');
 
-      var preparedObservations = $.map(rawObservations, function(observationSet) {
+      return $.map(rawObservations, function(observationSet) {
         var pieces = observationSet.split('|');
         var observation = {
           year:   pieces[0],
@@ -276,8 +278,6 @@
           value:     observation.value
         };
       });
-
-      return preparedObservations;
     },
 
     describe: function(options) {

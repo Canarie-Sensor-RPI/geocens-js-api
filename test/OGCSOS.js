@@ -11,7 +11,8 @@ $(document).ready(function() {
 
     var newPath = "http://www.example.com/translation_engine/";
     Geocens.SOS.setPath(newPath);
-    ok(Geocens.SOS.path === newPath, "Geocens Translation Engine path did not change");
+    ok(Geocens.SOS.path === newPath,
+        "Geocens Translation Engine path did not change");
 
     Geocens.SOS.setPath(originalPath);
   });
@@ -57,7 +58,8 @@ $(document).ready(function() {
 
     equal(args.service, "http://www.example.com/sos", "Service URL mismatch");
     equal(args.offeringID, "Temperature", "Offering mismatch");
-    equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Property mismatch");
+    equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+          "Property mismatch");
     equal(args.topleftLat, 90, "topleftLat mismatch");
     equal(args.topleftLon, -180, "topleftLon mismatch");
     equal(args.bottomrightLat, -90, "bottomrightLat mismatch");
@@ -89,7 +91,8 @@ $(document).ready(function() {
     var observationsPath = Geocens.SOS.path + "GetObservations";
     var baseRequestUrl = request.url.split('?')[0];
 
-    equal(baseRequestUrl, observationsPath, "Request not made for observations");
+    equal(baseRequestUrl, observationsPath,
+          "Request not made for observations");
 
     var args = ajaxSpy.args[0][0].data;
 
@@ -131,7 +134,8 @@ $(document).ready(function() {
     ok(newObservations instanceof Array, "Data is not an array");
   });
 
-  test('sets the `service` property for the Observations returned', 2, function() {
+  test('sets the `service` property for the Observations returned', 2,
+    function() {
     var newObservations;
 
     // Retrieve observation data
@@ -154,7 +158,8 @@ $(document).ready(function() {
     ok(first.service !== undefined, "Observation service was not defined");
   });
 
-  test('sets the `offering`, `property`, and sensor properties for the Observations returned', 5, function() {
+  test('sets the `offering`, `property`, and sensor properties for the Observations returned',
+        5, function() {
     var newObservations;
 
     // Retrieve observation data
@@ -174,7 +179,8 @@ $(document).ready(function() {
     var first = newObservations[0];
 
     equal(first.offering, "Temperature", "Offering incorrect");
-    equal(first.property, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Observed Property incorrect");
+    equal(first.property, "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+          "Observed Property incorrect");
 
     var attributes = first.attributes();
     equal(attributes.procedure_id, "sensor_1", "Procedure ID incorrect");
@@ -245,13 +251,15 @@ $(document).ready(function() {
     var observationsPath = Geocens.SOS.path + "GetObservations";
     var baseRequestUrl = request.url.split('?')[0];
 
-    equal(baseRequestUrl, observationsPath, "Request not made for observations");
+    equal(baseRequestUrl, observationsPath,
+          "Request not made for observations");
 
     var args = ajaxSpy.args[0][0].data;
 
     equal(args.service, "http://www.example.com/sos", "Service URL mismatch");
     equal(args.offeringID, "Temperature", "Offering mismatch");
-    equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature", "Property mismatch");
+    equal(args.propertyName, "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+          "Property mismatch");
     equal(args.topleftLat, 90, "topleftLat mismatch");
     equal(args.topleftLon, -180, "topleftLon mismatch");
     equal(args.bottomrightLat, -90, "bottomrightLat mismatch");
@@ -294,7 +302,8 @@ $(document).ready(function() {
     ok(newObservations instanceof Array, "Data is not an array");
   });
 
-  test('sets the `service` property for the Observations returned', 2, function() {
+  test('sets the `service` property for the Observations returned', 2,
+    function() {
     var newObservations, service;
 
     service = new Geocens.SOS({
