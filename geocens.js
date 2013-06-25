@@ -53,7 +53,7 @@
     },
 
     // Merge an array into currently cached time series data for the datastream
-    cache: function(data) {
+    _cache: function(data) {
       this._data = this._data.concat(data);
 
       // sort by timestamp
@@ -110,7 +110,7 @@
           };
         });
 
-        datastream.cache(convertedData);
+        datastream._cache(convertedData);
         options.done(convertedData);
       });
 
@@ -139,7 +139,7 @@
     // Default Data Service URL
     path: "http://dataservice.geocens.ca/api/",
 
-    ajax: {
+    _ajax: {
       // Retrieve just the resource
       get: function(options) {
         var service = this;
@@ -168,13 +168,13 @@
                             options.datastream_id;
 
       // Retrieve sensor resource
-      service.ajax.get({
+      service._ajax.get({
         path: sensor_path,
         api_key: options.api_key
       }).done(function (sensorData) {
 
         // Retrieve datastream resource
-        service.ajax.get({
+        service._ajax.get({
           path: datastream_path,
           api_key: options.api_key
         }).done(function (datastreamData) {
@@ -224,7 +224,7 @@
     },
 
     // Merge an array into currently cached time series data for the observation
-    cache: function(data) {
+    _cache: function(data) {
       this._data = this._data.concat(data);
 
       // sort by timestamp
@@ -244,7 +244,7 @@
     // Convert Translation Engine output to array of values.
     // Example Series Data:
     //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
-    convertSeriesData: function(data) {
+    _convertSeriesData: function(data) {
       parts = data.split(',');
 
       if (parts.length !== 7) {
@@ -351,8 +351,8 @@
           traceHours:   traceHours
         }
       }).done(function (data) {
-        var convertedData = observation.convertSeriesData(data);
-        observation.cache(convertedData);
+        var convertedData = observation._convertSeriesData(data);
+        observation._cache(convertedData);
         options.done(convertedData);
       });
     },
@@ -386,7 +386,7 @@
     path: "http://dataservice.geocens.ca/translation_engine/",
 
     // Convert Translation Engine Readings format
-    convertReadings: function(readings) {
+    _convertReadings: function(readings) {
       return $.map(readings, function(reading) {
         var time = new Date(reading.time);
 
@@ -398,7 +398,7 @@
     },
 
     // Convert Translation Engine output to Objects
-    decode: function(data) {
+    _decode: function(data) {
       var service         = this;
       var observations    = data.observations[0];
       var observationData = observations.data;
@@ -410,7 +410,7 @@
           offering:     observations.offeringID,
           procedure_id: data.id,
           property:     observations.propertyName,
-          readings:     service.convertReadings(data.readings),
+          readings:     service._convertReadings(data.readings),
           service:      service
         });
       });
@@ -445,7 +445,7 @@
           bottomrightLon: options.southeast[1]
         }
       }).done(function (data) {
-        var converted = service.decode(data);
+        var converted = service._decode(data);
         options.done(converted);
       });
     },
