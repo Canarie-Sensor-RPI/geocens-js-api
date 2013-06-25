@@ -368,7 +368,79 @@ After override, all new requests will use the new Data Service path.
 
 ### Chart Visualization
 
-TODO: Add API documentation for the chart module
+The GeoCENS JS API has an optional module for drawing simple charts. It requires the HighStock 1.3.2 or newer library to be installed. For a web page, include the `geocens-chart.js` file in a script tag, **after** the main `geocens.js` file.
+
+		<script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"></script>
+		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+		<script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"></script>
+
+Using the chart API is intended to be an easier alternative to interfacing with HighStock yourself, because the options are pre-configured.
+
+A quick example with a Data Service datastream source:
+
+		// Draw the chart after time series is returned
+		var drawChart = function(seriesData, datastream) {
+			var chart = $("#chart").Geocens.Chart({
+				datastream: datastream
+			});
+		};
+
+		// Retrieve the time series after datastream is returned
+		var getSeries = function(datastream) {
+			datastream.getTimeSeries({
+				done: drawChart	
+			});
+		};
+
+		// Retrieve the datastream
+		Geocens.DataService.getDatastream({
+			api_key: "your_32_character_api_key",
+			sensor_id: "32_character_sensor_id",
+			datastream_id: "32_character_datastream_id",
+			done: getSeries
+		});
+
+In the above example, the callback chain works in reverse. It first retrieves the datastream and passes it to the second function, which retrieves the time series and passes it to the first function. The first function then draws the chart with all the series data for the datastream.
+
+This means that if multiple `getTimeSeries` requests are made, all the cached data for that datastream will be used for drawing the time series chart.
+
+Using the chart API with OGC SOS observations is also short:
+
+		// Draw the chart after time series is returned
+		var drawChart = function(seriesData, observation) {
+			var chart = $("#chart").Geocens.Chart({
+				observation: observation
+			});
+		};
+
+		// Retrieve the time series after observations is returned (note plural)
+		var getSeries = function(observations) {
+			observations[0].getTimeSeries({
+				done: drawChart	
+			});
+		};
+
+		// Retrieve the observations
+		Geocens.SOS.getObservation({
+			service_url: "http://www.example.com/sos",
+			offering: "sos_offering",
+			property: "sos_property",
+			done: getSeries
+		});
+
+This example works in an identical manner to the Data Service example. As with the other example, in the case taht multiple `getTimeSeries` requests are made, all the cached data for that observation will be used for drawing the time series chart.
+
+##### option: observation
+
+Pass in a OGC SOS observation object to the chart, which will draw the time series using the cached time series data. If specified with `datastream`, will take precedence.
+
+##### option: datastream
+
+Pass in a Data Service datastream object to the chart, which will draw the time series using the cached time series data. If specified with `observation`, it will not be used.
+
+##### option: chart
+
+A JavaScript object with HighStock compatible configuration options. These options will be passed to the chart when it is created, overriding defaults set by the GeoCENS JS API chart module. Note that certain properties may not be overridden.
 
 ### Map Visualization
 
