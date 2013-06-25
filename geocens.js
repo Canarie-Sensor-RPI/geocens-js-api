@@ -85,11 +85,11 @@
       };
 
       if (options.limit !== undefined && isFinite(options.limit)) {
-        params["limit"] = options.limit;
+        params.limit = options.limit;
       }
 
       if (options.skip !== undefined && isFinite(options.skip)) {
-        params["skip"] = options.skip;
+        params.skip = options.skip;
       }
 
       var path = this.service.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records";
@@ -243,7 +243,7 @@
     // Example Series Data:
     //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
     convertSeriesData: function(data) {
-      parts = data.split(',')
+      parts = data.split(',');
 
       if (parts.length !== 7) {
         console.warn("Series data may be malformed", data);
@@ -311,15 +311,15 @@
         options = {};
       }
 
-      function ISODateString(d){
-        function pad(n){return n<10 ? '0'+n : n}
-        return d.getUTCFullYear()+'-'
-            + pad(d.getUTCMonth()+1)+'-'
-            + pad(d.getUTCDate())+'T'
-            + pad(d.getUTCHours())+':'
-            + pad(d.getUTCMinutes())+':'
-            + pad(d.getUTCSeconds())+'Z';
-      };
+      function ISODateString(d) {
+        function pad(n) { return n < 10 ? '0' + n : n; }
+        return d.getUTCFullYear()    + '-' +
+            pad(d.getUTCMonth() + 1) + '-' +
+            pad(d.getUTCDate())      + 'T' +
+            pad(d.getUTCHours())     + ':' +
+            pad(d.getUTCMinutes())   + ':' +
+            pad(d.getUTCSeconds())   + 'Z';
+      }
 
       options.done = options.done || function() {};
 
