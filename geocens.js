@@ -148,6 +148,10 @@
     // Return cached time series data
     seriesData: function () {
       return this._data;
+    },
+
+    units: function () {
+      return this._attributes.unit;
     }
   });
 
