@@ -54,7 +54,7 @@
       },
 
       rangeSelector: {
-          enabled: false
+          enabled: true
       },
 
       series: [{
