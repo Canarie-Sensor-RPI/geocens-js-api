@@ -27,7 +27,8 @@ $(document).ready(function() {
 
       // Path to resource on Data Service
       var basePath  = Geocens.DataService.path;
-      this.api_path = basePath + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records?detail=true";
+      this.api_path = basePath + "sensors/" + this.sensor_id + "/datastreams/" +
+                      this.datastream_id + "/records?detail=true";
 
       // Create service, datastream
       var service = new Geocens.DataService({ api_key: this.api_key });
@@ -100,7 +101,9 @@ $(document).ready(function() {
     equal(requests.length, 1, "Fake server did not receive requests");
 
     var request = requests[0];
-    var records_path = Geocens.DataService.path + "sensors/" + this.sensor_id + "/datastreams/" + this.datastream_id + "/records?detail=true";
+    var records_path = Geocens.DataService.path + "sensors/" + this.sensor_id +
+                       "/datastreams/" + this.datastream_id +
+                       "/records?detail=true";
 
     equal(request.url, records_path, "Request not made for records resource");
 
@@ -192,7 +195,8 @@ $(document).ready(function() {
 
       // Path to resource on Data Service
       var basePath  = Geocens.DataService.path;
-      this.api_path = basePath + "sensors/" + this.sensor_id + "/datastreams/" + datastream_id + "/records?detail=true";
+      this.api_path = basePath + "sensors/" + this.sensor_id + "/datastreams/" +
+                      datastream_id + "/records?detail=true";
 
       // Create service, datastream
       var service = new Geocens.DataService({ api_key: api_key });
@@ -210,7 +214,8 @@ $(document).ready(function() {
     }
   });
 
-  test('returns no data when no time series data has been retrieved', 2, function() {
+  test('returns no data when no time series data has been retrieved', 2,
+    function() {
     var data = this.datastream.seriesData();
 
     ok(data instanceof Array, 'seriesData is not an array');
@@ -232,7 +237,8 @@ $(document).ready(function() {
     equal(data.length, 2, 'seriesData is empty');
   });
 
-test('returns data when time series data has been retrieved multiple times', 2, function() {
+test('returns data when time series data has been retrieved multiple times', 2,
+  function() {
     // Retrieve first time series
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
