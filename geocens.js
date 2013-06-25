@@ -4,7 +4,7 @@
 //    All Rights Reserved.
 //    http://www.geocens.ca/
 
-(function() {
+(function () {
 
   // Reference to global object
   var root = this;
@@ -24,7 +24,7 @@
 
   // Run Geocens in noConflict mode, which prevents Geocens from overwriting
   // whatever previously held the `Geocens` variable.
-  Geocens.noConflict = function() {
+  Geocens.noConflict = function () {
     root.Geocens = previousGeocens;
     return this;
   };
@@ -48,7 +48,7 @@
   // properties
   jQuery.extend(Datastream.prototype, {
     // Respond to call for attributes
-    attributes: function() {
+    attributes: function () {
       return this._attributes;
     },
 
@@ -80,7 +80,7 @@
         options = {};
       }
 
-      options.done = options.done || function() {};
+      options.done = options.done || function () {};
 
       params = {
         "detail": true
@@ -119,7 +119,7 @@
     },
 
     // Return cached time series data
-    seriesData: function() {
+    seriesData: function () {
       return this._data;
     }
   });
@@ -163,7 +163,7 @@
         options = {};
       }
 
-      options.done = options.done || function() {};
+      options.done = options.done || function () {};
       options.api_key = options.api_key || self.api_key;
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
@@ -221,7 +221,7 @@
   // and properties
   jQuery.extend(Observation.prototype, {
     // Respond to call for attributes
-    attributes: function() {
+    attributes: function () {
       return this._attributes;
     },
 
@@ -327,7 +327,7 @@
             pad(d.getUTCSeconds())   + 'Z';
       }
 
-      options.done = options.done || function() {};
+      options.done = options.done || function () {};
 
       if (options.end !== undefined) {
         time = ISODateString(options.end);
@@ -364,12 +364,12 @@
     },
 
     // Return most recent reading
-    latest: function() {
+    latest: function () {
       return this._data[this._data.length - 1];
     },
 
     // Return cached time series data
-    seriesData: function() {
+    seriesData: function () {
       return this._data;
     }
   });
@@ -429,7 +429,7 @@
         options = {};
       }
 
-      options.done        = options.done || function() {};
+      options.done        = options.done || function () {};
       options.service_url = options.service_url || self.service_url;
       options.northwest   = options.northwest || [90, -180];
       options.southeast   = options.southeast || [-90, 180];
