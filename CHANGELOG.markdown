@@ -1,3 +1,7 @@
+0.4.0 (June 24 2013)
+
+* Add support for retrieving data from OGC SOS compatible servers using the GeoCENS Translation Engine
+
 0.3.0 (June 19 2013)
 
 * Retrieve extra detail for time series records (bug fix)
