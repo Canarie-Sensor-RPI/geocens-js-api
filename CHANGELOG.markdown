@@ -1,4 +1,4 @@
-0.3 (June 19 2013)
+0.3.0 (June 19 2013)
 
 * Retrieve extra detail for time series records (bug fix)
 * Change URL for time series retrieval
