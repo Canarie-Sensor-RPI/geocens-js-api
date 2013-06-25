@@ -72,7 +72,9 @@
 
     // Retrieve time series data for the datastream
     getTimeSeries: function(options) {
-      var datastream = this;
+      var datastream = this,
+          params,
+          path;
 
       if (options === undefined) {
         options = {};
@@ -80,7 +82,7 @@
 
       options.done = options.done || function() {};
 
-      var params = {
+      params = {
         "detail": true
       };
 
@@ -92,8 +94,8 @@
         params.skip = options.skip;
       }
 
-      var path = this.service.path + "sensors/" + this.sensor_id +
-                  "/datastreams/" + this.datastream_id + "/records";
+      path = this.service.path + "sensors/" + this.sensor_id +
+              "/datastreams/" + this.datastream_id + "/records";
 
       $.ajax({
         url: path,
@@ -142,8 +144,6 @@
     _ajax: {
       // Retrieve just the resource
       get: function(options) {
-        var service = this;
-
         return $.ajax({
           url: options.path,
           type: 'GET',
@@ -155,17 +155,19 @@
     },
 
     getDatastream: function(options) {
+      var service = this,
+          sensor_path,
+          datastream_path;
+
       if (options === undefined) {
         options = {};
       }
-      var service = this;
 
       options.done = options.done || function() {};
       options.api_key = options.api_key || service.api_key;
 
-      var sensor_path = this.path + "sensors/" + options.sensor_id;
-      var datastream_path = sensor_path + "/datastreams/" +
-                            options.datastream_id;
+      sensor_path = this.path + "sensors/" + options.sensor_id;
+      datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
 
       // Retrieve sensor resource
       service._ajax.get({
@@ -257,8 +259,12 @@
       var rawObservations = parts[6].split('*');
 
       return $.map(rawObservations, function(observationSet) {
-        var pieces = observationSet.split('|');
-        var observation = {
+        var pieces,
+            observation,
+            date;
+
+        pieces = observationSet.split('|');
+        observation = {
           year:   pieces[0],
           month:  pieces[1] - 1,
           day:    pieces[2],
@@ -269,9 +275,9 @@
           value:  parseFloat(pieces[7])
         };
 
-        var date = Date.UTC(observation.year, observation.month,
-                            observation.day, observation.hour,
-                            observation.minute, observation.second);
+        date = Date.UTC(observation.year, observation.month,
+                        observation.day, observation.hour,
+                        observation.minute, observation.second);
 
         return {
           timestamp: date,
@@ -304,8 +310,8 @@
     },
 
     getTimeSeries: function(options) {
-      var observation = this;
-      var time, traceHours;
+      var observation = this,
+          time, traceHours;
 
       if (options === undefined) {
         options = {};
@@ -399,11 +405,11 @@
 
     // Convert Translation Engine output to Objects
     _decode: function(data) {
-      var service         = this;
-      var observations    = data.observations[0];
-      var observationData = observations.data;
+      var service         = this,
+          observations    = data.observations[0],
+          observationData = observations.data;
 
-      var obs = $.map(observationData, function (data) {
+      return $.map(observationData, function (data) {
         return new Geocens.Observation({
           latitude:     data.lat,
           longitude:    data.lon,
@@ -414,8 +420,6 @@
           service:      service
         });
       });
-
-      return obs;
     },
 
     getObservation: function(options) {
