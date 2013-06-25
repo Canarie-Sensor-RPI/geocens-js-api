@@ -19,6 +19,13 @@ $(document).ready(function() {
     equal(attributes.phenName, options.phenName);
   });
 
+  test("name returns phenName + id", 1, function() {
+    var settings = $.extend({}, window.Fixtures.DataService.Sensor, window.Fixtures.DataService.Datastream);
+    var datastream = new Geocens.Datastream(settings);
+
+    equal(datastream.name(), "airquality: carbonMonoxide");
+  });
+
   module("Datastream GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";

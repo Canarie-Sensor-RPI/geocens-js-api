@@ -141,6 +141,10 @@
 
     },
 
+    name: function () {
+      return this._attributes.phenName + ": " + this._attributes.id;
+    },
+
     // Return cached time series data
     seriesData: function () {
       return this._data;
