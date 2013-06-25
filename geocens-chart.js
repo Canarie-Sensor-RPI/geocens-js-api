@@ -34,7 +34,7 @@
       },
 
       title: {
-        text: datasource._attributes.id
+        text: datasource.name()
       },
 
       tooltip: {
@@ -49,7 +49,7 @@
 
               return "<strong>" + Highcharts.dateFormat(format, this.x) +
                      "</strong><br>" + series.name + ": " + point.y + " " +
-                     datasource._attributes.unit;
+                     datasource.units();
           }
       },
 
@@ -58,18 +58,19 @@
       },
 
       series: [{
-          name: datasource._attributes.id,
+          name: datasource.name(),
           data: seriesData
       }],
 
       xAxis: {
+          ordinal: false,
           type: 'datetime'
       },
 
       yAxis: {
           offset: 50,
           title: {
-              text: datasource._attributes.unit
+              text: datasource.units()
           }
       }
     };
