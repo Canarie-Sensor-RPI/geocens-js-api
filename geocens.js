@@ -141,6 +141,10 @@
 
     },
 
+    location: function () {
+      return this._attributes.loc;
+    },
+
     name: function () {
       return this._attributes.phenName + ": " + this._attributes.id;
     },
