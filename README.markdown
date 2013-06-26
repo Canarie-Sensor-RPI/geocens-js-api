@@ -380,7 +380,7 @@ A quick example with a Data Service datastream source:
 
 		// Draw the chart after time series is returned
 		var drawChart = function(seriesData, datastream) {
-			var chart = $("#chart").Geocens.Chart({
+			var chart = $("#chart").GeocensChart({
 				datastream: datastream
 			});
 		};
@@ -408,7 +408,7 @@ Using the chart API with OGC SOS observations is also short:
 
 		// Draw the chart after time series is returned
 		var drawChart = function(seriesData, observation) {
-			var chart = $("#chart").Geocens.Chart({
+			var chart = $("#chart").GeocensChart({
 				observation: observation
 			});
 		};

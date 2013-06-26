@@ -19,6 +19,20 @@ $(document).ready(function() {
     equal(attributes.phenName, options.phenName);
   });
 
+  test("name returns phenName + id", 1, function() {
+    var settings = $.extend({}, window.Fixtures.DataService.Sensor, window.Fixtures.DataService.Datastream);
+    var datastream = new Geocens.Datastream(settings);
+
+    equal(datastream.name(), "airquality: carbonMonoxide");
+  });
+
+  test("units returns unit", 1, function() {
+    var settings = $.extend({}, window.Fixtures.DataService.Sensor, window.Fixtures.DataService.Datastream);
+    var datastream = new Geocens.Datastream(settings);
+
+    equal(datastream.units(), "ppm");
+  });
+
   module("Datastream GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";

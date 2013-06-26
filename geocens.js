@@ -136,14 +136,22 @@
         });
 
         self._cache(convertedData);
-        options.done(convertedData);
+        options.done(convertedData, self);
       });
 
+    },
+
+    name: function () {
+      return this._attributes.phenName + ": " + this._attributes.id;
     },
 
     // Return cached time series data
     seriesData: function () {
       return this._data;
+    },
+
+    units: function () {
+      return this._attributes.unit;
     }
   });
 
@@ -188,6 +196,10 @@
 
       options.done = options.done || function () {};
       options.api_key = options.api_key || self.api_key;
+
+      if (self.api_key === undefined) {
+        self.api_key = options.api_key;
+      }
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
       datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
@@ -382,7 +394,7 @@
       }).done(function (data) {
         var convertedData = self._convertSeriesData(data);
         self._cache(convertedData);
-        options.done(convertedData);
+        options.done(convertedData, self);
       });
     },
 
@@ -391,9 +403,22 @@
       return this._data[this._data.length - 1];
     },
 
+    name: function () {
+      return this.shortProperty() + ": " + this._attributes.procedure_id;
+    },
+
     // Return cached time series data
     seriesData: function () {
       return this._data;
+    },
+
+    shortProperty: function () {
+      var parts = this.property.split(':');
+      return parts[parts.length - 1];
+    },
+
+    units: function () {
+      return this._attributes.unit;
     }
   });
 
@@ -452,12 +477,16 @@
         options = {};
       }
 
+      if (self.service_url === undefined) {
+        self.service_url = options.service_url;
+      }
+
       options.done        = options.done || function () {};
       options.service_url = options.service_url || self.service_url;
       options.northwest   = options.northwest || [90, -180];
       options.southeast   = options.southeast || [-90, 180];
 
-      // Retrieve sensor resource
+      // Retrieve observation resource
       $.ajax({
         type: 'GET',
         url: this.path + "GetObservations",

@@ -178,6 +178,30 @@ $(document).ready(function() {
     ok(newDatastream.service !== undefined, "Datastream service was not defined");
   });
 
+  test('sets the `api_key` property for the Datastream service returned', 1,
+    function() {
+    var newDatastream;
+
+    // Retrieve datastream
+    Geocens.DataService.getDatastream({
+      api_key:       this.api_key,
+      sensor_id:     this.sensor_id,
+      datastream_id: this.datastream_id,
+      done: function (datastream) {
+        newDatastream = datastream;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastream)]);
+    this.server.respond();
+
+    ok(newDatastream.service.api_key !== undefined, "Datastream service api_key was not defined");
+  });
+
   test('sets the `datastream_id` and `sensor_id` properties for the Datastream returned',
     2, function() {
     var newDatastream;
