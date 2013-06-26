@@ -147,7 +147,9 @@
 
   var goGetObservations = function(datastream) {
     datastream.getTimeSeries({
-      done: function(seriesData) {
+      start: new Date("2012-01-01T00:00:00Z"),
+      end:   new Date("2013-01-01T00:00:00Z"),
+      done:  function(seriesData) {
         console.log("Example Three", seriesData);
         alert(JSON.stringify(seriesData));
       }
@@ -174,7 +176,9 @@
 
       var goGetObservations = function(datastream) {
         datastream.getTimeSeries({
-          done: function(seriesData) {
+          start: new Date("2012-01-01T00:00:00Z"),
+          end:   new Date("2013-01-01T00:00:00Z"),
+          done:  function(seriesData) {
             console.log("Example Three", seriesData);
             alert(JSON.stringify(seriesData));
           }
@@ -413,7 +417,9 @@
   // Retrieve the time series after datastream is returned
   var getSeries = function(datastream) {
     datastream.getTimeSeries({
-      done: drawChart
+      start: new Date("2012-01-01T00:00:00Z"),
+      end:   new Date("2013-01-01T00:00:00Z"),
+      done:  drawChart
     });
   };
 
@@ -444,7 +450,9 @@
       // Retrieve the time series after datastream is returned
       var getSeries = function(datastream) {
         datastream.getTimeSeries({
-          done: drawChart
+          start: new Date("2012-01-01T00:00:00Z"),
+          end:   new Date("2013-01-01T00:00:00Z"),
+          done:  drawChart
         });
       };
 
