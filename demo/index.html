@@ -64,7 +64,7 @@
 
 <pre class="code">
 
-  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
   var service = new Geocens.DataService({
     api_key: api_key
@@ -98,17 +98,17 @@
 
 <pre class="code">
 
-  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
   var service = new Geocens.DataService({
     api_key: api_key
   });
 
   service.getDatastream({
-    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
     done: function(datastream) {
-      console.log("Example Two", datastream);
+      console.log(&quot;Example Two&quot;, datastream);
       alert(JSON.stringify(datastream.attributes()));
     }
   });
@@ -143,14 +143,14 @@
 
 <pre class="code">
 
-  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
   var goGetObservations = function(datastream) {
     datastream.getTimeSeries({
-      start: new Date("2012-01-01T00:00:00Z"),
-      end:   new Date("2013-01-01T00:00:00Z"),
+      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+      end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
       done:  function(seriesData) {
-        console.log("Example Three", seriesData);
+        console.log(&quot;Example Three&quot;, seriesData);
         alert(JSON.stringify(seriesData));
       }
     });
@@ -161,8 +161,8 @@
   });
 
   service.getDatastream({
-    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
     done: goGetObservations
   });
 
@@ -209,7 +209,7 @@
 <pre class="code">
 
   var service = new Geocens.SOS({
-    service_url: "http://app.geocens.ca:8171/sos"
+    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
   });
 
 </pre>
@@ -236,14 +236,14 @@
 <pre class="code">
 
   var service = new Geocens.SOS({
-    service_url: "http://app.geocens.ca:8171/sos"
+    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
   });
 
   service.getObservation({
-    offering: "Temperature",
-    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    offering: &quot;Temperature&quot;,
+    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
     done: function (observations) {
-      console.log("Example Five", observations);
+      console.log(&quot;Example Five&quot;, observations);
       alert(JSON.stringify(observations[0].attributes()));
     }
   });
@@ -278,22 +278,22 @@
 
   var goGetRecords = function(observations) {
     observations[0].getTimeSeries({
-      start: new Date("2012-01-01T00:00:00Z"),
-      end:   new Date("2012-06-01T00:00:00Z"),
+      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+      end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
       done:  function(seriesData) {
-        console.log("Example Six", seriesData);
+        console.log(&quot;Example Six&quot;, seriesData);
         alert(JSON.stringify(seriesData));
       }
     });
   };
 
   var service = new Geocens.SOS({
-    service_url: "http://app.geocens.ca:8171/sos"
+    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
   });
 
   service.getObservation({
-    offering: "Temperature",
-    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    offering: &quot;Temperature&quot;,
+    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
     done: goGetRecords
   });
 
@@ -338,19 +338,19 @@
   var goGetDescription = function(observations) {
     observations[0].describe({
       done: function(sensorML) {
-        console.log("Example Seven", sensorML);
+        console.log(&quot;Example Seven&quot;, sensorML);
         alert(JSON.stringify(sensorML));
       }
     });
   };
 
   var service = new Geocens.SOS({
-    service_url: "http://app.geocens.ca:8171/sos"
+    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
   });
 
   service.getObservation({
-    offering: "Temperature",
-    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    offering: &quot;Temperature&quot;,
+    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
     done: goGetDescription
   });
 
@@ -409,7 +409,7 @@
 
   // Draw the chart after time series is returned
   var drawChart = function(seriesData, datastream) {
-    var chart = $("#chart").GeocensChart({
+    var chart = $(&quot;#chart&quot;).GeocensChart({
       datastream: datastream
     });
   };
@@ -417,17 +417,17 @@
   // Retrieve the time series after datastream is returned
   var getSeries = function(datastream) {
     datastream.getTimeSeries({
-      start: new Date("2012-01-01T00:00:00Z"),
-      end:   new Date("2013-01-01T00:00:00Z"),
+      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+      end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
       done:  drawChart
     });
   };
 
   // Retrieve the datastream
   Geocens.DataService.getDatastream({
-    api_key: "57378dc18d74bef1051312e29a26f0b3",
-    sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-    datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+    api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
+    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
     done: getSeries
   });
 
@@ -477,7 +477,7 @@
 
   // Draw the chart after time series is returned
   var drawChart = function(seriesData, observation) {
-    var chart = $("#chart2").GeocensChart({
+    var chart = $(&quot;#chart2&quot;).GeocensChart({
       observation: observation
     });
   };
@@ -485,17 +485,17 @@
   // Retrieve the time series after observations is returned (note plural)
   var getSeries = function(observations) {
     observations[0].getTimeSeries({
-      start: new Date("2012-01-01T00:00:00Z"),
-      end:   new Date("2012-06-01T00:00:00Z"),
+      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+      end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
       done:  drawChart
     });
   };
 
   // Retrieve the observations
   Geocens.SOS.getObservation({
-    service_url: "http://app.geocens.ca:8171/sos",
-    offering: "Temperature",
-    property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+    service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+    offering: &quot;Temperature&quot;,
+    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
     done: getSeries
   });
 
