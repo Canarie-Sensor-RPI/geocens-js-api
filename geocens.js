@@ -403,6 +403,10 @@
       return this._data[this._data.length - 1];
     },
 
+    location: function () {
+      return [this._attributes.latitude, this._attributes.longitude];
+    },
+
     name: function () {
       return this.shortProperty() + ": " + this._attributes.procedure_id;
     },
