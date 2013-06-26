@@ -1,3 +1,7 @@
+0.5.0 (June 25 2013)
+
+* Add GeoCENS JS API chart module, for easily drawing time series using the HighStock library
+
 0.4.1 (June 25 2013)
 
 * Add support for custom start and end times for Data Service time series retrieval

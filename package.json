@@ -2,7 +2,7 @@
   "name": "geocens_js_api",
   "description": "GeoCENS JavaScript Data and Visualization Library",
   "author": "James Badger <jamesbadger@gmail.com>",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "license": "All Rights Reserved",
   "main": "geocens.js",
   "readmeFilename": "README.markdown",
