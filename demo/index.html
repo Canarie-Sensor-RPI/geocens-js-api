@@ -582,7 +582,7 @@
     }).addTo(map);
 
     var mapObservations = function(observations) {
-      var markerGroup = L.Geocens(observations);
+      L.Geocens(observations);
     };
 
     Geocens.SOS.getObservation({
@@ -610,7 +610,7 @@
       }).addTo(map);
 
       var mapObservations = function(observations) {
-        var markerGroup = L.Geocens(observations);
+        L.Geocens(observations);
       };
 
       Geocens.SOS.getObservation({
