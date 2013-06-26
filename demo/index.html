@@ -18,7 +18,7 @@
       max-width: 80em;
     }
 
-    #map1 {
+    #map1, #map2 {
       height: 400px;
       width: 100%;
       border: 1px solid black;
@@ -47,7 +47,8 @@
   <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
   <li><a href="#chart_observation_series">Observation Time Series Chart</a></li>
   <li><a href="#map_include">Including the Map Module</a></li>
-  <li><a href="#map_observations">Add OGC SOS Observations to Map</a></li>
+  <li><a href="#map_observations">Add OGC SOS Observations to a Map</a></li>
+  <li><a href="#map_datastreams">Add Data Service Datastreams to a Map</a></li>
 </ol>
 
 <h2 id="include">Include the Libraries</h2>
@@ -565,13 +566,13 @@
 <p>Be sure to include Leaflet <em>before</em> including the GeoCENS Map module!</p>
 
 
-<h2 id="map_observations">Add OGC SOS Observations to Map</h2>
+<h2 id="map_observations">Add OGC SOS Observations to a Map</h2>
 
 <p>A module is added to Leaflet to make adding OGC SOS observations easy.</p>
 
 <pre class="code">
 
-    var map = L.map('map', {
+    var map = L.map('map1', {
           center: [51.07993, -114.131802],
           zoom: 3
     });
@@ -580,31 +581,14 @@
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Add SOS Observations to the map
     var mapObservations = function(observations) {
-      // Returns a Leaflet LayerGroup containing the markers.
-      var markerGroup = L.Geocens(observations, {
-        // Custom marker options.
-        // See Leaflet Marker Options documentation.
-        marker: {
-          clickable: true // note: setting clickable to false will disable popups
-        },
-
-        // Return custom HTML content for marker popups.
-        // `datasource` refers to the datastream/observation for
-        // the popup. `event` is the click event that activated
-        // the popup, and `marker` is the one the user clicked.
-        popup: function(datasource, event, marker) {
-          return datasource.name();
-        }
-      });
+      var markerGroup = L.Geocens(observations);
     };
 
-    // Retrieve the observations
     Geocens.SOS.getObservation({
-      service_url: "http://app.geocens.ca:8171/sos",
-      offering: "Temperature",
-      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+      offering: &quot;Temperature&quot;,
+      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
       done: mapObservations
     });
 
@@ -617,40 +601,81 @@
   $(document).ready(function() {
     $("#example_ten").on("click", function() {
       var map = L.map('map1', {
-        center: [51.07993, -114.131802],
-        zoom: 3
+            center: [51.07993, -114.131802],
+            zoom: 3
       });
 
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      // Add SOS Observations to the map
       var mapObservations = function(observations) {
-        // Returns a Leaflet LayerGroup containing the markers.
-        var markerGroup = L.Geocens(observations, {
-          // Custom marker options.
-          // See Leaflet Marker Options documentation.
-          marker: {
-            clickable: true // note: setting clickable to false will disable popups
-          },
-
-          // Return custom HTML content for marker popups.
-          // `datasource` refers to the datastream/observation for
-          // the popup. `event` is the click event that activated
-          // the popup, and `marker` is the one the user clicked.
-          popup: function(datasource, event, marker) {
-            return datasource.name();
-          }
-        });
+        var markerGroup = L.Geocens(observations);
       };
 
-      // Retrieve the observations
       Geocens.SOS.getObservation({
         service_url: "http://app.geocens.ca:8171/sos",
         offering: "Temperature",
         property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
         done: mapObservations
+      });
+    });
+  }());
+</script>
+
+
+<h2 id="map_datastreams">Add Data Service Datastreams to a Map</h2>
+
+<p>A module is added to Leaflet to make adding GeoCENS Data Service datastreams easy.</p>
+
+<pre class="code">
+
+    var map = L.map('map2', {
+          center: [51.07993, -114.131802],
+          zoom: 3
+    });
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var mapDatastream = function(datastream) {
+      L.Geocens(datastream);
+    };
+
+    Geocens.DataService.getDatastream({
+      api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
+      sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+      datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
+      done: mapDatastream
+    });
+
+</pre>
+
+<div id="map2"></div>
+
+<button id="example_eleven">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_eleven").on("click", function() {
+      var map = L.map('map2', {
+            center: [51.07993, -114.131802],
+            zoom: 3
+      });
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var mapDatastream = function(datastream) {
+        L.Geocens(datastream);
+      };
+
+      Geocens.DataService.getDatastream({
+        api_key: "57378dc18d74bef1051312e29a26f0b3",
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: mapDatastream
       });
     });
   }());
