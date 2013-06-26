@@ -444,7 +444,104 @@ A JavaScript object with HighStock compatible configuration options. These optio
 
 ### Map Visualization
 
-TODO: Add API documentation for the map module
+The GeoCENS JS API has an optional module for mapping datastreams and/or observations. It requires the [Leaflet](http://leafletjs.com/) 0.6.0 or newer library to be installed. For a web page, include the `geocens-map.js` file in a script tag, **after** the main `geocens.js` file. It can be included with the `geocens-chart.js` module without conflict.
+
+		<script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"></script>
+		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+		<script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"></script>
+
+The Map API makes it easy to draw map markers on a map without having to customize the markers and popups yourself. Getting started is as easy as [getting started with the Leaflet Library](http://leafletjs.com/examples/quick-start.html). An interactive demo is available in the `demo` directory.
+
+1. Include the Leaflet CSS files
+2. Include the Leaflet JS file
+3. Add a div element for the map
+4. Set the height on the div element
+5. Set up the map (see following code example)
+
+		$(document).ready(function() {
+			var map = L.map('map', {
+		        center: [51.07993, -114.131802],
+		        zoom: 3
+			});
+
+			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(map);
+
+			// Add SOS Observations to the map
+			var mapObservations = function(observations) {
+				// Returns a Leaflet LayerGroup containing the markers.
+				var markerGroup = L.Geocens(observations, {
+					// Custom marker options.
+					// See Leaflet Marker Options documentation.
+					marker: {
+						clickable: true // note: setting clickable to false will disable popups
+					},
+
+					// Return custom HTML content for marker popups.
+					// `datasource` refers to the datastream/observation for
+					// the popup. `event` is the click event that activated
+					// the popup, and `marker` is the one the user clicked.
+					popup: function(datasource, event, marker) {
+						return datasource.name();
+					}
+				});
+			};
+
+			// Retrieve the observations
+			Geocens.SOS.getObservation({
+			  service_url: "http://app.geocens.ca:8171/sos",
+			  offering: "Temperature",
+			  property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+			  done: mapObservations
+			});
+
+		}());
+
+In the above example, a group of observations from an OGC SOS server are added to a map. Each marker on the map corresponds to a observation/procedure from the SOS, and displays a popup with the observed property/procedure id.
+
+#### L.Geocens
+
+This is a Leaflet function that is designed to add data from GeoCENS JS API data sources. It can be used on multiple input types:
+
+		// A single OGC SOS observation. Returns a Leaflet Marker.
+		L.Geocens(observation);
+
+		// An array of OGC SOS observations. Returns a Leaflet LayerGroup containing Leaflet Markers.
+		L.Geocens(observations);
+
+		// A single GeoCENS Data Service datastream. Returns a Leaflet Marker.
+		L.Geocens(datastream);
+
+		// An array of GeoCENS Data Service datastreams. Returns a Leaflet LayerGroup containing Leaflet Markers.
+		L.Geocens(datastreams);
+
+As noted above, Inputting a single item will return a single output. Inputting an array of items will return a LayerGroup.
+
+The function also supports an options input, allowing the markers and popups to be customized. Modifying these will override the defaults.
+
+		L.Geocens(observations, {
+			marker: {
+				clickable: true
+			},
+
+			popup: function(datasource, event, marker) {
+				return datasource.name();
+			}
+		});
+
+##### option: marker
+
+Custom Leaflet Marker options, applied to every marker generated from the input data. See the [Leaflet Marker option documentation](http://leafletjs.com/reference.html#marker-options) for options.
+
+By default, it will apply no customization to the markers and they will appear as the Leaflet default markers.
+
+##### option: popup
+
+Custom content to be inserted into popups. Whenever a user clicks on a marker, it will trigger this function to determine what HTML content will be displayed in the popup for the marker. The function will return the `datasource`, `event` and `marker`. The `datasource` is the observation or datastream for the marker; it can be queried using their respective APIs. The `event` is the [Leaflet click event](http://leafletjs.com/reference.html#mouse-event) for the popup. The `marker` is the [Leaflet marker](http://leafletjs.com/reference.html#marker) the user clicked on.
+
+Note that if click events are disabled for the marker (in the marker options), then the popup will not be displayed.
 
 ## Developing and Extending
 
