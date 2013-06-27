@@ -6,10 +6,16 @@
 
 (function($, L) {
 
-  L.Geocens = L.FeatureGroup.extend({
+  var GeocensGroup = L.FeatureGroup.extend({
 
-    initialize: function(data, options) {}
+    initialize: function(data, options) {
+      console.log("initializing", data, options);
+    }
 
   });
+
+  L.Geocens = function (data, options) {
+    return new GeocensGroup(data, options);
+  };
 
 })(jQuery, L);
