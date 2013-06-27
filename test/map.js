@@ -39,6 +39,7 @@ $(document).ready(function() {
     });
 
     ok(spy.calledWith([51.07993, -114.131802], markerOptions), "Marker options not used");
+    spy.restore();
   });
 
   test('default popup is called on click', 1, function() {
@@ -50,6 +51,20 @@ $(document).ready(function() {
     group._markers[0].fireEvent('click');
 
     ok(spy.called, "Default popup function not called");
+    spy.restore();
+  });
+
+  test('custom popup is called on click', 1, function() {
+    var input = [this.observation];
+    var spy = sinon.spy();
+
+    var group = L.geocens(input, {
+      popup: spy
+    });
+
+    group._markers[0].fireEvent('click');
+
+    ok(spy.called, "Custom popup function not called");
   });
 
 });
