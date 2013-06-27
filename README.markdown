@@ -507,19 +507,19 @@ In the above example, a group of observations from an OGC SOS server are added t
 
 This is a Leaflet function that is designed to add data from GeoCENS JS API data sources. It can be used on multiple input types:
 
-		// A single OGC SOS observation. Returns a Leaflet Marker.
+		// A single OGC SOS observation
 		L.geocens(observation);
 
-		// An array of OGC SOS observations. Returns a Leaflet FeatureGroup containing Leaflet Markers.
+		// An array of OGC SOS observations
 		L.geocens(observations);
 
-		// A single GeoCENS Data Service datastream. Returns a Leaflet Marker.
+		// A single GeoCENS Data Service datastream
 		L.geocens(datastream);
 
-		// An array of GeoCENS Data Service datastreams. Returns a Leaflet FeatureGroup containing Leaflet Markers.
+		// An array of GeoCENS Data Service datastreams
 		L.geocens(datastreams);
 
-As noted above, Inputting a single item will return a single output. Inputting an array of items will return a FeatureGroup.
+All instances will return a Leaflet FeatureGroup.
 
 The function also supports an options input, allowing the markers and popups to be customized. Modifying these will override the defaults.
 
