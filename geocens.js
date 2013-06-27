@@ -141,6 +141,10 @@
 
     },
 
+    location: function () {
+      return this._attributes.loc;
+    },
+
     name: function () {
       return this._attributes.phenName + ": " + this._attributes.id;
     },
@@ -401,6 +405,10 @@
     // Return most recent reading
     latest: function () {
       return this._data[this._data.length - 1];
+    },
+
+    location: function () {
+      return [this._attributes.latitude, this._attributes.longitude];
     },
 
     name: function () {

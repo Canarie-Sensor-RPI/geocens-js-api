@@ -55,6 +55,7 @@ $(document).ready(function() {
       service_url: "http://www.example.com/sos"
     });
 
+    // skip typical initialization process and populate observation manually
     var observation = new Geocens.Observation({
       latitude: 51.07993,
       longitude: -114.131802,
@@ -74,6 +75,7 @@ $(document).ready(function() {
       service_url: "http://www.example.com/sos"
     });
 
+    // skip typical initialization process and populate observation manually
     var observation = new Geocens.Observation({
       latitude: 51.07993,
       longitude: -114.131802,
@@ -85,6 +87,25 @@ $(document).ready(function() {
     });
 
     equal(observation.name(), "Water Temperature: sensor_1");
+  });
+
+  test("location returns an array of latitude, longitude", 1, function() {
+    var service = new Geocens.SOS({
+      service_url: "http://www.example.com/sos"
+    });
+
+    // skip typical initialization process and populate observation manually
+    var observation = new Geocens.Observation({
+      latitude: 51.07993,
+      longitude: -114.131802,
+      offering: "Temperature",
+      procedure_id: "sensor_1",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      readings: [],
+      service: service
+    });
+
+    deepEqual(observation.location(), [51.07993, -114.131802]);
   });
 
   module("SOS Observation getTimeSeries", {

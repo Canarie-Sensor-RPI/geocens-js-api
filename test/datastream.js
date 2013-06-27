@@ -33,6 +33,13 @@ $(document).ready(function() {
     equal(datastream.units(), "ppm");
   });
 
+  test("location returns latitude, longitude", 1, function() {
+    var settings = $.extend({}, window.Fixtures.DataService.Sensor, window.Fixtures.DataService.Datastream);
+    var datastream = new Geocens.Datastream(settings);
+
+    deepEqual(datastream.location(), [51, -114]);
+  });
+
   module("Datastream GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";

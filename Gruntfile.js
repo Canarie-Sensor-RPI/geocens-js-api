@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     jshint: {
-      files: ['Gruntfile.js', 'geocens.js', 'test/*.js'],
+      files: ['Gruntfile.js', 'geocens.js', 'geocens-chart.js', 'geocens-map.js', 'test/*.js'],
       options: {
         globals: {
           jQuery: true,
@@ -21,11 +21,12 @@ module.exports = function(grunt) {
 
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> complete <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      build: {
-        src: 'geocens.js',
-        dest: 'geocens.min.js'
+      my_target: {
+        files: {
+          'geocens.min.js': ['geocens.js', 'geocens-chart.js', 'geocens-map.js']
+        }
       }
     },
 

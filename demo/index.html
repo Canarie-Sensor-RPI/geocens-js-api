@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <title>GeoCENS JS API Test Example</title>
+  <link rel="stylesheet" href="../test/vendor/leaflet.css"></link>
+  <link rel="stylesheet" href="../test/vendor/MarkerCluster.css"></link>
+  <link rel="stylesheet" href="../test/vendor/MarkerCluster.Default.css"></link>
   <style>
     body {
       width: 50%;
@@ -15,6 +18,12 @@
       background-color: #FFE;
       display: block;
       max-width: 80em;
+    }
+
+    .map {
+      height: 400px;
+      width: 100%;
+      border: 1px solid black;
     }
   </style>
 </head>
@@ -39,6 +48,10 @@
   <li><a href="#chart_include">Including the Chart Module</a></li>
   <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
   <li><a href="#chart_observation_series">Observation Time Series Chart</a></li>
+  <li><a href="#map_include">Including the Map Module</a></li>
+  <li><a href="#map_observations">Add OGC SOS Observations to a Map</a></li>
+  <li><a href="#map_datastreams">Add Data Service Datastreams to a Map</a></li>
+  <li><a href="#map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</a></li>
 </ol>
 
 <h2 id="include">Include the Libraries</h2>
@@ -401,6 +414,7 @@
 
 <p>Be sure to include HighStock <em>before</em> including the GeoCENS Chart module!</p>
 
+
 <h2 id="chart_datastream_series">Datastream Time Series Chart</h2>
 
 <p>The GeoCENS Chart module is a jQuery plugin, so it is invoked using a jQuery selector. By passing the data through the callbacks, the datastream time series can be customized before being plotted on the chart.</p>
@@ -532,6 +546,215 @@
         done: getSeries
       });
 
+    });
+  }());
+</script>
+
+
+<h2 id="map_include">Including the Map Module</h2>
+
+<p>There is an optional module for adding observations and datastreams to a map as markers. It requires <a href="http://www.leafletjs.com/">Leaflet</a> (0.6.0 or newer), <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer), and the core GeoCENS JS API (0.4.1 or newer).</p>
+
+<pre class="code">
+
+  &lt;script src="jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+  &lt;script src="geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+  &lt;script src="leaflet.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+  &lt;script src="geocens-map.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+
+</pre>
+<script src="../test/vendor/leaflet.js" type="text/javascript" charset="utf-8"></script>
+<script src="../geocens-map.js" type="text/javascript" charset="utf-8"></script>
+
+<p>Be sure to include Leaflet <em>before</em> including the GeoCENS Map module!</p>
+
+
+<h2 id="map_observations">Add OGC SOS Observations to a Map</h2>
+
+<p>A module is added to Leaflet to make adding OGC SOS observations easy.</p>
+
+<pre class="code">
+
+    var map = L.map('map1', {
+          center: [51.07993, -114.131802],
+          zoom: 3
+    });
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    }).addTo(map);
+
+    var mapObservations = function(observations) {
+      L.geocens(observations).addTo(map);
+    };
+
+    Geocens.SOS.getObservation({
+      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+      offering: &quot;Temperature&quot;,
+      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+      done: mapObservations
+    });
+
+</pre>
+
+<div id="map1" class="map"></div>
+
+<button id="example_ten">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_ten").on("click", function() {
+      var map = L.map('map1', {
+            center: [51.07993, -114.131802],
+            zoom: 3
+      });
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var mapObservations = function(observations) {
+        L.geocens(observations).addTo(map);
+      };
+
+      Geocens.SOS.getObservation({
+        service_url: "http://app.geocens.ca:8171/sos",
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: mapObservations
+      });
+    });
+  }());
+</script>
+
+
+<h2 id="map_datastreams">Add Data Service Datastreams to a Map</h2>
+
+<p>A module is added to Leaflet to make adding GeoCENS Data Service datastreams easy.</p>
+
+<pre class="code">
+
+    var map = L.map('map2', {
+          center: [51.07993, -114.131802],
+          zoom: 3
+    });
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    }).addTo(map);
+
+    var mapDatastream = function(datastream) {
+      L.geocens(datastream).addTo(map);
+    };
+
+    Geocens.DataService.getDatastream({
+      api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
+      sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+      datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
+      done: mapDatastream
+    });
+
+</pre>
+
+<div id="map2" class="map"></div>
+
+<button id="example_eleven">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_eleven").on("click", function() {
+      var map = L.map('map2', {
+            center: [51.07993, -114.131802],
+            zoom: 3
+      });
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var mapDatastream = function(datastream) {
+        L.geocens(datastream).addTo(map);
+      };
+
+      Geocens.DataService.getDatastream({
+        api_key: "57378dc18d74bef1051312e29a26f0b3",
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        done: mapDatastream
+      });
+    });
+  }());
+</script>
+
+
+<h2 id="map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</h2>
+
+<p>First, include the clustering plugin CSS and JS:</p>
+
+<pre class="code">
+
+  &lt;link rel="stylesheet" href="../test/vendor/MarkerCluster.css"&gt;&lt;/link&gt;
+  &lt;link rel="stylesheet" href="../test/vendor/MarkerCluster.Default.css"&gt;&lt;/link&gt;
+  &lt;script src="../test/vendor/leaflet.markercluster.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+
+</pre>
+<script src="../test/vendor/leaflet.markercluster.js" type="text/javascript" charset="utf-8"></script>
+
+<p>Then use the clustering plugin as usual when creating the map. A <a href="map.html">fullscreen example</a> version is also available.</p>
+
+<pre class="code">
+
+    var map = L.map('map1', {
+          center: [51.07993, -114.131802],
+          zoom: 3
+    });
+
+    var markers = new L.MarkerClusterGroup();
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    }).addTo(map);
+
+    var mapObservations = function(observations) {
+      markers.addLayer(L.geocens(observations));
+      map.addLayer(markers);
+    };
+
+    Geocens.SOS.getObservation({
+      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+      offering: &quot;Temperature&quot;,
+      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+      done: mapObservations
+    });
+
+</pre>
+
+<div id="map3" class="map"></div>
+
+<button id="example_twelve">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_twelve").on("click", function() {
+      var map = L.map('map3', {
+            center: [51.07993, -114.131802],
+            zoom: 3
+      });
+
+      var markers = new L.MarkerClusterGroup();
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var mapObservations = function(observations) {
+        markers.addLayer(L.geocens(observations));
+        map.addLayer(markers);
+      };
+
+      Geocens.SOS.getObservation({
+        service_url: "http://app.geocens.ca:8171/sos",
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: mapObservations
+      });
     });
   }());
 </script>
