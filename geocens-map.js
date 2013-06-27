@@ -8,10 +8,31 @@
 
   var GeocensGroup = L.FeatureGroup.extend({
 
+    options: {},
+
     initialize: function(data, options) {
       console.log("initializing", data, options);
 
+      L.Util.setOptions(this, options);
+
       this._datasource = data;
+      this._layers = {};
+      var markers = this._markers = [];
+
+      // Create markers from datasource(s)
+      if (data instanceof Array) {
+        $.each(data, function(index) {
+          var marker = L.marker(this.location());
+          markers.push(marker);
+        });
+      } else {
+        var marker = L.marker(data.location());
+        markers.push(marker);
+      }
+
+      var markerGroup = L.featureGroup(markers);
+      var id = L.stamp(markerGroup);
+      this._layers[id] = markerGroup;
     },
 
     datasource: function () {
