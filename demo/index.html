@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <title>GeoCENS JS API Test Example</title>
   <link rel="stylesheet" href="../test/vendor/leaflet.css"></link>
+  <link rel="stylesheet" href="../test/vendor/MarkerCluster.css"></link>
+  <link rel="stylesheet" href="../test/vendor/MarkerCluster.Default.css"></link>
   <style>
     body {
       width: 50%;
@@ -18,7 +20,7 @@
       max-width: 80em;
     }
 
-    #map1, #map2 {
+    .map {
       height: 400px;
       width: 100%;
       border: 1px solid black;
@@ -49,6 +51,7 @@
   <li><a href="#map_include">Including the Map Module</a></li>
   <li><a href="#map_observations">Add OGC SOS Observations to a Map</a></li>
   <li><a href="#map_datastreams">Add Data Service Datastreams to a Map</a></li>
+  <li><a href="#map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</a></li>
 </ol>
 
 <h2 id="include">Include the Libraries</h2>
@@ -594,7 +597,7 @@
 
 </pre>
 
-<div id="map1"></div>
+<div id="map1" class="map"></div>
 
 <button id="example_ten">Run Example</button>
 <script>
@@ -652,7 +655,7 @@
 
 </pre>
 
-<div id="map2"></div>
+<div id="map2" class="map"></div>
 
 <button id="example_eleven">Run Example</button>
 <script>
@@ -676,6 +679,81 @@
         sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
         datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
         done: mapDatastream
+      });
+    });
+  }());
+</script>
+
+
+<h2 id="map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</h2>
+
+<p>First, include the clustering plugin CSS and JS:</p>
+
+<pre class="code">
+
+  &lt;link rel="stylesheet" href="../test/vendor/MarkerCluster.css"&gt;&lt;/link&gt;
+  &lt;link rel="stylesheet" href="../test/vendor/MarkerCluster.Default.css"&gt;&lt;/link&gt;
+  &lt;script src="../test/vendor/leaflet.markercluster.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+
+</pre>
+<script src="../test/vendor/leaflet.markercluster.js" type="text/javascript" charset="utf-8"></script>
+
+<p>Then use the clustering plugin as usual when creating the map.</p>
+
+<pre class="code">
+
+    var map = L.map('map1', {
+          center: [51.07993, -114.131802],
+          zoom: 3
+    });
+
+    var markers = new L.MarkerClusterGroup();
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    }).addTo(map);
+
+    var mapObservations = function(observations) {
+      markers.addLayer(L.geocens(observations));
+      map.addLayer(markers);
+    };
+
+    Geocens.SOS.getObservation({
+      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+      offering: &quot;Temperature&quot;,
+      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+      done: mapObservations
+    });
+
+</pre>
+
+<div id="map3" class="map"></div>
+
+<button id="example_twelve">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_twelve").on("click", function() {
+      var map = L.map('map3', {
+            center: [51.07993, -114.131802],
+            zoom: 3
+      });
+
+      var markers = new L.MarkerClusterGroup();
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var mapObservations = function(observations) {
+        markers.addLayer(L.geocens(observations));
+        map.addLayer(markers);
+      };
+
+      Geocens.SOS.getObservation({
+        service_url: "http://app.geocens.ca:8171/sos",
+        offering: "Temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        done: mapObservations
       });
     });
   }());

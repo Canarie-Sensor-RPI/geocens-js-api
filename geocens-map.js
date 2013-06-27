@@ -16,13 +16,11 @@
 
     initialize: function(data, options) {
       var self = this;
-      console.log("initializing", data, options);
 
       L.Util.setOptions(this, options);
 
       this._datasource = data;
-      this._layers = {};
-      var markers = this._markers = [];
+      var layers = this._layers = {};
       var markerOptions = this.options.marker;
       var popup = L.popup();
 
@@ -43,16 +41,14 @@
             marker.bindPopup(popup);
           });
 
-          markers.push(marker);
+          var id = L.stamp(marker);
+          layers[id] = marker;
         });
       } else {
         var marker = L.marker(data.location(), markerOptions);
-        markers.push(marker);
+        var id = L.stamp(marker);
+        layers[id] = marker;
       }
-
-      var markerGroup = L.featureGroup(markers);
-      var id = L.stamp(markerGroup);
-      this._layers[id] = markerGroup;
     },
 
     datasource: function () {
