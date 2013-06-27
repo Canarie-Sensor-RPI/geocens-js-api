@@ -545,10 +545,6 @@ Custom content to be inserted into popups. Whenever a user clicks on a marker, i
 
 Note that if click events are disabled for the marker (in the marker options), then the popup will not be displayed.
 
-## Developing and Extending
-
-TODO: Explain how to add features/fixes to the JS API
-
 ## Running Test
 
 There is a test suite for ensuring the JS API meets its requirements. The JS API is build with Behaviour Driven Development ([BDD](http://dannorth.net/introducing-bdd/)), which focuses on defining *requirements* before any code is written. This keeps new code clean and concise, only enough to satisfy the new behaviour.
