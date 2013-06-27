@@ -21,13 +21,11 @@ module.exports = function(grunt) {
 
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> complete <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       my_target: {
         files: {
-          'geocens.min.js': 'geocens.js',
-          'geocens-chart.min.js': 'geocens-chart.js',
-          'geocens-map.min.js': 'geocens-map.js'
+          'geocens.min.js': ['geocens.js', 'geocens-chart.js', 'geocens-map.js']
         }
       }
     },
