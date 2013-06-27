@@ -10,6 +10,12 @@
 
     initialize: function(data, options) {
       console.log("initializing", data, options);
+
+      this._datasource = data;
+    },
+
+    datasource: function () {
+      return this._datasource;
     }
 
   });
