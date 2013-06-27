@@ -1,4 +1,4 @@
-//    GeoCENS.js 0.5.0
+//    GeoCENS.js 1.0.0
 
 //    (c) 2013, James Badger, Geo Sensor Web Lab.
 //    All Rights Reserved.
@@ -17,7 +17,7 @@
   Geocens = root.Geocens = {};
 
   // Current library version
-  Geocens.VERSION = '0.5.0';
+  Geocens.VERSION = '1.0.0';
 
   // Require jQuery into `$` variable
   Geocens.$ = root.jQuery || root.$;

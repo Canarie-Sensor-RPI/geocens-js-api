@@ -1,3 +1,7 @@
+1.0.0 (June 26 2013)
+
+* Add GeoCENS JS API map module, for adding markers with customizable popups to Leaflet maps
+
 0.5.0 (June 25 2013)
 
 * Add GeoCENS JS API chart module, for easily drawing time series using the HighStock library
