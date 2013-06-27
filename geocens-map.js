@@ -18,15 +18,16 @@
       this._datasource = data;
       this._layers = {};
       var markers = this._markers = [];
+      var markerOptions = this.options.marker;
 
       // Create markers from datasource(s)
       if (data instanceof Array) {
         $.each(data, function(index) {
-          var marker = L.marker(this.location());
+          var marker = L.marker(this.location(), markerOptions);
           markers.push(marker);
         });
       } else {
-        var marker = L.marker(data.location());
+        var marker = L.marker(data.location(), markerOptions);
         markers.push(marker);
       }
 
