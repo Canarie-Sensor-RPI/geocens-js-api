@@ -31,8 +31,8 @@
           marker.datasource = this;
 
           marker.on("click", function(e) {
-            if (self._map !== undefined) {
-              self._map.closePopup(popup);
+            if (popup._map !== undefined) {
+              popup._map.closePopup(popup);
             }
 
             popup.setLatLng(e.latlng)
