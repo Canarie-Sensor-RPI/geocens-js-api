@@ -487,6 +487,8 @@ The Map API makes it easy to draw map markers on a map without having to customi
 						return datasource.name();
 					}
 				});
+
+				markerGroup.addTo(map);
 			};
 
 			// Retrieve the observations

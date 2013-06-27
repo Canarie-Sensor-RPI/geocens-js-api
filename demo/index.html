@@ -582,7 +582,7 @@
     }).addTo(map);
 
     var mapObservations = function(observations) {
-      L.Geocens(observations);
+      L.Geocens(observations).addTo(map);
     };
 
     Geocens.SOS.getObservation({
@@ -610,7 +610,7 @@
       }).addTo(map);
 
       var mapObservations = function(observations) {
-        L.Geocens(observations);
+        L.Geocens(observations).addTo(map);
       };
 
       Geocens.SOS.getObservation({
@@ -640,7 +640,7 @@
     }).addTo(map);
 
     var mapDatastream = function(datastream) {
-      L.Geocens(datastream);
+      L.Geocens(datastream).addTo(map);
     };
 
     Geocens.DataService.getDatastream({
@@ -668,7 +668,7 @@
       }).addTo(map);
 
       var mapDatastream = function(datastream) {
-        L.Geocens(datastream);
+        L.Geocens(datastream).addTo(map);
       };
 
       Geocens.DataService.getDatastream({
