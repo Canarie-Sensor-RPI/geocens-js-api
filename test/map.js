@@ -48,7 +48,8 @@ $(document).ready(function() {
 
     var group = L.geocens(input);
 
-    group._markers[0].fireEvent('click');
+
+    group.getLayers()[0].fireEvent('click');
 
     ok(spy.called, "Default popup function not called");
     spy.restore();
@@ -62,7 +63,7 @@ $(document).ready(function() {
       popup: spy
     });
 
-    group._markers[0].fireEvent('click');
+    group.getLayers()[0].fireEvent('click');
 
     ok(spy.called, "Custom popup function not called");
   });
