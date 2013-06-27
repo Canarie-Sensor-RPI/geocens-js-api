@@ -6,11 +6,16 @@
 
 (function($, L) {
 
-  var GeocensGroup = L.FeatureGroup.extend({
+  L.Geocens = L.FeatureGroup.extend({
 
-    options: {},
+    options: {
+      popup: function(datasource, event, marker) {
+        return datasource.name();
+      }
+    },
 
     initialize: function(data, options) {
+      var self = this;
       console.log("initializing", data, options);
 
       L.Util.setOptions(this, options);
@@ -19,11 +24,25 @@
       this._layers = {};
       var markers = this._markers = [];
       var markerOptions = this.options.marker;
+      var popup = L.popup();
 
       // Create markers from datasource(s)
       if (data instanceof Array) {
         $.each(data, function(index) {
           var marker = L.marker(this.location(), markerOptions);
+          marker.datasource = this;
+
+          marker.on("click", function(e) {
+            if (self._map !== undefined) {
+              self._map.closePopup(popup);
+            }
+
+            popup.setLatLng(e.latlng)
+                 .setContent(self.options.popup(marker.datasource), e, marker);
+
+            marker.bindPopup(popup);
+          });
+
           markers.push(marker);
         });
       } else {
@@ -39,11 +58,10 @@
     datasource: function () {
       return this._datasource;
     }
-
   });
 
-  L.Geocens = function (data, options) {
-    return new GeocensGroup(data, options);
+  L.geocens = function (data, options) {
+    return new L.Geocens(data, options);
   };
 
 })(jQuery, L);

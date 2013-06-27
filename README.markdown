@@ -472,7 +472,7 @@ The Map API makes it easy to draw map markers on a map without having to customi
 			// Add SOS Observations to the map
 			var mapObservations = function(observations) {
 				// Returns a Leaflet FeatureGroup containing the markers.
-				var markerGroup = L.Geocens(observations, {
+				var markerGroup = L.geocens(observations, {
 					// Custom marker options.
 					// See Leaflet Marker Options documentation.
 					marker: {
@@ -503,27 +503,27 @@ The Map API makes it easy to draw map markers on a map without having to customi
 
 In the above example, a group of observations from an OGC SOS server are added to a map. Each marker on the map corresponds to a observation/procedure from the SOS, and displays a popup with the observed property/procedure id.
 
-#### L.Geocens
+#### L.geocens
 
 This is a Leaflet function that is designed to add data from GeoCENS JS API data sources. It can be used on multiple input types:
 
 		// A single OGC SOS observation. Returns a Leaflet Marker.
-		L.Geocens(observation);
+		L.geocens(observation);
 
 		// An array of OGC SOS observations. Returns a Leaflet FeatureGroup containing Leaflet Markers.
-		L.Geocens(observations);
+		L.geocens(observations);
 
 		// A single GeoCENS Data Service datastream. Returns a Leaflet Marker.
-		L.Geocens(datastream);
+		L.geocens(datastream);
 
 		// An array of GeoCENS Data Service datastreams. Returns a Leaflet FeatureGroup containing Leaflet Markers.
-		L.Geocens(datastreams);
+		L.geocens(datastreams);
 
 As noted above, Inputting a single item will return a single output. Inputting an array of items will return a FeatureGroup.
 
 The function also supports an options input, allowing the markers and popups to be customized. Modifying these will override the defaults.
 
-		L.Geocens(observations, {
+		L.geocens(observations, {
 			marker: {
 				clickable: true
 			},
