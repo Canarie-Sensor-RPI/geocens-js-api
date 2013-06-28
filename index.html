@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Geocens-js-api by Canarie-Sensor-RPI</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Geocens-js-api</h1>
+          <h2>GeoCENS JavaScript API for Sensor Data Access and Visualization</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/Canarie-Sensor-RPI/geocens-js-api/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/Canarie-Sensor-RPI/geocens-js-api/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Canarie-Sensor-RPI/geocens-js-api" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="geocens-javascript-api" class="anchor" href="#geocens-javascript-api"><span class="octicon octicon-link"></span></a>GeoCENS JavaScript API</h1>
+
+<p>The GeoCENS JavaScript API can be used to retrieve geospatial sensor data from either the GeoCENS Data Service or OGC SOS compatible services, and display the information on a map or chart.</p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>jQuery 1.10.1 or newer</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>For a web page, include the <code>geocens.js</code> file in a script tag:</p>
+
+<pre><code>    &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+</code></pre>
+
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <a href="mailto:info@geocens.ca">info@geocens.ca</a> or use the JS API to load data from an OGC SOS compatible service. An interactive demo is available in the <code>demo</code> directory.</p>
+
+<p>In this example, we will retrieve a datastream. First, we connect to the Data Service and download the datastream information:</p>
+
+<pre><code>    Geocens.DataService.getDatastream({
+        api_key: api_key,
+        sensor_id: sensor_id,
+        datastream_id: datastream_id,
+        done: function (datastream) {
+            window.newDatastream = datastream;
+        }
+    });
+</code></pre>
+
+<p>This provides us with a <code>Datastream</code> object in the <code>done</code> callback. We can retrieve properties for the Datastream:</p>
+
+<pre><code>    datastream.attributes();
+</code></pre>
+
+<p>Which returns an object with the properties:</p>
+
+<pre><code>    {
+        uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+        id: "carbonMonoxide",
+        sensor: {
+            id: "5C-86-4A-00-2C-9E",
+            user: "bob@example.com",
+            uid: "4ddecd5124661f9442cfca8be23f8dda",
+            altitude: 1100,
+            samplingrate: 0,
+            loc: [51,-114],
+            title: "Our first integration Testing",
+            height: 0,
+            nickName: "Alpha",
+            description: "",
+            last_time_online: "2012-09-18T21:04:40",
+            phens: [
+                "airtemperature",
+                "relatedhumidity",
+                "airquality",
+                "hydrogentest",
+                "hydrogentest1Name"
+            ]
+        },
+        unit: "ppm",
+        phenName: "airquality",
+        user: "bob@example.com"
+    }
+</code></pre>
+
+<p>We can also use the Datastream object to retrieve the latest time series records:</p>
+
+<pre><code>    datastream.getTimeSeries({
+        done: function (seriesData) {
+            window.seriesData = seriesData;
+        }
+    });
+</code></pre>
+
+<p>By default, <code>getTimeSeries()</code> will retrieve 24 hours of observation values from the Data Service.</p>
+
+<p>The <code>getTimeSeries()</code> method will cache the results in the Datastream object, and return an array of objects:</p>
+
+<pre><code>    [{
+        timestamp: 1356998400000,
+        value: 3.88
+    },
+    {
+        timestamp: 1369699200000,
+        value: 5.22
+    }]
+</code></pre>
+
+<p>The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: <code>new Date(1356998400000)</code>.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h4>
+<a name="geocensnoconflict" class="anchor" href="#geocensnoconflict"><span class="octicon octicon-link"></span></a>Geocens.noConflict</h4>
+
+<p>If you are using a variable that already is called <code>Geocens</code>, you can prevent the GeoCENS JS API from overwriting it. The <code>noConflict()</code> method will return the <code>Geocens</code> variable back to the previous owner/value.</p>
+
+<pre><code>    var GeocensAPI = Geocens.noConflict();
+    var sosSource = GeocensAPI.SOS({…});
+</code></pre>
+
+<h3>
+<a name="loading-data" class="anchor" href="#loading-data"><span class="octicon octicon-link"></span></a>Loading Data</h3>
+
+<p>The library can load data from either an <a href="http://www.opengeospatial.org/standards/sos">OGC SOS compatible service</a>, or from our GeoCENS Data Service.</p>
+
+<h4>
+<a name="geocenssos" class="anchor" href="#geocenssos"><span class="octicon octicon-link"></span></a>Geocens.SOS</h4>
+
+<p>Define an OGC SOS object with the SOS URL:</p>
+
+<pre><code>    var sosSource = new Geocens.SOS({
+        service_url: "http://www.example.com/sos"
+    });
+</code></pre>
+
+<p>This object can be reused to use the same <code>service_url</code> for multiple <code>getObservation</code> invocations.</p>
+
+<h4>
+<a name="geocenssosgetobservation" class="anchor" href="#geocenssosgetobservation"><span class="octicon octicon-link"></span></a>Geocens.SOS.getObservation</h4>
+
+<p>Use an OGC SOS object to retrieve SOS observation data, as set out by the <a href="http://www.opengeospatial.org/standards/om">Observation and Measurement specification</a>. Results returned are procedure-observation pairs that exist within the filter criteria. Procedures that have no data within the filter will not be returned. Results are filtered by SOS Offering (required), Observed Property (required), and bounding box (optional).</p>
+
+<pre><code>    sosSource.getObservation({
+        offering: "sos_offering",
+        property: "sos_property",
+        northwest: [51, -114],
+        southeast: [-51, 114],
+        done: function (observations) {
+            window.observations = observations;
+        }
+    });
+</code></pre>
+
+<p>These can be combined:</p>
+
+<pre><code>    Geocens.SOS.getObservation({
+        service_url: "http://www.example.com/sos",
+        offering: "sos_offering",
+        property: "sos_property",
+        northwest: [51, -114],
+        southeast: [-51, 114],
+        done: function (observations) {
+            window.observations = observations;
+        }
+    });
+</code></pre>
+
+<h5>
+<a name="option-offering" class="anchor" href="#option-offering"><span class="octicon octicon-link"></span></a>option: offering</h5>
+
+<p>The SOS Offering key. Can be used to filter into a logical group of observations. Is required.</p>
+
+<h5>
+<a name="option-property" class="anchor" href="#option-property"><span class="octicon octicon-link"></span></a>option: property</h5>
+
+<p>The SOS Observed Property key. Can be used to filter observations by physical phenomena. Note that it is typically a <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URN</a>. Is required.</p>
+
+<h5>
+<a name="option-northwest" class="anchor" href="#option-northwest"><span class="octicon octicon-link"></span></a>option: northwest</h5>
+
+<p>An optional pair of Float numbers representing the North West corner of the bounding box. Used in conjunction with <code>southeast</code>. Only observations inside the bounding box will be returned. Defaults to [90, -180] which is 90 degrees North, and 180 degrees West.</p>
+
+<h5>
+<a name="option-southeast" class="anchor" href="#option-southeast"><span class="octicon octicon-link"></span></a>option: southeast</h5>
+
+<p>An optional pair of Float numbers representing the South East corner of the bounding box. Used in conjunction with <code>northwest</code>. Only observations inside the bounding box will be returned. Defaults to [-90, 180] which is 90 degrees South, and 180 degrees East.</p>
+
+<p>If both <code>northwest</code> and <code>southeast</code> are not provided, then the bounding box will encompass the entire world.</p>
+
+<h5>
+<a name="option-done" class="anchor" href="#option-done"><span class="octicon octicon-link"></span></a>option: done</h5>
+
+<p>An optional callback function that will return an array of Observation objects as the first parameter.</p>
+
+<h4>
+<a name="observationattributes" class="anchor" href="#observationattributes"><span class="octicon octicon-link"></span></a>Observation.attributes</h4>
+
+<p>With an Observation object, the basic metadata properties can be retrieved:</p>
+
+<pre><code>    observation.attributes();
+</code></pre>
+
+<p>Example attributes for an observation from an OGC SOS:</p>
+
+<pre><code>    {
+        latitude: 51.000,
+        longitude: -114.000,
+        offering: "temperature",
+        property: "urn:ogc:def:property:noaa:ndbc:water temperature",
+        sensor_id: "snr_301",
+        sensor_type: "SOS",
+        service_url: "http://example.com/sos",
+        unit: "celcius"
+    }
+</code></pre>
+
+<h4>
+<a name="observationdescribe" class="anchor" href="#observationdescribe"><span class="octicon octicon-link"></span></a>Observation.describe</h4>
+
+<p>For Observations, the <a href="http://www.opengeospatial.org/standards/sensorml">sensorML document</a> can be retrieved for additional metadata. It is then possible to use <a href="http://api.jquery.com/category/traversing/">jQuery's traversal API</a> to navigate the result.</p>
+
+<pre><code>    observation.describe({
+        done: function (sensorML) {
+            var intendedApp = sensorML.find("classifier[name~='intendedApplication']").text();
+            // "water temperature monitoring"
+        }
+    });
+</code></pre>
+
+<p>Note that the sensorML document may or may not include the <code>classifier</code> element; it is up to the user to determine useful data from the sensorML document.</p>
+
+<h4>
+<a name="observationgettimeseries" class="anchor" href="#observationgettimeseries"><span class="octicon octicon-link"></span></a>Observation.getTimeSeries</h4>
+
+<p>The time series records can be retrieved:</p>
+
+<pre><code>    observation.getTimeSeries({
+        start: new Date("2013-01-01 00:00:00Z"),
+        end:   new Date("2013-05-28 00:00:00Z"),
+        done:  function (seriesData) {
+            window.seriesData = seriesData;
+        }
+    });
+</code></pre>
+
+<h5>
+<a name="option-start" class="anchor" href="#option-start"><span class="octicon octicon-link"></span></a>option: start</h5>
+
+<p>An optional Date object specifying the start limit of the time series.</p>
+
+<h5>
+<a name="option-end" class="anchor" href="#option-end"><span class="octicon octicon-link"></span></a>option: end</h5>
+
+<p>An optional Date object specifying the end limit of the time series.</p>
+
+<h5>
+<a name="option-done-1" class="anchor" href="#option-done-1"><span class="octicon octicon-link"></span></a>option: done</h5>
+
+<p>An optional callback function that will return an array of Time Series objects as the first parameter. Example response:</p>
+
+<pre><code>    [{
+        timestamp: 1356998400000,
+        value: 3.88
+    },
+    {
+        timestamp: 1369699200000,
+        value: 5.22
+    }] 
+</code></pre>
+
+<h4>
+<a name="observationseriesdata" class="anchor" href="#observationseriesdata"><span class="octicon octicon-link"></span></a>Observation.seriesData</h4>
+
+<p>Retrieve a sorted array of timeseries objects for an SOS Observation, based on data already retrieved by <code>getTimeSeries()</code> operations. If <code>getTimeSeries()</code> has not yet been called, <code>seriesData()</code> will return an empty array.</p>
+
+<h4>
+<a name="translation-engine-customization" class="anchor" href="#translation-engine-customization"><span class="octicon octicon-link"></span></a>Translation Engine Customization</h4>
+
+<p>The Translation Engine URL is hard-coded into the library. It is a GeoCENS proxy service that retrieves data from OGC SOS and provides easily-consumed data. Users can optionally override it:</p>
+
+<pre><code>    Geocens.TranslationEngine.setPath("http://example.com/translation-engine/");
+</code></pre>
+
+<p>After override, all new requests will use the new Translation Engine path.</p>
+
+<h4>
+<a name="geocensdataservice" class="anchor" href="#geocensdataservice"><span class="octicon octicon-link"></span></a>Geocens.DataService</h4>
+
+<p>Define a Data Service object with your Data Service API key:</p>
+
+<pre><code>    var dsSource = new Geocens.DataService({
+        api_key: "your_32_character_api_key"
+    });
+</code></pre>
+
+<h4>
+<a name="geocensdataservicegetdatastream" class="anchor" href="#geocensdataservicegetdatastream"><span class="octicon octicon-link"></span></a>Geocens.DataService.getDatastream</h4>
+
+<p>Use a Data Service object to retrieve a singular datastream with its sensor ID and datastream ID:</p>
+
+<pre><code>    dsSource.getDatastream({
+        sensor_id: "32_character_sensor_id",
+        datastream_id: "32_character_datastream_id",
+        done: function (datastream) {
+            window.datastream = datastream;
+        }
+    });
+</code></pre>
+
+<p>These can be combined:</p>
+
+<pre><code>    Geocens.DataService.getDatastream({
+        api_key: "your_32_character_api_key",
+        sensor_id: "32_character_sensor_id",
+        datastream_id: "32_character_datastream_id",
+        done: function (datastream) {
+            window.datastream = datastream;
+        }
+    });
+</code></pre>
+
+<p>The <code>done</code> option will return the Datastream object as the first parameter after the metadata has been retrieved.</p>
+
+<h4>
+<a name="datastreamattributes" class="anchor" href="#datastreamattributes"><span class="octicon octicon-link"></span></a>Datastream.attributes</h4>
+
+<p>With a Datastream object, the basic metadata properties can be retrieved:</p>
+
+<pre><code>    datastream.attributes();
+</code></pre>
+
+<p>Example attributes for a datastream from GeoCENS Data Service:</p>
+
+<pre><code>    {
+        uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+        id: "carbonMonoxide",
+        sensor: {
+            id: "5C-86-4A-00-2C-9E",
+            user: "bob@example.com",
+            uid: "4ddecd5124661f9442cfca8be23f8dda",
+            altitude: 1100,
+            samplingrate: 0,
+            loc: [51,-114],
+            title: "Our first integration Testing",
+            height: 0,
+            nickName: "Alpha",
+            description: "",
+            last_time_online: "2012-09-18T21:04:40",
+            phens: [
+                "airtemperature",
+                "relatedhumidity",
+                "airquality",
+                "hydrogentest",
+                "hydrogentest1Name"
+            ]
+        },
+        unit: "ppm",
+        phenName: "airquality",
+        user: "bob@example.com"
+    }
+</code></pre>
+
+<h4>
+<a name="datastreamgettimeseries" class="anchor" href="#datastreamgettimeseries"><span class="octicon octicon-link"></span></a>Datastream.getTimeSeries</h4>
+
+<p>The time series observations can be retrieved:</p>
+
+<pre><code>    datastream.getTimeSeries({
+        limit: 100,
+        skip:  100,
+        start: new Date("2013-01-01 00:00:00Z"),
+        end:   new Date("2013-05-28 00:00:00Z"),
+        done:  function (seriesData) {
+            window.seriesData = seriesData;
+        }
+    });
+</code></pre>
+
+<h5>
+<a name="option-start-1" class="anchor" href="#option-start-1"><span class="octicon octicon-link"></span></a>option: start</h5>
+
+<p>An optional Date object specifying the start limit of the time series.</p>
+
+<h5>
+<a name="option-end-1" class="anchor" href="#option-end-1"><span class="octicon octicon-link"></span></a>option: end</h5>
+
+<p>An optional Date object specifying the end limit of the time series.</p>
+
+<h4>
+<a name="done" class="anchor" href="#done"><span class="octicon octicon-link"></span></a>done</h4>
+
+<p>This callback function will return the series data as the first parameter after it has been retrieved.</p>
+
+<h4>
+<a name="limit" class="anchor" href="#limit"><span class="octicon octicon-link"></span></a>limit</h4>
+
+<p>The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the <em>latest</em> value in a time range, not the <em>earliest</em>.</p>
+
+<h4>
+<a name="limit-1" class="anchor" href="#limit-1"><span class="octicon octicon-link"></span></a>limit</h4>
+
+<p>Skip the latest <em>n</em> records returned from the Data Service (it sorts date <em>descending</em>). Can be used with <code>limit</code> to emulate pagination.</p>
+
+<h5>
+<a name="result" class="anchor" href="#result"><span class="octicon octicon-link"></span></a>Result</h5>
+
+<p>The <code>getTimeSeries</code> method will return an array of time series objects:</p>
+
+<pre><code>    [{
+        timestamp: 1356998400000,
+        value: 3.88
+    },
+    {
+        timestamp: 1369699200000,
+        value: 5.22
+    }]
+</code></pre>
+
+<p>The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: <code>new Date(1356998400000)</code>.</p>
+
+<p>If the <code>getTimeSeries</code> method is called multiple times (with the same or different options) then the results will be merged and can be retrieved with <code>datastream.seriesData()</code>.</p>
+
+<h4>
+<a name="datastreamseriesdata" class="anchor" href="#datastreamseriesdata"><span class="octicon octicon-link"></span></a>Datastream.seriesData</h4>
+
+<p>Retrieve a sorted array of timeseries objects for a datastream, based on data already retrieved by <code>getTimeSeries()</code> operations. If <code>getTimeSeries()</code> has not yet been called, <code>seriesData()</code> will return an empty array.</p>
+
+<h4>
+<a name="data-service-customization" class="anchor" href="#data-service-customization"><span class="octicon octicon-link"></span></a>Data Service Customization</h4>
+
+<p>The Data Service URL is hard-coded into the library. Users can optionally override it:</p>
+
+<pre><code>    Geocens.DataService.setPath("http://dataservice.example.com/");
+</code></pre>
+
+<p>After override, all new requests will use the new Data Service path.</p>
+
+<h3>
+<a name="chart-visualization" class="anchor" href="#chart-visualization"><span class="octicon octicon-link"></span></a>Chart Visualization</h3>
+
+<p>The GeoCENS JS API has an optional module for drawing simple charts. It requires the HighStock 1.3.2 or newer library to be installed. For a web page, include the <code>geocens-chart.js</code> file in a script tag, <strong>after</strong> the main <code>geocens.js</code> file.</p>
+
+<pre><code>    &lt;script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Using the chart API is intended to be an easier alternative to interfacing with HighStock yourself, because the options are pre-configured.</p>
+
+<p>A quick example with a Data Service datastream source:</p>
+
+<pre><code>    // Draw the chart after time series is returned
+    var drawChart = function(seriesData, datastream) {
+        var chart = $("#chart").GeocensChart({
+            datastream: datastream
+        });
+    };
+
+    // Retrieve the time series after datastream is returned
+    var getSeries = function(datastream) {
+        datastream.getTimeSeries({
+            done: drawChart 
+        });
+    };
+
+    // Retrieve the datastream
+    Geocens.DataService.getDatastream({
+        api_key: "your_32_character_api_key",
+        sensor_id: "32_character_sensor_id",
+        datastream_id: "32_character_datastream_id",
+        done: getSeries
+    });
+</code></pre>
+
+<p>In the above example, the callback chain works in reverse. It first retrieves the datastream and passes it to the second function, which retrieves the time series and passes it to the first function. The first function then draws the chart with all the series data for the datastream.</p>
+
+<p>This means that if multiple <code>getTimeSeries</code> requests are made, all the cached data for that datastream will be used for drawing the time series chart.</p>
+
+<p>Using the chart API with OGC SOS observations is also short:</p>
+
+<pre><code>    // Draw the chart after time series is returned
+    var drawChart = function(seriesData, observation) {
+        var chart = $("#chart").GeocensChart({
+            observation: observation
+        });
+    };
+
+    // Retrieve the time series after observations is returned (note plural)
+    var getSeries = function(observations) {
+        observations[0].getTimeSeries({
+            done: drawChart 
+        });
+    };
+
+    // Retrieve the observations
+    Geocens.SOS.getObservation({
+        service_url: "http://www.example.com/sos",
+        offering: "sos_offering",
+        property: "sos_property",
+        done: getSeries
+    });
+</code></pre>
+
+<p>This example works in an identical manner to the Data Service example. As with the other example, in the case taht multiple <code>getTimeSeries</code> requests are made, all the cached data for that observation will be used for drawing the time series chart.</p>
+
+<h5>
+<a name="option-observation" class="anchor" href="#option-observation"><span class="octicon octicon-link"></span></a>option: observation</h5>
+
+<p>Pass in a OGC SOS observation object to the chart, which will draw the time series using the cached time series data. If specified with <code>datastream</code>, will take precedence.</p>
+
+<h5>
+<a name="option-datastream" class="anchor" href="#option-datastream"><span class="octicon octicon-link"></span></a>option: datastream</h5>
+
+<p>Pass in a Data Service datastream object to the chart, which will draw the time series using the cached time series data. If specified with <code>observation</code>, it will not be used.</p>
+
+<h5>
+<a name="option-chart" class="anchor" href="#option-chart"><span class="octicon octicon-link"></span></a>option: chart</h5>
+
+<p>A JavaScript object with HighStock compatible configuration options. These options will be passed to the chart when it is created, overriding defaults set by the GeoCENS JS API chart module. Note that certain properties may not be overridden.</p>
+
+<h3>
+<a name="map-visualization" class="anchor" href="#map-visualization"><span class="octicon octicon-link"></span></a>Map Visualization</h3>
+
+<p>The GeoCENS JS API has an optional module for mapping datastreams and/or observations. It requires the <a href="http://leafletjs.com/">Leaflet</a> 0.6.0 or newer library to be installed. For a web page, include the <code>geocens-map.js</code> file in a script tag, <strong>after</strong> the main <code>geocens.js</code> file. It can be included with the <code>geocens-chart.js</code> module without conflict.</p>
+
+<pre><code>    &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+    &lt;script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>The Map API makes it easy to draw map markers on a map without having to customize the markers and popups yourself. Getting started is as easy as <a href="http://leafletjs.com/examples/quick-start.html">getting started with the Leaflet Library</a>. An interactive demo is available in the <code>demo</code> directory.</p>
+
+<ol>
+<li>Include the Leaflet CSS files</li>
+<li>Include the Leaflet JS file</li>
+<li>Add a div element for the map</li>
+<li>Set the height on the div element</li>
+<li>
+<p>Set up the map (see following code example)</p>
+
+<pre><code>$(document).ready(function() {
+    var map = L.map('map', {
+        center: [51.07993, -114.131802],
+        zoom: 3
+    });
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    }).addTo(map);
+
+    // Add SOS Observations to the map
+    var mapObservations = function(observations) {
+        // Returns a Leaflet FeatureGroup containing the markers.
+        var markerGroup = L.geocens(observations, {
+            // Custom marker options.
+            // See Leaflet Marker Options documentation.
+            marker: {
+                clickable: true // note: setting clickable to false will disable popups
+            },
+
+            // Return custom HTML content for marker popups.
+            // `datasource` refers to the datastream/observation for
+            // the popup. `event` is the click event that activated
+            // the popup, and `marker` is the one the user clicked.
+            popupContent: function(datasource, event, marker) {
+                return datasource.name();
+            }
+        });
+
+        markerGroup.addTo(map);
+    };
+
+    // Retrieve the observations
+    Geocens.SOS.getObservation({
+      service_url: "http://app.geocens.ca:8171/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: mapObservations
+    });
+
+}());
+</code></pre>
+</li>
+</ol><p>In the above example, a group of observations from an OGC SOS server are added to a map. Each marker on the map corresponds to a observation/procedure from the SOS, and displays a popup with the observed property/procedure id.</p>
+
+<h4>
+<a name="lgeocens" class="anchor" href="#lgeocens"><span class="octicon octicon-link"></span></a>L.geocens</h4>
+
+<p>This is a Leaflet function that is designed to add data from GeoCENS JS API data sources. It can be used on multiple input types:</p>
+
+<pre><code>    // A single OGC SOS observation
+    L.geocens(observation);
+
+    // An array of OGC SOS observations
+    L.geocens(observations);
+
+    // A single GeoCENS Data Service datastream
+    L.geocens(datastream);
+
+    // An array of GeoCENS Data Service datastreams
+    L.geocens(datastreams);
+</code></pre>
+
+<p>All instances will return a Leaflet FeatureGroup.</p>
+
+<p>The function also supports an options input, allowing the markers and popups to be customized. Modifying these will override the defaults.</p>
+
+<pre><code>    L.geocens(observations, {
+        marker: {
+            clickable: true
+        },
+
+        popupContent: function(datasource, event, marker) {
+            return datasource.name();
+        }
+    });
+</code></pre>
+
+<h5>
+<a name="option-marker" class="anchor" href="#option-marker"><span class="octicon octicon-link"></span></a>option: marker</h5>
+
+<p>Custom Leaflet Marker options, applied to every marker generated from the input data. See the <a href="http://leafletjs.com/reference.html#marker-options">Leaflet Marker option documentation</a> for options.</p>
+
+<p>By default, it will apply no customization to the markers and they will appear as the Leaflet default markers.</p>
+
+<h5>
+<a name="option-popup" class="anchor" href="#option-popup"><span class="octicon octicon-link"></span></a>option: popup</h5>
+
+<p>Custom Leaflet Popup options, applied to the popup that is displayed when a marker is clicked. See the <a href="http://leafletjs.com/reference.html#popup-options">Leaflet Marker option documentation</a> for options.</p>
+
+<h5>
+<a name="option-popupcontent" class="anchor" href="#option-popupcontent"><span class="octicon octicon-link"></span></a>option: popupContent</h5>
+
+<p>Custom content to be inserted into popups. Whenever a user clicks on a marker, it will trigger this function to determine what HTML content will be displayed in the popup for the marker. The function will return the <code>datasource</code>, <code>event</code> and <code>marker</code>. The <code>datasource</code> is the observation or datastream for the marker; it can be queried using their respective APIs. The <code>event</code> is the <a href="http://leafletjs.com/reference.html#mouse-event">Leaflet click event</a> for the popup. The <code>marker</code> is the <a href="http://leafletjs.com/reference.html#marker">Leaflet marker</a> the user clicked on.</p>
+
+<p>Note that if click events are disabled for the marker (in the marker options), then the popup will not be displayed.</p>
+
+<h2>
+<a name="running-test" class="anchor" href="#running-test"><span class="octicon octicon-link"></span></a>Running Test</h2>
+
+<p>There is a test suite for ensuring the JS API meets its requirements. The JS API is build with Behaviour Driven Development (<a href="http://dannorth.net/introducing-bdd/">BDD</a>), which focuses on defining <em>requirements</em> before any code is written. This keeps new code clean and concise, only enough to satisfy the new behaviour.</p>
+
+<p>The tests can be run in a web browser by opening the <code>test/index.html</code> file. They are based on <a href="http://qunitjs.com/">Qunit</a>.</p>
+
+<p>Alternatively, the tests can be run from the command line if Node and NPM is installed.</p>
+
+<pre><code>    $ npm install -g grunt-cli
+    $ npm install
+    $ grunt qunit
+</code></pre>
+
+<p>See <code>Gruntfile.js</code> for more tasks that can be run from the command line.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>2013, James Badger, Geo Sensor Web Lab, All Rights Reserved.</p>
+        </section>
+
+        <footer>
+          Geocens-js-api is maintained by <a href="https://github.com/Canarie-Sensor-RPI">Canarie-Sensor-RPI</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
