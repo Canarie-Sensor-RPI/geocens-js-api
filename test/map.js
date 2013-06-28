@@ -42,30 +42,30 @@ $(document).ready(function() {
     spy.restore();
   });
 
-  test('default popup is called on click', 1, function() {
+  test('default popupContent is called on click', 1, function() {
     var input = [this.observation];
-    var spy = sinon.spy(L.Geocens.prototype.options, 'popup');
+    var spy = sinon.spy(L.Geocens.prototype.options, 'popupContent');
 
     var group = L.geocens(input);
 
 
     group.getLayers()[0].fireEvent('click');
 
-    ok(spy.called, "Default popup function not called");
+    ok(spy.called, "Default popupContent function not called");
     spy.restore();
   });
 
-  test('custom popup is called on click', 1, function() {
+  test('custom popupContent is called on click', 1, function() {
     var input = [this.observation];
     var spy = sinon.spy();
 
     var group = L.geocens(input, {
-      popup: spy
+      popupContent: spy
     });
 
     group.getLayers()[0].fireEvent('click');
 
-    ok(spy.called, "Custom popup function not called");
+    ok(spy.called, "Custom popupContent function not called");
   });
 
 });

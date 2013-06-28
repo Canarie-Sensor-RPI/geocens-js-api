@@ -9,7 +9,7 @@
   L.Geocens = L.FeatureGroup.extend({
 
     options: {
-      popup: function(datasource, event, marker) {
+      popupContent: function(datasource, event, marker) {
         return datasource.name();
       }
     },
@@ -36,7 +36,7 @@
             }
 
             popup.setLatLng(e.latlng)
-                 .setContent(self.options.popup(marker.datasource), e, marker);
+                 .setContent(self.options.popupContent(marker.datasource), e, marker);
 
             marker.bindPopup(popup);
           });

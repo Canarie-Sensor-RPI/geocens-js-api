@@ -483,7 +483,7 @@ The Map API makes it easy to draw map markers on a map without having to customi
 					// `datasource` refers to the datastream/observation for
 					// the popup. `event` is the click event that activated
 					// the popup, and `marker` is the one the user clicked.
-					popup: function(datasource, event, marker) {
+					popupContent: function(datasource, event, marker) {
 						return datasource.name();
 					}
 				});
@@ -528,7 +528,7 @@ The function also supports an options input, allowing the markers and popups to 
 				clickable: true
 			},
 
-			popup: function(datasource, event, marker) {
+			popupContent: function(datasource, event, marker) {
 				return datasource.name();
 			}
 		});
@@ -539,7 +539,7 @@ Custom Leaflet Marker options, applied to every marker generated from the input 
 
 By default, it will apply no customization to the markers and they will appear as the Leaflet default markers.
 
-##### option: popup
+##### option: popupContent
 
 Custom content to be inserted into popups. Whenever a user clicks on a marker, it will trigger this function to determine what HTML content will be displayed in the popup for the marker. The function will return the `datasource`, `event` and `marker`. The `datasource` is the observation or datastream for the marker; it can be queried using their respective APIs. The `event` is the [Leaflet click event](http://leafletjs.com/reference.html#mouse-event) for the popup. The `marker` is the [Leaflet marker](http://leafletjs.com/reference.html#marker) the user clicked on.
 
