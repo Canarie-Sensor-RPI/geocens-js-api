@@ -48,7 +48,8 @@
               }
 
               return "<strong>" + Highcharts.dateFormat(format, this.x) +
-                     "</strong><br>" + series.name + ": " + point.y + " " +
+                     "</strong><br>" + series.name + ": " +
+                     Highcharts.numberFormat(point.y, 2) + " " +
                      datasource.units();
           }
       },
