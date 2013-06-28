@@ -31,7 +31,7 @@
           marker.datasource = this;
 
           marker.on("click", function(e) {
-            if (popup._map !== undefined) {
+            if (popup._map !== undefined && popup._map !== null) {
               popup._map.closePopup(popup);
             }
 
