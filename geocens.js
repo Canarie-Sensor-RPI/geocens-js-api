@@ -19,9 +19,6 @@
   // Current library version
   Geocens.VERSION = '1.0.0';
 
-  // Require jQuery into `$` variable
-  Geocens.$ = root.jQuery || root.$;
-
   // Run Geocens in noConflict mode, which prevents Geocens from overwriting
   // whatever previously held the `Geocens` variable.
   Geocens.noConflict = function () {
