@@ -22,7 +22,7 @@
       this._datasource = data;
       var layers = this._layers = {};
       var markerOptions = this.options.marker;
-      var popup = L.popup();
+      var popup = L.popup(this.options.popup);
 
       // Create markers from datasource(s)
       if (data instanceof Array) {

@@ -539,6 +539,10 @@ Custom Leaflet Marker options, applied to every marker generated from the input 
 
 By default, it will apply no customization to the markers and they will appear as the Leaflet default markers.
 
+##### option: popup
+
+Custom Leaflet Popup options, applied to the popup that is displayed when a marker is clicked. See the [Leaflet Marker option documentation](http://leafletjs.com/reference.html#popup-options) for options.
+
 ##### option: popupContent
 
 Custom content to be inserted into popups. Whenever a user clicks on a marker, it will trigger this function to determine what HTML content will be displayed in the popup for the marker. The function will return the `datasource`, `event` and `marker`. The `datasource` is the observation or datastream for the marker; it can be queried using their respective APIs. The `event` is the [Leaflet click event](http://leafletjs.com/reference.html#mouse-event) for the popup. The `marker` is the [Leaflet marker](http://leafletjs.com/reference.html#marker) the user clicked on.
