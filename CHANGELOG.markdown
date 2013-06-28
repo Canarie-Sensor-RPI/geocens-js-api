@@ -1,3 +1,10 @@
+1.0.1 (June 28 2013)
+
+* Fix bug where new popups would stop working after being closed
+* Change name `popup` callback to `popupContent` in map module
+* Add `popup` option to map module for custom popup options
+* Fix numbers in chart tooltip to 2 decimal places
+
 1.0.0 (June 26 2013)
 
 * Add GeoCENS JS API map module, for adding markers with customizable popups to Leaflet maps
