@@ -39,6 +39,7 @@
 <ol>
   <li><a href="#include">Include the Libraries</a></li>
   <li><a href="#data_service_object">Create a Service Object</a></li>
+  <li><a href="#get_sensor">Retrieve a Sensor</a></li>
   <li><a href="#get_datastream">Retrieve a Datastream</a></li>
   <li><a href="#datastream_time_series">Retrieve a Datastream Time Series</a></li>
   <li><a href="#ogc_sos_object">Create an OGC SOS Service Object</a></li>
@@ -99,6 +100,46 @@
 
       alert("service: " + service.path + "\n"
         + "key: " + service.api_key);
+    });
+  }());
+</script>
+
+<h2 id="get_sensor">Retrieve a Sensor</h2>
+
+<pre class="code">
+
+  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+
+  var service = new Geocens.DataService({
+    api_key: api_key
+  });
+
+  service.getSensor({
+    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+    done: function(sensor) {
+      console.log(&quot;Example Thirteen&quot;, sensor);
+      alert(JSON.stringify(sensor.metadata));
+    }
+  });
+
+</pre>
+<button id="example_thirteen">Run Example</button>
+<script>
+  $(document).ready(function() {
+    $("#example_thirteen").on("click", function() {
+      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getSensor({
+        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+        done: function(sensor) {
+          console.log("Example Thirteen", sensor);
+          alert(JSON.stringify(sensor.metadata));
+        }
+      });
     });
   }());
 </script>

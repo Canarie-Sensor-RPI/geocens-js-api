@@ -26,6 +26,24 @@
     return this;
   };
 
+  // Geocens.Sensor
+  // ------------------
+  //
+  var Sensor = Geocens.Sensor = function(options) {
+    // Handle undefined options
+    if (options === undefined) {
+      options = {};
+    }
+
+    this.metadata = options;
+    this.sensor_id = options.sensor_id;
+  };
+
+  // Extend Sensor object (actually function) prototype with new methods and
+  // properties
+  jQuery.extend(Sensor.prototype, {
+  });
+
   // Geocens.Datastream
   // ------------------
   //
@@ -225,6 +243,33 @@
           datastream.service = self;
           options.done(datastream);
         });
+      });
+    },
+
+    getSensor: function(options) {
+      var self = this,
+          sensor_path;
+
+      if (options === undefined) {
+        options = {};
+      }
+
+      options.done = options.done || function () {};
+      options.api_key = options.api_key || self.api_key;
+
+      if (self.api_key === undefined) {
+        self.api_key = options.api_key;
+      }
+
+      sensor_path = this.path + "sensors/" + options.sensor_id;
+
+      // Retrieve sensor resource
+      self._ajax.get({
+        path: sensor_path,
+        api_key: options.api_key
+      }).done(function (sensorData) {
+        var sensor = new Sensor(sensorData);
+        options.done(sensor);
       });
     },
 
