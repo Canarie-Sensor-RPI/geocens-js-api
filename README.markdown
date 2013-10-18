@@ -246,6 +246,54 @@ Define a Data Service object with your Data Service API key:
 			api_key: "your_32_character_api_key"
 		});
 
+#### Geocens.DataService.getSensor
+
+Use a Data Service object to retrieve a single sensor with its sensor ID:
+
+		dsSource.getSensor({
+			sensor_id: "32_character_sensor_id",
+			done: function (sensor) {
+				window.sensor = sensor;
+			}
+		});
+
+These can be combined:
+
+		Geocens.DataService.getSensor({
+			api_key: "your_32_character_api_key",
+			sensor_id: "32_character_sensor_id",
+			done: function (sensor) {
+				window.sensor = sensor;
+			}
+		});
+
+The `done` option will return the Sensor object as the first parameter after the metadata has been retrieved.
+
+#### Sensor.metadata
+
+With a Sensor object, the basic metadata properties can be retrieved:
+
+		datastream.metadata;
+
+Example attributes for a sensor from GeoCENS Data Service:
+
+		{
+			id: "radio-1",
+			uid: "2c8df396cf668a78b643ccf6ed7a5947",
+			title: "Demonstration Sensor Radio-1",
+			contact_email: "james@geocens.ca",
+			description: "lorem ipsum",
+			contact_name: "James Badger",
+			loc: [
+				51.08125,
+				-114.13412
+			],
+			user: "demo@geocens.ca",
+			phens: [
+				"airquality"
+			]
+		}
+
 #### Geocens.DataService.getDatastream
 
 Use a Data Service object to retrieve a singular datastream with its sensor ID and datastream ID:
