@@ -17,6 +17,50 @@ $(document).ready(function() {
     Geocens.DataService.setPath(originalPath);
   });
 
+  module("Data Service with getSensor", {
+    setup: function () {
+      this.api_key       = "your_32_character_api_key";
+      this.sensor_id     = "32_character_sensor_id";
+
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "sensors/" + this.sensor_id;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
+
+  test('makes a request for the sensor resource', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve datastream
+    Geocens.DataService.getSensor({
+      api_key:       this.api_key,
+      sensor_id:     this.sensor_id
+    });
+
+    // Return sensor
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var sensor_path = Geocens.DataService.path + "sensors/" + this.sensor_id;
+
+    equal(request.url, sensor_path, "Request not made for sensor resource");
+
+    xhr.restore();
+  });
+
   module("Data Service with getDatastream", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
@@ -225,6 +269,75 @@ $(document).ready(function() {
 
     equal(newDatastream.datastream_id, this.datastream_id, "Datastream id was not defined");
     equal(newDatastream.sensor_id, this.sensor_id, "Sensor id was not defined");
+  });
+
+  module("Init Data Service, then getSensor", {
+    setup: function () {
+      this.api_key       = "your_32_character_api_key";
+      this.sensor_id     = "32_character_sensor_id";
+
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "sensors/" + this.sensor_id;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function() {
+      this.server.restore();
+    }
+  });
+
+  test('sends the api key', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve datastream
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getSensor({
+      sensor_id: this.sensor_id
+    });
+
+    // Return sensor
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor));
+
+    equal(requests.length, 1, "Fake server did not receive request");
+
+    var request = requests[0];
+
+    equal(request.requestHeaders["x-api-key"], this.api_key, "API mismatch");
+  });
+
+  test('returns a "Sensor" object', 2, function() {
+    var newSensor;
+
+    // Retrieve sensor
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getSensor({
+      sensor_id:     this.sensor_id,
+      done: function (sensor) {
+        newSensor = sensor;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensor)]);
+    this.server.respond();
+
+    ok(newSensor !== undefined, "Sensor was not defined");
+    // If it looks and acts like a Sensor object…
+    ok(newSensor.metadata !== undefined,
+       "Sensor does not respond to .metadata");
   });
 
   module("Init Data Service, then getDatastream", {
