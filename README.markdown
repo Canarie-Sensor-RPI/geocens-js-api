@@ -12,6 +12,10 @@ For a web page, include the `geocens.js` file in a script tag:
 
 		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
 
+### Alternate Install for Rails
+
+For use with the Rails asset pipeline, try the [geocens-js-api-rails](https://github.com/Canarie-Sensor-RPI/geocens-js-api-rails) gem.
+
 ## Getting Started
 
 Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service. An interactive demo is available in the `demo` directory.
@@ -219,7 +223,7 @@ An optional callback function that will return an array of Time Series objects a
 		{
 			timestamp: 1369699200000,
 			value: 5.22
-		}] 
+		}]
 
 #### Observation.seriesData
 
@@ -388,7 +392,7 @@ A quick example with a Data Service datastream source:
 		// Retrieve the time series after datastream is returned
 		var getSeries = function(datastream) {
 			datastream.getTimeSeries({
-				done: drawChart	
+				done: drawChart
 			});
 		};
 
@@ -416,7 +420,7 @@ Using the chart API with OGC SOS observations is also short:
 		// Retrieve the time series after observations is returned (note plural)
 		var getSeries = function(observations) {
 			observations[0].getTimeSeries({
-				done: drawChart	
+				done: drawChart
 			});
 		};
 
