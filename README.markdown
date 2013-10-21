@@ -294,6 +294,22 @@ Example attributes for a sensor from GeoCENS Data Service:
 			]
 		}
 
+#### Sensor.getDatastreams
+
+With a Sensor object, an array of Datastream objects for that sensor can be retrieved:
+
+		sensor.getDatastreams();
+
+From there, each of the Datastream objects can be used to load their time series or attributes.
+
+#### Sensor.datastreams
+
+Return an array of Datastream objects for this Sensor. If the datastreams for this sensor have not been downloaded from GeoCENS using `Sensor.getDatastreams()`, then `null` will be returned. If the datastream sensors have been downloaded, then an array of datastreams will be returned. If the datastream information for the sensor has been retrieved and there are no datastreams for this sensor, then an empty array will be returned.
+
+Example usage:
+
+		var streamsList = sensor.datastreams;
+
 #### Geocens.DataService.getDatastream
 
 Use a Data Service object to retrieve a singular datastream with its sensor ID and datastream ID:
