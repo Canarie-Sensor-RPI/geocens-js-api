@@ -273,7 +273,7 @@ The `done` option will return the Sensor object as the first parameter after the
 
 With a Sensor object, the basic metadata properties can be retrieved:
 
-		datastream.metadata;
+		sensor.metadata;
 
 Example attributes for a sensor from GeoCENS Data Service:
 
