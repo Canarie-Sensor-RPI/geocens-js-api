@@ -298,9 +298,13 @@ Example attributes for a sensor from GeoCENS Data Service:
 
 With a Sensor object, an array of Datastream objects for that sensor can be retrieved:
 
-	sensor.getDatastreams();
+	sensor.getDatastreams({
+		done: function (datastreams) {
+			window.datastreams = datastreams;
+		}
+	});
 
-From there, each of the Datastream objects can be used to load their time series or attributes.
+When the datastreams have been retrieved from the server, the `done` callback will be called. The `datastreams` parameter will contain an array of zero or more Datastream objects. From there, each of the Datastream objects can be used to load their time series or attributes.
 
 #### Sensor.datastreams
 
