@@ -52,6 +52,7 @@
         options = {};
       }
 
+      options.raw  = options.raw || function () {};
       options.done = options.done || function () {};
 
       params = {
@@ -76,6 +77,7 @@
         });
 
         self.datastreams = datastreams;
+        options.raw(data, self);
         options.done(datastreams, self);
       });
 

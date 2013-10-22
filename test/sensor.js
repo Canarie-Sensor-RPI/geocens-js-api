@@ -127,4 +127,21 @@ $(document).ready(function() {
     ok(datastreams[0].getTimeSeries !== undefined, "datastream does not respond to getTimeSeries");
   });
 
+  test("raw callback does not return Datastream objects", 2, function() {
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastreams)]);
+    var datastreams;
+
+    // Retrieve datastreams
+    this.sensor.getDatastreams({
+      raw: function(data) {
+        datastreams = data;
+      }
+    });
+    this.server.respond();
+
+    equal(datastreams.length, 1);
+    ok(datastreams[0].getTimeSeries === undefined, "datastream responds to getTimeSeries, should not be defined");
+  });
+
 });
