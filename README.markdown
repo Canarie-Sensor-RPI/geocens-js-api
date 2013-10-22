@@ -301,10 +301,16 @@ With a Sensor object, an array of Datastream objects for that sensor can be retr
 	sensor.getDatastreams({
 		done: function (datastreams) {
 			window.datastreams = datastreams;
+		},
+
+		raw: function (data) {
+			window.datastreamJSON = data;
 		}
 	});
 
 When the datastreams have been retrieved from the server, the `done` callback will be called. The `datastreams` parameter will contain an array of zero or more Datastream objects. From there, each of the Datastream objects can be used to load their time series or attributes.
+
+Alternatively or simultaneously the `raw` callback can be used to receive the JS objects from the GeoCENS Data Service not formatted as Datastream objects.
 
 #### Sensor.datastreams
 
