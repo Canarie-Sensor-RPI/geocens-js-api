@@ -10,7 +10,7 @@ The GeoCENS JavaScript API can be used to retrieve geospatial sensor data from e
 
 For a web page, include the `geocens.js` file in a script tag:
 
-		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
 
 ### Alternate Install for Rails
 
@@ -22,69 +22,69 @@ Here is a brief introduction on how to retrieve data from the GeoCENS Data Servi
 
 In this example, we will retrieve a datastream. First, we connect to the Data Service and download the datastream information:
 
-		Geocens.DataService.getDatastream({
-			api_key: api_key,
-			sensor_id: sensor_id,
-			datastream_id: datastream_id,
-			done: function (datastream) {
-				window.newDatastream = datastream;
-			}
-		});
+	Geocens.DataService.getDatastream({
+		api_key: api_key,
+		sensor_id: sensor_id,
+		datastream_id: datastream_id,
+		done: function (datastream) {
+			window.newDatastream = datastream;
+		}
+	});
 
 This provides us with a `Datastream` object in the `done` callback. We can retrieve properties for the Datastream:
 
-		datastream.attributes();
+	datastream.attributes();
 
 Which returns an object with the properties:
 
-		{
-			uid: "ccc92c6fe57dff592ff687d99c4ebf70",
-			id: "carbonMonoxide",
-			sensor: {
-				id: "5C-86-4A-00-2C-9E",
-				user: "bob@example.com",
-				uid: "4ddecd5124661f9442cfca8be23f8dda",
-				altitude: 1100,
-				samplingrate: 0,
-				loc: [51,-114],
-				title: "Our first integration Testing",
-				height: 0,
-				nickName: "Alpha",
-				description: "",
-				last_time_online: "2012-09-18T21:04:40",
-				phens: [
-					"airtemperature",
-					"relatedhumidity",
-					"airquality",
-					"hydrogentest",
-					"hydrogentest1Name"
-				]
-			},
-			unit: "ppm",
-			phenName: "airquality",
-			user: "bob@example.com"
-		}
+	{
+		uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+		id: "carbonMonoxide",
+		sensor: {
+			id: "5C-86-4A-00-2C-9E",
+			user: "bob@example.com",
+			uid: "4ddecd5124661f9442cfca8be23f8dda",
+			altitude: 1100,
+			samplingrate: 0,
+			loc: [51,-114],
+			title: "Our first integration Testing",
+			height: 0,
+			nickName: "Alpha",
+			description: "",
+			last_time_online: "2012-09-18T21:04:40",
+			phens: [
+				"airtemperature",
+				"relatedhumidity",
+				"airquality",
+				"hydrogentest",
+				"hydrogentest1Name"
+			]
+		},
+		unit: "ppm",
+		phenName: "airquality",
+		user: "bob@example.com"
+	}
 
 We can also use the Datastream object to retrieve the latest time series records:
 
-		datastream.getTimeSeries({
-			done: function (seriesData) {
-				window.seriesData = seriesData;
-			}
-		});
+	datastream.getTimeSeries({
+		done: function (seriesData) {
+			window.seriesData = seriesData;
+		}
+	});
 
 By default, `getTimeSeries()` will retrieve 24 hours of observation values from the Data Service.
 
 The `getTimeSeries()` method will cache the results in the Datastream object, and return an array of objects:
 
-		[{
-			timestamp: 1356998400000,
-			value: 3.88
-		},
-		{
-			timestamp: 1369699200000,
-			value: 5.22
-		}]
+	[{
+		timestamp: 1356998400000,
+		value: 3.88
+	},
+	{
+		timestamp: 1369699200000,
+		value: 5.22
+	}]
 
 The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
 
@@ -94,8 +94,8 @@ The returned objects contain timestamp and value properties. The timestamps corr
 
 If you are using a variable that already is called `Geocens`, you can prevent the GeoCENS JS API from overwriting it. The `noConflict()` method will return the `Geocens` variable back to the previous owner/value.
 
-		var GeocensAPI = Geocens.noConflict();
-		var sosSource = GeocensAPI.SOS({…});
+	var GeocensAPI = Geocens.noConflict();
+	var sosSource = GeocensAPI.SOS({…});
 
 ### Loading Data
 
@@ -105,9 +105,9 @@ The library can load data from either an [OGC SOS compatible service](http://www
 
 Define an OGC SOS object with the SOS URL:
 
-		var sosSource = new Geocens.SOS({
-			service_url: "http://www.example.com/sos"
-		});
+	var sosSource = new Geocens.SOS({
+		service_url: "http://www.example.com/sos"
+	});
 
 This object can be reused to use the same `service_url` for multiple `getObservation` invocations.
 
@@ -115,28 +115,28 @@ This object can be reused to use the same `service_url` for multiple `getObserva
 
 Use an OGC SOS object to retrieve SOS observation data, as set out by the [Observation and Measurement specification](http://www.opengeospatial.org/standards/om). Results returned are procedure-observation pairs that exist within the filter criteria. Procedures that have no data within the filter will not be returned. Results are filtered by SOS Offering (required), Observed Property (required), and bounding box (optional).
 
-		sosSource.getObservation({
-			offering: "sos_offering",
-			property: "sos_property",
-			northwest: [51, -114],
-			southeast: [-51, 114],
-			done: function (observations) {
-				window.observations = observations;
-			}
-		});
+	sosSource.getObservation({
+		offering: "sos_offering",
+		property: "sos_property",
+		northwest: [51, -114],
+		southeast: [-51, 114],
+		done: function (observations) {
+			window.observations = observations;
+		}
+	});
 
 These can be combined:
 
-		Geocens.SOS.getObservation({
-			service_url: "http://www.example.com/sos",
-			offering: "sos_offering",
-			property: "sos_property",
-			northwest: [51, -114],
-			southeast: [-51, 114],
-			done: function (observations) {
-				window.observations = observations;
-			}
-		});
+	Geocens.SOS.getObservation({
+		service_url: "http://www.example.com/sos",
+		offering: "sos_offering",
+		property: "sos_property",
+		northwest: [51, -114],
+		southeast: [-51, 114],
+		done: function (observations) {
+			window.observations = observations;
+		}
+	});
 
 ##### option: offering
 
@@ -164,31 +164,31 @@ An optional callback function that will return an array of Observation objects a
 
 With an Observation object, the basic metadata properties can be retrieved:
 
-		observation.attributes();
+	observation.attributes();
 
 Example attributes for an observation from an OGC SOS:
 
-		{
-			latitude: 51.000,
-			longitude: -114.000,
-			offering: "temperature",
-			property: "urn:ogc:def:property:noaa:ndbc:water temperature",
-			sensor_id: "snr_301",
-			sensor_type: "SOS",
-			service_url: "http://example.com/sos",
-			unit: "celcius"
-		}
+	{
+		latitude: 51.000,
+		longitude: -114.000,
+		offering: "temperature",
+		property: "urn:ogc:def:property:noaa:ndbc:water temperature",
+		sensor_id: "snr_301",
+		sensor_type: "SOS",
+		service_url: "http://example.com/sos",
+		unit: "celcius"
+	}
 
 #### Observation.describe
 
 For Observations, the [sensorML document](http://www.opengeospatial.org/standards/sensorml) can be retrieved for additional metadata. It is then possible to use [jQuery's traversal API](http://api.jquery.com/category/traversing/) to navigate the result.
 
-		observation.describe({
-			done: function (sensorML) {
-				var intendedApp = sensorML.find("classifier[name~='intendedApplication']").text();
-				// "water temperature monitoring"
-			}
-		});
+	observation.describe({
+		done: function (sensorML) {
+			var intendedApp = sensorML.find("classifier[name~='intendedApplication']").text();
+			// "water temperature monitoring"
+		}
+	});
 
 Note that the sensorML document may or may not include the `classifier` element; it is up to the user to determine useful data from the sensorML document.
 
@@ -196,13 +196,13 @@ Note that the sensorML document may or may not include the `classifier` element;
 
 The time series records can be retrieved:
 
-		observation.getTimeSeries({
-			start: new Date("2013-01-01 00:00:00Z"),
-			end:   new Date("2013-05-28 00:00:00Z"),
-			done:  function (seriesData) {
-				window.seriesData = seriesData;
-			}
-		});
+	observation.getTimeSeries({
+		start: new Date("2013-01-01 00:00:00Z"),
+		end:   new Date("2013-05-28 00:00:00Z"),
+		done:  function (seriesData) {
+			window.seriesData = seriesData;
+		}
+	});
 
 ##### option: start
 
@@ -216,14 +216,14 @@ An optional Date object specifying the end limit of the time series.
 
 An optional callback function that will return an array of Time Series objects as the first parameter. Example response:
 
-		[{
-			timestamp: 1356998400000,
-			value: 3.88
-		},
-		{
-			timestamp: 1369699200000,
-			value: 5.22
-		}]
+	[{
+		timestamp: 1356998400000,
+		value: 3.88
+	},
+	{
+		timestamp: 1369699200000,
+		value: 5.22
+	}]
 
 #### Observation.seriesData
 
@@ -234,7 +234,7 @@ Retrieve a sorted array of timeseries objects for an SOS Observation, based on d
 
 The Translation Engine URL is hard-coded into the library. It is a GeoCENS proxy service that retrieves data from OGC SOS and provides easily-consumed data. Users can optionally override it:
 
-		Geocens.TranslationEngine.setPath("http://example.com/translation-engine/");
+	Geocens.TranslationEngine.setPath("http://example.com/translation-engine/");
 
 After override, all new requests will use the new Translation Engine path.
 
@@ -242,30 +242,30 @@ After override, all new requests will use the new Translation Engine path.
 
 Define a Data Service object with your Data Service API key:
 
-		var dsSource = new Geocens.DataService({
-			api_key: "your_32_character_api_key"
-		});
+	var dsSource = new Geocens.DataService({
+		api_key: "your_32_character_api_key"
+	});
 
 #### Geocens.DataService.getSensor
 
 Use a Data Service object to retrieve a single sensor with its sensor ID:
 
-		dsSource.getSensor({
-			sensor_id: "32_character_sensor_id",
-			done: function (sensor) {
-				window.sensor = sensor;
-			}
-		});
+	dsSource.getSensor({
+		sensor_id: "32_character_sensor_id",
+		done: function (sensor) {
+			window.sensor = sensor;
+		}
+	});
 
 These can be combined:
 
-		Geocens.DataService.getSensor({
-			api_key: "your_32_character_api_key",
-			sensor_id: "32_character_sensor_id",
-			done: function (sensor) {
-				window.sensor = sensor;
-			}
-		});
+	Geocens.DataService.getSensor({
+		api_key: "your_32_character_api_key",
+		sensor_id: "32_character_sensor_id",
+		done: function (sensor) {
+			window.sensor = sensor;
+		}
+	});
 
 The `done` option will return the Sensor object as the first parameter after the metadata has been retrieved.
 
@@ -273,49 +273,75 @@ The `done` option will return the Sensor object as the first parameter after the
 
 With a Sensor object, the basic metadata properties can be retrieved:
 
-		sensor.metadata;
+	sensor.metadata;
 
 Example attributes for a sensor from GeoCENS Data Service:
 
-		{
-			id: "radio-1",
-			uid: "2c8df396cf668a78b643ccf6ed7a5947",
-			title: "Demonstration Sensor Radio-1",
-			contact_email: "james@geocens.ca",
-			description: "lorem ipsum",
-			contact_name: "James Badger",
-			loc: [
-				51.08125,
-				-114.13412
-			],
-			user: "demo@geocens.ca",
-			phens: [
-				"airquality"
-			]
+	{
+		id: "radio-1",
+		uid: "2c8df396cf668a78b643ccf6ed7a5947",
+		title: "Demonstration Sensor Radio-1",
+		contact_email: "james@geocens.ca",
+		description: "lorem ipsum",
+		contact_name: "James Badger",
+		loc: [
+			51.08125,
+			-114.13412
+		],
+		user: "demo@geocens.ca",
+		phens: [
+			"airquality"
+		]
+	}
+
+#### Sensor.getDatastreams
+
+With a Sensor object, an array of Datastream objects for that sensor can be retrieved:
+
+	sensor.getDatastreams({
+		done: function (datastreams) {
+			window.datastreams = datastreams;
+		},
+
+		raw: function (data) {
+			window.datastreamJSON = data;
 		}
+	});
+
+When the datastreams have been retrieved from the server, the `done` callback will be called. The `datastreams` parameter will contain an array of zero or more Datastream objects. From there, each of the Datastream objects can be used to load their time series or attributes.
+
+Alternatively or simultaneously the `raw` callback can be used to receive the JS objects from the GeoCENS Data Service not formatted as Datastream objects.
+
+#### Sensor.datastreams
+
+Return an array of Datastream objects for this Sensor. If the datastreams for this sensor have not been downloaded from GeoCENS using `Sensor.getDatastreams()`, then `null` will be returned. If the datastream sensors have been downloaded, then an array of datastreams will be returned. If the datastream information for the sensor has been retrieved and there are no datastreams for this sensor, then an empty array will be returned.
+
+Example usage:
+
+	var streamsList = sensor.datastreams;
 
 #### Geocens.DataService.getDatastream
 
 Use a Data Service object to retrieve a singular datastream with its sensor ID and datastream ID:
 
-		dsSource.getDatastream({
-			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id",
-			done: function (datastream) {
-				window.datastream = datastream;
-			}
-		});
+	dsSource.getDatastream({
+		sensor_id: "32_character_sensor_id",
+		datastream_id: "32_character_datastream_id",
+		done: function (datastream) {
+			window.datastream = datastream;
+		}
+	});
 
 These can be combined:
 
-		Geocens.DataService.getDatastream({
-			api_key: "your_32_character_api_key",
-			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id",
-			done: function (datastream) {
-				window.datastream = datastream;
-			}
-		});
+	Geocens.DataService.getDatastream({
+		api_key: "your_32_character_api_key",
+		sensor_id: "32_character_sensor_id",
+		datastream_id: "32_character_datastream_id",
+		done: function (datastream) {
+			window.datastream = datastream;
+		}
+	});
 
 The `done` option will return the Datastream object as the first parameter after the metadata has been retrieved.
 
@@ -323,51 +349,51 @@ The `done` option will return the Datastream object as the first parameter after
 
 With a Datastream object, the basic metadata properties can be retrieved:
 
-		datastream.attributes();
+	datastream.attributes();
 
 Example attributes for a datastream from GeoCENS Data Service:
 
-		{
-			uid: "ccc92c6fe57dff592ff687d99c4ebf70",
-			id: "carbonMonoxide",
-			sensor: {
-				id: "5C-86-4A-00-2C-9E",
-				user: "bob@example.com",
-				uid: "4ddecd5124661f9442cfca8be23f8dda",
-				altitude: 1100,
-				samplingrate: 0,
-				loc: [51,-114],
-				title: "Our first integration Testing",
-				height: 0,
-				nickName: "Alpha",
-				description: "",
-				last_time_online: "2012-09-18T21:04:40",
-				phens: [
-					"airtemperature",
-					"relatedhumidity",
-					"airquality",
-					"hydrogentest",
-					"hydrogentest1Name"
-				]
-			},
-			unit: "ppm",
-			phenName: "airquality",
-			user: "bob@example.com"
-		}
+	{
+		uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+		id: "carbonMonoxide",
+		sensor: {
+			id: "5C-86-4A-00-2C-9E",
+			user: "bob@example.com",
+			uid: "4ddecd5124661f9442cfca8be23f8dda",
+			altitude: 1100,
+			samplingrate: 0,
+			loc: [51,-114],
+			title: "Our first integration Testing",
+			height: 0,
+			nickName: "Alpha",
+			description: "",
+			last_time_online: "2012-09-18T21:04:40",
+			phens: [
+				"airtemperature",
+				"relatedhumidity",
+				"airquality",
+				"hydrogentest",
+				"hydrogentest1Name"
+			]
+		},
+		unit: "ppm",
+		phenName: "airquality",
+		user: "bob@example.com"
+	}
 
 #### Datastream.getTimeSeries
 
 The time series observations can be retrieved:
 
-		datastream.getTimeSeries({
-			limit: 100,
-			skip:  100,
-			start: new Date("2013-01-01 00:00:00Z"),
-			end:   new Date("2013-05-28 00:00:00Z"),
-			done:  function (seriesData) {
-				window.seriesData = seriesData;
-			}
-		});
+	datastream.getTimeSeries({
+		limit: 100,
+		skip:  100,
+		start: new Date("2013-01-01 00:00:00Z"),
+		end:   new Date("2013-05-28 00:00:00Z"),
+		done:  function (seriesData) {
+			window.seriesData = seriesData;
+		}
+	});
 
 ##### option: start
 
@@ -393,14 +419,14 @@ Skip the latest *n* records returned from the Data Service (it sorts date *desce
 
 The `getTimeSeries` method will return an array of time series objects:
 
-		[{
-			timestamp: 1356998400000,
-			value: 3.88
-		},
-		{
-			timestamp: 1369699200000,
-			value: 5.22
-		}]
+	[{
+		timestamp: 1356998400000,
+		value: 3.88
+	},
+	{
+		timestamp: 1369699200000,
+		value: 5.22
+	}]
 
 The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
 
@@ -414,7 +440,7 @@ Retrieve a sorted array of timeseries objects for a datastream, based on data al
 
 The Data Service URL is hard-coded into the library. Users can optionally override it:
 
-		Geocens.DataService.setPath("http://dataservice.example.com/");
+	Geocens.DataService.setPath("http://dataservice.example.com/");
 
 After override, all new requests will use the new Data Service path.
 
@@ -422,35 +448,35 @@ After override, all new requests will use the new Data Service path.
 
 The GeoCENS JS API has an optional module for drawing simple charts. It requires the HighStock 1.3.2 or newer library to be installed. For a web page, include the `geocens-chart.js` file in a script tag, **after** the main `geocens.js` file.
 
-		<script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"></script>
-		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
-		<script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"></script>
 
 Using the chart API is intended to be an easier alternative to interfacing with HighStock yourself, because the options are pre-configured.
 
 A quick example with a Data Service datastream source:
 
-		// Draw the chart after time series is returned
-		var drawChart = function(seriesData, datastream) {
-			var chart = $("#chart").GeocensChart({
-				datastream: datastream
-			});
-		};
-
-		// Retrieve the time series after datastream is returned
-		var getSeries = function(datastream) {
-			datastream.getTimeSeries({
-				done: drawChart
-			});
-		};
-
-		// Retrieve the datastream
-		Geocens.DataService.getDatastream({
-			api_key: "your_32_character_api_key",
-			sensor_id: "32_character_sensor_id",
-			datastream_id: "32_character_datastream_id",
-			done: getSeries
+	// Draw the chart after time series is returned
+	var drawChart = function(seriesData, datastream) {
+		var chart = $("#chart").GeocensChart({
+			datastream: datastream
 		});
+	};
+
+	// Retrieve the time series after datastream is returned
+	var getSeries = function(datastream) {
+		datastream.getTimeSeries({
+			done: drawChart
+		});
+	};
+
+	// Retrieve the datastream
+	Geocens.DataService.getDatastream({
+		api_key: "your_32_character_api_key",
+		sensor_id: "32_character_sensor_id",
+		datastream_id: "32_character_datastream_id",
+		done: getSeries
+	});
 
 In the above example, the callback chain works in reverse. It first retrieves the datastream and passes it to the second function, which retrieves the time series and passes it to the first function. The first function then draws the chart with all the series data for the datastream.
 
@@ -458,27 +484,27 @@ This means that if multiple `getTimeSeries` requests are made, all the cached da
 
 Using the chart API with OGC SOS observations is also short:
 
-		// Draw the chart after time series is returned
-		var drawChart = function(seriesData, observation) {
-			var chart = $("#chart").GeocensChart({
-				observation: observation
-			});
-		};
-
-		// Retrieve the time series after observations is returned (note plural)
-		var getSeries = function(observations) {
-			observations[0].getTimeSeries({
-				done: drawChart
-			});
-		};
-
-		// Retrieve the observations
-		Geocens.SOS.getObservation({
-			service_url: "http://www.example.com/sos",
-			offering: "sos_offering",
-			property: "sos_property",
-			done: getSeries
+	// Draw the chart after time series is returned
+	var drawChart = function(seriesData, observation) {
+		var chart = $("#chart").GeocensChart({
+			observation: observation
 		});
+	};
+
+	// Retrieve the time series after observations is returned (note plural)
+	var getSeries = function(observations) {
+		observations[0].getTimeSeries({
+			done: drawChart
+		});
+	};
+
+	// Retrieve the observations
+	Geocens.SOS.getObservation({
+		service_url: "http://www.example.com/sos",
+		offering: "sos_offering",
+		property: "sos_property",
+		done: getSeries
+	});
 
 This example works in an identical manner to the Data Service example. As with the other example, in the case taht multiple `getTimeSeries` requests are made, all the cached data for that observation will be used for drawing the time series chart.
 
@@ -498,10 +524,10 @@ A JavaScript object with HighStock compatible configuration options. These optio
 
 The GeoCENS JS API has an optional module for mapping datastreams and/or observations. It requires the [Leaflet](http://leafletjs.com/) 0.6.0 or newer library to be installed. For a web page, include the `geocens-map.js` file in a script tag, **after** the main `geocens.js` file. It can be included with the `geocens-chart.js` module without conflict.
 
-		<script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"></script>
-		<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
-		<script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+	<script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"></script>
 
 The Map API makes it easy to draw map markers on a map without having to customize the markers and popups yourself. Getting started is as easy as [getting started with the Leaflet Library](http://leafletjs.com/examples/quick-start.html). An interactive demo is available in the `demo` directory.
 
@@ -559,31 +585,31 @@ In the above example, a group of observations from an OGC SOS server are added t
 
 This is a Leaflet function that is designed to add data from GeoCENS JS API data sources. It can be used on multiple input types:
 
-		// A single OGC SOS observation
-		L.geocens(observation);
+	// A single OGC SOS observation
+	L.geocens(observation);
 
-		// An array of OGC SOS observations
-		L.geocens(observations);
+	// An array of OGC SOS observations
+	L.geocens(observations);
 
-		// A single GeoCENS Data Service datastream
-		L.geocens(datastream);
+	// A single GeoCENS Data Service datastream
+	L.geocens(datastream);
 
-		// An array of GeoCENS Data Service datastreams
-		L.geocens(datastreams);
+	// An array of GeoCENS Data Service datastreams
+	L.geocens(datastreams);
 
 All instances will return a Leaflet FeatureGroup.
 
 The function also supports an options input, allowing the markers and popups to be customized. Modifying these will override the defaults.
 
-		L.geocens(observations, {
-			marker: {
-				clickable: true
-			},
+	L.geocens(observations, {
+		marker: {
+			clickable: true
+		},
 
-			popupContent: function(datasource, event, marker) {
-				return datasource.name();
-			}
-		});
+		popupContent: function(datasource, event, marker) {
+			return datasource.name();
+		}
+	});
 
 ##### option: marker
 
@@ -609,9 +635,9 @@ The tests can be run in a web browser by opening the `test/index.html` file. The
 
 Alternatively, the tests can be run from the command line if Node and NPM is installed.
 
-		$ npm install -g grunt-cli
-		$ npm install
-		$ grunt qunit
+	$ npm install -g grunt-cli
+	$ npm install
+	$ grunt qunit
 
 See `Gruntfile.js` for more tasks that can be run from the command line.
 
