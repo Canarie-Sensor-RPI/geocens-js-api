@@ -11,6 +11,15 @@ window.Fixtures = {
       user: "bob@example.com"
     },
 
+    Datastreams: [{
+      uid: "ccc92c6fe57dff592ff687d99c4ebf70",
+      id: "carbonMonoxide",
+      sensor: "5C-86-4A-00-2C-9E",
+      unit: "ppm",
+      phenName: "airquality",
+      user: "bob@example.com"
+    }],
+
     Sensor: {
       id: "5C-86-4A-00-2C-9E",
       user: "bob@example.com",
