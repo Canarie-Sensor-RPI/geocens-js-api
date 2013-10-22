@@ -104,7 +104,7 @@ $(document).ready(function() {
 
     var request = requests[0];
     var records_path = Geocens.DataService.path + "sensors/" + this.sensor_id +
-                       "/datastreams?detail=true";
+                       "/datastreams";
 
     var url = request.url.split('?')[0];
 
@@ -113,11 +113,9 @@ $(document).ready(function() {
     xhr.restore();
   });
 
-  test("stores the datastreams as Datastream objects", 1, function() {
+  test("stores the datastreams as Datastream objects", 2, function() {
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.DataService.Datastreams)]);
-
-
 
     // Retrieve datastreams
     this.sensor.getDatastreams();
@@ -126,6 +124,7 @@ $(document).ready(function() {
     var datastreams = this.sensor.datastreams;
 
     equal(datastreams.length, 1);
+    ok(datastreams[0].getTimeSeries !== undefined, "datastream does not respond to getTimeSeries");
   });
 
 });

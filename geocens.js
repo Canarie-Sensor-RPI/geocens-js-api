@@ -36,12 +36,50 @@
     }
 
     this.metadata = options;
-    this.sensor_id = options.sensor_id;
+    this.sensor_id = options.uid || options.sensor_id;
   };
 
   // Extend Sensor object (actually function) prototype with new methods and
   // properties
   jQuery.extend(Sensor.prototype, {
+    // Retrieve datastreams for the sensor
+    getDatastreams: function(options) {
+      var self = this,
+          params,
+          path;
+
+      if (options === undefined) {
+        options = {};
+      }
+
+      options.done = options.done || function () {};
+
+      params = {
+        "detail": true
+      };
+
+      path = this.service.path + "sensors/" + this.sensor_id + "/datastreams";
+
+      $.ajax({
+        url: path,
+        type: 'GET',
+        headers: {
+          "x-api-key": options.api_key || this.service.api_key
+        },
+        data: params
+      }).done(function (data) {
+        var datastreams = $.map(data, function(value, index) {
+          var datastream = new Geocens.Datastream(value);
+          datastream.sensor_id = self.sensor_id;
+          datastream.service = self.service;
+          return datastream;
+        });
+
+        self.datastreams = datastreams;
+        options.done(datastreams, self);
+      });
+
+    }
   });
 
   // Geocens.Datastream
@@ -55,7 +93,7 @@
 
     this._attributes = options;
     this.sensor_id = options.sensor_id;
-    this.datastream_id = options.datastream_id;
+    this.datastream_id = options.datastream_id || options.uid;
     this._data = [];
   };
 
@@ -269,6 +307,7 @@
         api_key: options.api_key
       }).done(function (sensorData) {
         var sensor = new Sensor(sensorData);
+        sensor.service = self;
         options.done(sensor);
       });
     },
