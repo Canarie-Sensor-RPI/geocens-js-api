@@ -1,3 +1,9 @@
+1.1.0 (October 23 2013)
+
+* Add support for retrieving metadata for a sensor
+* Add support for retrieving list of datastreams for a sensor
+* Add support for retrieving list of sensors for an API key
+
 1.0.1 (June 28 2013)
 
 * Fix bug where new popups would stop working after being closed
