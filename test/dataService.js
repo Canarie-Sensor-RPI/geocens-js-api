@@ -59,6 +59,27 @@ $(document).ready(function() {
     xhr.restore();
   });
 
+  test('returns a "Sensor" object', 2, function() {
+    var newSensor;
+
+    // Retrieve sensor
+    Geocens.DataService.getSensors({
+      api_key:       this.api_key,
+      done: function(sensors) {
+        newSensor = sensors[0];
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensors)]);
+    this.server.respond();
+
+    ok(newSensor !== undefined, "Sensor was not defined");
+    // If it looks and acts like a Sensor object…
+    ok(newSensor.getDatastreams !== undefined,
+       "Sensor does not respond to getDatastreams()");
+  });
+
   module("Data Service with getSensor", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
