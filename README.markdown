@@ -18,58 +18,62 @@ For use with the Rails asset pipeline, try the [geocens-js-api-rails](https://gi
 
 ## Getting Started
 
-Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service. An interactive demo is available in the `demo` directory.
+Here is a brief introduction on how to retrieve data from the GeoCENS Data Service, with an API Key. If you do not already have a key, please contact us at <info@geocens.ca> or use the JS API to load data from an OGC SOS compatible service. An interactive demo is available in the `demo` directory, and the API Key from there can be used here.
 
-In this example, we will retrieve a datastream. First, we connect to the Data Service and download the datastream information:
+In this example, we will go from an API Key to retrieving a time series for a Datastream. A Datastream is a set of data returned for a single observed property on a sensor.
 
-	Geocens.DataService.getDatastream({
+First, we connect to the Data Service and download a list of sensors:
+
+	Geocens.DataService.getSensors({
 		api_key: api_key,
-		sensor_id: sensor_id,
-		datastream_id: datastream_id,
-		done: function (datastream) {
-			window.newDatastream = datastream;
+		done: function (sensors) {
+			window.sensor = sensors[0];
 		}
 	});
 
-This provides us with a `Datastream` object in the `done` callback. We can retrieve properties for the Datastream:
+This provides us with a `Sensor` object in the `done` callback. We can retrieve properties for the Sensor:
 
-	datastream.attributes();
+	sensor.metadata;
 
 Which returns an object with the properties:
 
 	{
-		uid: "ccc92c6fe57dff592ff687d99c4ebf70",
-		id: "carbonMonoxide",
-		sensor: {
-			id: "5C-86-4A-00-2C-9E",
-			user: "bob@example.com",
-			uid: "4ddecd5124661f9442cfca8be23f8dda",
-			altitude: 1100,
-			samplingrate: 0,
-			loc: [51,-114],
-			title: "Our first integration Testing",
-			height: 0,
-			nickName: "Alpha",
-			description: "",
-			last_time_online: "2012-09-18T21:04:40",
-			phens: [
-				"airtemperature",
-				"relatedhumidity",
-				"airquality",
-				"hydrogentest",
-				"hydrogentest1Name"
-			]
-		},
-		unit: "ppm",
-		phenName: "airquality",
-		user: "bob@example.com"
+		"id": "5C-86-4A-00-2C-9E",
+		"user": "jamesbadger@gmail.com",
+		"uid": "4ddecd5124661f9442cfca8be23f8dda",
+		"altitude": 1100,
+		"samplingrate": 0,
+		"loc": [
+			51,
+			-114
+		],
+		"title": "Our first integration Testing",
+		"height": 0,
+		"nickName": "Alpha",
+		"description": "",
+		"last_time_online": "2012-09-18T21:04:40",
+		"phens": [
+			"airtemperature",
+			"relatedhumidity",
+			"airquality",
+			"hydrogentest",
+			"hydrogentest1Name"
+		]
 	}
 
-We can also use the Datastream object to retrieve the latest time series records:
+We can also use the Sensor object to retrieve the list of datastreams:
+
+	sensor.getDatastreams({
+		done: function (datastreams) {
+				window.datastream = datastreams[0];
+		}
+	});
+
+With this `Datastream` object, we can now retrieve the time series data:
 
 	datastream.getTimeSeries({
 		done: function (seriesData) {
-			window.seriesData = seriesData;
+				window.seriesData = seriesData;
 		}
 	});
 
@@ -87,6 +91,8 @@ The `getTimeSeries()` method will cache the results in the Datastream object, an
 	}]
 
 The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
+
+Afterwards, the GeoCENS Map and GeoCENS Chart modules can be used to visualize the sensor and datastreams.
 
 ## Usage
 
@@ -557,12 +563,12 @@ The Map API makes it easy to draw map markers on a map without having to customi
 
 		$(document).ready(function() {
 			var map = L.map('map', {
-		        center: [51.07993, -114.131802],
-		        zoom: 3
+				center: [51.07993, -114.131802],
+				zoom: 3
 			});
 
 			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(map);
 
 			// Add SOS Observations to the map
