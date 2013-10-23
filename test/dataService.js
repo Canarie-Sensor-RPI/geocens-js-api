@@ -17,6 +17,69 @@ $(document).ready(function() {
     Geocens.DataService.setPath(originalPath);
   });
 
+  module("Data Service with getSensors", {
+    setup: function () {
+      this.api_key       = "your_32_character_api_key";
+
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "sensors";
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
+
+  test('makes a request for the sensor resource', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensors
+    Geocens.DataService.getSensors({
+      api_key: this.api_key
+    });
+
+    // Return sensor list
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensors));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var sensor_path = Geocens.DataService.path + "sensors?detail=true";
+
+    equal(request.url, sensor_path, "Request not made for sensors resource");
+
+    xhr.restore();
+  });
+
+  test('returns a "Sensor" object', 2, function() {
+    var newSensor;
+
+    // Retrieve sensor
+    Geocens.DataService.getSensors({
+      api_key:       this.api_key,
+      done: function(sensors) {
+        newSensor = sensors[0];
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensors)]);
+    this.server.respond();
+
+    ok(newSensor !== undefined, "Sensor was not defined");
+    // If it looks and acts like a Sensor object…
+    ok(newSensor.getDatastreams !== undefined,
+       "Sensor does not respond to getDatastreams()");
+  });
+
   module("Data Service with getSensor", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
@@ -41,7 +104,7 @@ $(document).ready(function() {
       requests.push(request);
     };
 
-    // Retrieve datastream
+    // Retrieve sensor
     Geocens.DataService.getSensor({
       api_key:       this.api_key,
       sensor_id:     this.sensor_id
