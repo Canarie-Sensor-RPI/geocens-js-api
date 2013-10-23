@@ -246,6 +246,24 @@ Define a Data Service object with your Data Service API key:
 		api_key: "your_32_character_api_key"
 	});
 
+#### Geocens.DataService.getSensors
+
+An API Key gives access to certain sensors for a user in the GeoCENS Data Service. This method can be used to get a list of sensors for an API Key.
+
+	dsSource.getSensors({
+		done: function (sensors) {
+			window.sensors = sensors;
+		},
+
+		raw: function (data) {
+			window.sensorsJSON = data;
+		}
+	});
+
+When the sensors have been retrieved from the server, the `done` callback will be called. The `sensors` parameter will contain an array of zero or more Sensor objects. From there, each of the Sensor objects can be used to load their datastreams or metadata.
+
+Alternatively or simultaneously the `raw` callback can be used to receive the JS objects from the GeoCENS Data Service not formatted as Sensor objects.
+
 #### Geocens.DataService.getSensor
 
 Use a Data Service object to retrieve a single sensor with its sensor ID:
