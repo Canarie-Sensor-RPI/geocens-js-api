@@ -43,6 +43,7 @@
     <ol>
       <li><a href="#include">Include the Libraries</a></li>
       <li><a href="#data_service_object">Create a Service Object</a></li>
+      <li><a href="#get_sensors">Retrieve a List of Sensors</a></li>
       <li><a href="#get_sensor">Retrieve a Sensor</a></li>
       <li><a href="#get_sensor_datastreams">Retrieve a Sensor's Datastreams</a></li>
       <li><a href="#get_datastream">Retrieve a Datastream</a></li>
@@ -106,6 +107,51 @@
     + "key: " + service.api_key);
   '>Run Example</button>
   <a href="http://jsfiddle.net/openfirmware/XWhcx/1/">View on JSFiddle</a>
+
+  <h2 id="get_sensors">Retrieve a List of Sensors</h2>
+
+  <p>The list of sensors available for an API Key can be retrieved using the <code>getSensors</code> function on a GeoCENS Data Service object.</p>
+
+  <pre class="code">
+
+    var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+
+    var service = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    service.getSensors({
+      done: function(sensors) {
+        console.log(&quot;Get Sensors&quot;, sensors);
+        alert(JSON.stringify(sensors));
+      },
+
+      raw: function(data) {
+        console.log(&quot;Get Sensors&quot;, data);
+        alert(JSON.stringify(data));
+      }
+    });
+
+  </pre>
+  <button onclick='javascript:
+  var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+  var service = new Geocens.DataService({
+    api_key: api_key
+  });
+
+  service.getSensors({
+    done: function(sensors) {
+      console.log("Get Sensors", sensors);
+      alert(JSON.stringify(sensors));
+    },
+
+    raw: function(data) {
+      console.log("Get Sensors", data);
+      alert(JSON.stringify(data));
+    }
+  });
+  '>Run Example</button>
 
   <h2 id="get_sensor">Retrieve a Sensor</h2>
 
