@@ -237,6 +237,7 @@
         return $.ajax({
           url: options.path,
           type: 'GET',
+          data: options.data,
           headers: {
             "x-api-key": options.api_key
           }
@@ -311,6 +312,45 @@
         var sensor = new Sensor(sensorData);
         sensor.service = self;
         options.done(sensor);
+      });
+    },
+
+    getSensors: function(options) {
+      var params,
+          self = this,
+          sensors_path;
+
+      if (options === undefined) {
+        options = {};
+      }
+
+      options.done = options.done || function () {};
+      options.raw  = options.raw || function () {};
+      options.api_key = options.api_key || self.api_key;
+
+      if (self.api_key === undefined) {
+        self.api_key = options.api_key;
+      }
+
+      sensors_path = this.path + "sensors";
+      params = {
+        "detail": true
+      };
+
+      // Retrieve sensors resource
+      self._ajax.get({
+        path: sensors_path,
+        api_key: options.api_key,
+        data: params
+      }).done(function (sensorData) {
+        var sensors = $.map(sensorData, function(value, index) {
+          var sensor = new Geocens.Sensor(value);
+          sensor.service = self;
+          return sensor;
+        });
+
+        options.raw(sensorData);
+        options.done(sensors);
       });
     },
 

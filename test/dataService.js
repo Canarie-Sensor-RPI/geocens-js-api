@@ -52,7 +52,7 @@ $(document).ready(function() {
     equal(requests.length, 1, "Fake server did not receive requests");
 
     var request = requests[0];
-    var sensor_path = Geocens.DataService.path + "sensors";
+    var sensor_path = Geocens.DataService.path + "sensors?detail=true";
 
     equal(request.url, sensor_path, "Request not made for sensors resource");
 
