@@ -13,6 +13,8 @@
       padding-bottom: 5em;
     }
 
+    header, nav, main { display: block; }
+
     .code {
       border: 1px solid #555;
       background-color: #FFE;
@@ -28,174 +30,301 @@
   </style>
 </head>
 <body>
-<h1>GeoCENS JS API Interactive Tutorial</h1>
+<header>
+  <h1>GeoCENS JS API Interactive Tutorial</h1>
 
-<p>The GeoCENS JavaScript API allows developers to retrieve data from the GeoCENS Data Service. Here are a few interactive examples.</p>
+  <p>The GeoCENS JavaScript API allows developers to retrieve data from the GeoCENS Data Service. Here are a few interactive examples.</p>
 
-<p>Note: Parts of this tutorial may stop working if the API key is revoked or the data is moved.</p>
+  <p>Note: Parts of this tutorial may stop working if the API key is revoked or the data is moved.</p>
 
-<h2>Table of Contents</h2>
+  <nav>
+    <h2>Table of Contents</h2>
 
-<ol>
-  <li><a href="#include">Include the Libraries</a></li>
-  <li><a href="#data_service_object">Create a Service Object</a></li>
-  <li><a href="#get_datastream">Retrieve a Datastream</a></li>
-  <li><a href="#datastream_time_series">Retrieve a Datastream Time Series</a></li>
-  <li><a href="#ogc_sos_object">Create an OGC SOS Service Object</a></li>
-  <li><a href="#get_observation">Retrieve SOS Observations</a></li>
-  <li><a href="#get_observation_time_series">Retrieve an Observation Time Series</a></li>
-  <li><a href="#get_observation_description">Retrieve an Observation Sensor Description</a></li>
-  <li><a href="#chart_include">Including the Chart Module</a></li>
-  <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
-  <li><a href="#chart_observation_series">Observation Time Series Chart</a></li>
-  <li><a href="#map_include">Including the Map Module</a></li>
-  <li><a href="#map_observations">Add OGC SOS Observations to a Map</a></li>
-  <li><a href="#map_datastreams">Add Data Service Datastreams to a Map</a></li>
-  <li><a href="#map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</a></li>
-</ol>
+    <ol>
+      <li><a href="#include">Include the Libraries</a></li>
+      <li><a href="#data_service_object">Create a Service Object</a></li>
+      <li><a href="#get_sensors">Retrieve a List of Sensors</a></li>
+      <li><a href="#get_sensor">Retrieve a Sensor</a></li>
+      <li><a href="#get_sensor_datastreams">Retrieve a Sensor's Datastreams</a></li>
+      <li><a href="#get_datastream">Retrieve a Datastream</a></li>
+      <li><a href="#datastream_time_series">Retrieve a Datastream Time Series</a></li>
+      <li><a href="#ogc_sos_object">Create an OGC SOS Service Object</a></li>
+      <li><a href="#get_observation">Retrieve SOS Observations</a></li>
+      <li><a href="#get_observation_time_series">Retrieve an Observation Time Series</a></li>
+      <li><a href="#get_observation_description">Retrieve an Observation Sensor Description</a></li>
+      <li><a href="#chart_include">Including the Chart Module</a></li>
+      <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
+      <li><a href="#chart_observation_series">Observation Time Series Chart</a></li>
+      <li><a href="#map_include">Including the Map Module</a></li>
+      <li><a href="#map_observations">Add OGC SOS Observations to a Map</a></li>
+      <li><a href="#map_datastreams">Add Data Service Datastreams to a Map</a></li>
+      <li><a href="#map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</a></li>
+    </ol>
+  </nav>
+</header>
 
-<h2 id="include">Include the Libraries</h2>
+<main>
+  <div class="example">
+    <h2 id="include">Include the Libraries</h2>
 
-<p>The JS API requires <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer). Be sure to include it before including the GeoCENS JS API.</p>
+    <p>The JS API requires <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer). Be sure to include it before including the GeoCENS JS API.</p>
 
-<pre class="code">
+    <pre class="code">
 
-  &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
 
-</pre>
+    </pre>
 
-<script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
-<script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"></script>
 
 
-<h2 id="data_service_object">Create a Service Object</h2>
+    <h2 id="data_service_object">Create a Service Object</h2>
 
-<p>A service object allows you to retrieve specific sensors from the GeoCENS Data Service. You will need an account with the GeoCENS Data Service to generate an API token key; this key allows you to retrieve data from the Restful API. A registration page for the Data Service is coming soon.</p>
+    <p>A service object allows you to retrieve specific sensors from the GeoCENS Data Service. You will need an account with the GeoCENS Data Service to generate an API token key; this key allows you to retrieve data from the Restful API. A registration page for the Data Service is coming soon.</p>
 
-<p>Creating a service object is simple:</p>
+    <p>Creating a service object is simple:</p>
 
-<pre class="code">
+    <pre class="code">
 
-  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
-
-  var service = new Geocens.DataService({
-    api_key: api_key
-  });
-
-</pre>
-<button id="example_one">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/XWhcx/1/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_one").on("click", function() {
-      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
       var service = new Geocens.DataService({
         api_key: api_key
       });
 
-      console.log("Example One", service);
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
 
-      alert("service: " + service.path + "\n"
-        + "key: " + service.api_key);
+    var service = new Geocens.DataService({
+      api_key: api_key
     });
-  }());
-</script>
+
+    console.log("Example One", service);
+
+    alert("service: " + service.path + "\n"
+      + "key: " + service.api_key);
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/XWhcx/1/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="get_datastream">Retrieve a Datastream</h2>
+  <div class="example">
+    <h2 id="get_sensors">Retrieve a List of Sensors</h2>
 
-<p>With a Datastream object, we can now retrieve a datastream. There are two identifiers for each datastream: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the datastream.</p>
+    <p>The list of sensors available for an API Key can be retrieved using the <code>getSensors</code> function on a GeoCENS Data Service object.</p>
 
-<p>Once we have the datastream, we can get the datastream attributes using the <code>attributes()</code> method.</p>
+    <pre class="code">
 
-<pre class="code">
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
-  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
 
-  var service = new Geocens.DataService({
-    api_key: api_key
-  });
+      service.getSensors({
+        done: function(sensors) {
+          console.log(&quot;Get Sensors&quot;, sensors);
+          alert(JSON.stringify(sensors));
+        },
 
-  service.getDatastream({
-    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
-    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
-    done: function(datastream) {
-      console.log(&quot;Example Two&quot;, datastream);
-      alert(JSON.stringify(datastream.attributes()));
-    }
-  });
+        raw: function(data) {
+          console.log(&quot;Get Sensors&quot;, data);
+          alert(JSON.stringify(data));
+        }
+      });
 
-</pre>
-<button id="example_two">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/vTBsD/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_two").on("click", function() {
-      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var service = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    service.getSensors({
+      done: function(sensors) {
+        console.log("Get Sensors", sensors);
+        alert(JSON.stringify(sensors));
+      },
+
+      raw: function(data) {
+        console.log("Get Sensors", data);
+        alert(JSON.stringify(data));
+      }
+    });
+    '>Run Example</button>
+  </div>
+
+
+  <div class="example">
+    <h2 id="get_sensor">Retrieve a Sensor</h2>
+
+    <p>A single sensor from the GeoCENS Data Service can be retrieved using this function.</p>
+
+    <pre class="code">
+
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getSensor({
+        sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+        done: function(sensor) {
+          console.log(&quot;Example Thirteen&quot;, sensor);
+          alert(JSON.stringify(sensor.metadata));
+        }
+      });
+
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var service = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    service.getSensor({
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      done: function(sensor) {
+        console.log("Example Thirteen", sensor);
+        alert(JSON.stringify(sensor.metadata));
+      }
+    });
+    '>Run Example</button>
+  </div>
+
+
+  <div class="example">
+    <h2 id="get_sensor_datastreams">Retrieve a Sensor's Datastreams</h2>
+
+    <p>With a Sensor object, the list of datastreams for that sensor can be retrieved as raw JS objects or full Datastream objects. Raw is useful if you want to parse the data yourself, otherwise the regular <code>done</code> callback is more useful as it returns full Datastream objects with <code>getTimeSeries</code> functions defined.</p>
+
+    <pre class="code">
+
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+
+      var goGetDatastreams = function(sensor) {
+        sensor.getDatastreams({
+          done: function(datastreams) {
+            console.log(&quot;Example Fourteen&quot;, datastreams);
+            alert(datastreams);
+          },
+          raw: function(data) {
+            console.log(&quot;Example Fourteen&quot;, data);
+            alert(data);
+          }
+        });
+      };
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getSensor({
+        sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+        done: function(sensor) {
+          console.log(&quot;Example Fourteen&quot;, sensor);
+          goGetDatastreams(sensor);
+        }
+      });
+
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var goGetDatastreams = function(sensor) {
+      sensor.getDatastreams({
+        done: function(datastreams) {
+          console.log("Example Fourteen", datastreams);
+          alert(datastreams);
+        },
+        raw: function(data) {
+          console.log("Example Fourteen", data);
+          alert(data);
+        }
+      });
+    };
+
+    var service = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    service.getSensor({
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      done: function(sensor) {
+        console.log("Example Fourteen", sensor);
+        goGetDatastreams(sensor);
+      }
+    });
+    '>Run Example</button>
+  </div>
+
+
+  <div class="example">
+    <h2 id="get_datastream">Retrieve a Datastream</h2>
+
+    <p>With a Datastream object, we can now retrieve a datastream. There are two identifiers for each datastream: the sensor ID, and the datastream ID. (These are part of the GeoCENS Data Service specification.) Using these identifiers we can get the datastream.</p>
+
+    <p>Once we have the datastream, we can get the datastream attributes using the <code>attributes()</code> method.</p>
+
+    <pre class="code">
+
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
       var service = new Geocens.DataService({
         api_key: api_key
       });
 
       service.getDatastream({
-        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+        datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
         done: function(datastream) {
-          console.log("Example Two", datastream);
+          console.log(&quot;Example Two&quot;, datastream);
           alert(JSON.stringify(datastream.attributes()));
         }
       });
+
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var service = new Geocens.DataService({
+      api_key: api_key
     });
-  }());
-</script>
 
-
-<h2 id="datastream_time_series">Retrieve a Datastream Time Series</h2>
-
-<p>The main use case of the JS API is retrieving observations from sensors, and this can be done using the <code>getTimeSeries()</code> method.</p>
-
-<pre class="code">
-
-  var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
-
-  var goGetObservations = function(datastream) {
-    datastream.getTimeSeries({
-      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
-      end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
-      done:  function(seriesData) {
-        console.log(&quot;Example Three&quot;, seriesData);
-        alert(JSON.stringify(seriesData));
+    service.getDatastream({
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+      done: function(datastream) {
+        console.log("Example Two", datastream);
+        alert(JSON.stringify(datastream.attributes()));
       }
     });
-  };
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/vTBsD/">View on JSFiddle</a>
+  </div>
 
-  var service = new Geocens.DataService({
-    api_key: api_key
-  });
 
-  service.getDatastream({
-    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
-    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
-    done: goGetObservations
-  });
+  <div class="example">
+    <h2 id="datastream_time_series">Retrieve a Datastream Time Series</h2>
 
-</pre>
-<button id="example_three">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/ndZhQ/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_three").on("click", function() {
+    <p>The main use case of the JS API is retrieving observations from sensors, and this can be done using the <code>getTimeSeries()</code> method.</p>
 
-      var api_key = "57378dc18d74bef1051312e29a26f0b3";
+    <pre class="code">
+
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
 
       var goGetObservations = function(datastream) {
         datastream.getTimeSeries({
-          start: new Date("2012-01-01T00:00:00Z"),
-          end:   new Date("2013-01-01T00:00:00Z"),
+          start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+          end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
           done:  function(seriesData) {
-            console.log("Example Three", seriesData);
+            console.log(&quot;Example Three&quot;, seriesData);
             alert(JSON.stringify(seriesData));
           }
         });
@@ -206,265 +335,242 @@
       });
 
       service.getDatastream({
-        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+        datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
         done: goGetObservations
       });
 
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var goGetObservations = function(datastream) {
+      datastream.getTimeSeries({
+        start: new Date("2012-01-01T00:00:00Z"),
+        end:   new Date("2013-01-01T00:00:00Z"),
+        done:  function(seriesData) {
+          console.log("Example Three", seriesData);
+          alert(JSON.stringify(seriesData));
+        }
+      });
+    };
+
+    var service = new Geocens.DataService({
+      api_key: api_key
     });
-  }());
-</script>
+
+    service.getDatastream({
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+      done: goGetObservations
+    });
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/ndZhQ/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="ogc_sos_object">Create an OGC SOS Service Object</h2>
+  <div class="example">
+    <h2 id="ogc_sos_object">Create an OGC SOS Service Object</h2>
 
-<p>OGC SOS Service Objects allow you to retrieve observation data.</p>
+    <p>OGC SOS Service Objects allow you to retrieve observation data.</p>
 
-<p>Creating an OGC SOS service object is simple:</p>
+    <p>Creating an OGC SOS service object is simple:</p>
 
-<pre class="code">
+    <pre class="code">
 
-  var service = new Geocens.SOS({
-    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
-  });
-
-</pre>
-<button id="example_four">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/pfCVm/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_four").on("click", function() {
       var service = new Geocens.SOS({
-        service_url: "http://app.geocens.ca:8171/sos"
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;
       });
 
-      console.log("Example Four", service);
-
-      alert("service: " + service.path);
+    </pre>
+    <button onclick='javascript:
+    var service = new Geocens.SOS({
+      service_url: "http://app.geocens.ca:8171/sos"
     });
-  }());
-</script>
+
+    console.log("Example Four", service);
+
+    alert("service: " + service.path);
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/pfCVm/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="get_observation">Retrieve SOS Observations</h2>
+  <div class="example">
+    <h2 id="get_observation">Retrieve SOS Observations</h2>
 
-<p>Once we have a service object for the SOS, we can retrieve the SOS Observations for an Offering and Observed Property.</p>
+    <p>Once we have a service object for the SOS, we can retrieve the SOS Observations for an Offering and Observed Property.</p>
 
-<pre class="code">
+    <pre class="code">
 
-  var service = new Geocens.SOS({
-    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
-  });
-
-  service.getObservation({
-    offering: &quot;Temperature&quot;,
-    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
-    done: function (observations) {
-      console.log(&quot;Example Five&quot;, observations);
-      alert(JSON.stringify(observations[0].attributes()));
-    }
-  });
-
-</pre>
-<button id="example_five">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/trZZj/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_five").on("click", function() {
       var service = new Geocens.SOS({
-        service_url: "http://app.geocens.ca:8171/sos"
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;
       });
 
       service.getObservation({
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        offering: &quot;Temperature&quot;,
+        property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
         done: function (observations) {
-          console.log("Example Five", observations);
+          console.log(&quot;Example Five&quot;, observations);
           alert(JSON.stringify(observations[0].attributes()));
         }
       });
+
+    </pre>
+    <button onclick='javascript:
+    var service = new Geocens.SOS({
+      service_url: "http://app.geocens.ca:8171/sos"
     });
-  }());
-</script>
 
-
-<h2 id="get_observation_time_series">Retrieve an Observation Time Series</h2>
-
-<p>Each Observation object has a method for retrieving the series records.</p>
-
-<pre class="code">
-
-  var goGetRecords = function(observations) {
-    observations[0].getTimeSeries({
-      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
-      end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
-      done:  function(seriesData) {
-        console.log(&quot;Example Six&quot;, seriesData);
-        alert(JSON.stringify(seriesData));
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: function (observations) {
+        console.log("Example Five", observations);
+        alert(JSON.stringify(observations[0].attributes()));
       }
     });
-  };
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/trZZj/">View on JSFiddle</a>
+  </div>
 
-  var service = new Geocens.SOS({
-    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
-  });
 
-  service.getObservation({
-    offering: &quot;Temperature&quot;,
-    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
-    done: goGetRecords
-  });
+  <div class="example">
+    <h2 id="get_observation_time_series">Retrieve an Observation Time Series</h2>
 
-</pre>
-<button id="example_six">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/rYHdq/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_six").on("click", function() {
+    <p>Each Observation object has a method for retrieving the series records.</p>
+
+    <pre class="code">
 
       var goGetRecords = function(observations) {
         observations[0].getTimeSeries({
-          start: new Date("2012-01-01T00:00:00Z"),
-          end:   new Date("2012-06-01T00:00:00Z"),
+          start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+          end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
           done:  function(seriesData) {
-            console.log("Example Six", seriesData);
+            console.log(&quot;Example Six&quot;, seriesData);
             alert(JSON.stringify(seriesData));
           }
         });
       };
 
       var service = new Geocens.SOS({
-        service_url: "http://app.geocens.ca:8171/sos"
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;
       });
 
       service.getObservation({
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        offering: &quot;Temperature&quot;,
+        property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
         done: goGetRecords
       });
 
+    </pre>
+    <button onclick='javascript:
+    var goGetRecords = function(observations) {
+      observations[0].getTimeSeries({
+        start: new Date("2012-01-01T00:00:00Z"),
+        end:   new Date("2012-06-01T00:00:00Z"),
+        done:  function(seriesData) {
+          console.log("Example Six", seriesData);
+          alert(JSON.stringify(seriesData));
+        }
+      });
+    };
+
+    var service = new Geocens.SOS({
+      service_url: "http://app.geocens.ca:8171/sos"
     });
-  }());
-</script>
 
-
-<h2 id="get_observation_description">Retrieve an Observation Sensor Description</h2>
-
-<p>Each Observation object has a method for retrieving the sensorML document for its procedure.</p>
-
-<pre class="code">
-
-  var goGetDescription = function(observations) {
-    observations[0].describe({
-      done: function(sensorML) {
-        console.log(&quot;Example Seven&quot;, sensorML);
-        alert(JSON.stringify(sensorML));
-      }
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: goGetRecords
     });
-  };
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/rYHdq/">View on JSFiddle</a>
+  </div>
 
-  var service = new Geocens.SOS({
-    service_url: &quot;http://app.geocens.ca:8171/sos&quot;
-  });
 
-  service.getObservation({
-    offering: &quot;Temperature&quot;,
-    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
-    done: goGetDescription
-  });
+  <div class="example">
+    <h2 id="get_observation_description">Retrieve an Observation Sensor Description</h2>
 
-</pre>
-<button id="example_seven">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/sps7r/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_seven").on("click", function() {
+    <p>Each Observation object has a method for retrieving the sensorML document for its procedure.</p>
+
+    <pre class="code">
 
       var goGetDescription = function(observations) {
         observations[0].describe({
           done: function(sensorML) {
-            console.log("Example Seven", sensorML);
+            console.log(&quot;Example Seven&quot;, sensorML);
             alert(JSON.stringify(sensorML));
           }
         });
       };
 
       var service = new Geocens.SOS({
-        service_url: "http://app.geocens.ca:8171/sos"
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;
       });
 
       service.getObservation({
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        offering: &quot;Temperature&quot;,
+        property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
         done: goGetDescription
       });
 
+    </pre>
+    <button onclick='javascript:
+    var goGetDescription = function(observations) {
+      observations[0].describe({
+        done: function(sensorML) {
+          console.log("Example Seven", sensorML);
+          alert(JSON.stringify(sensorML));
+        }
+      });
+    };
+
+    var service = new Geocens.SOS({
+      service_url: "http://app.geocens.ca:8171/sos"
     });
-  }());
-</script>
 
-
-<h2 id="chart_include">Including the Chart Module</h2>
-
-<p>There is an optional module for drawing time series graphs for observations and datastreams. It requires <a href="http://www.highcharts.com/">HighStock</a> (1.3.2 or newer), <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer), and the core GeoCENS JS API (0.4.1 or newer).</p>
-
-<pre class="code">
-
-  &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-
-</pre>
-<script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"></script>
-<script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"></script>
-
-<p>Be sure to include HighStock <em>before</em> including the GeoCENS Chart module!</p>
-
-
-<h2 id="chart_datastream_series">Datastream Time Series Chart</h2>
-
-<p>The GeoCENS Chart module is a jQuery plugin, so it is invoked using a jQuery selector. By passing the data through the callbacks, the datastream time series can be customized before being plotted on the chart.</p>
-
-<pre class="code">
-
-  // Draw the chart after time series is returned
-  var drawChart = function(seriesData, datastream) {
-    var chart = $(&quot;#chart&quot;).GeocensChart({
-      datastream: datastream
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: goGetDescription
     });
-  };
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/sps7r/">View on JSFiddle</a>
+  </div>
 
-  // Retrieve the time series after datastream is returned
-  var getSeries = function(datastream) {
-    datastream.getTimeSeries({
-      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
-      end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
-      done:  drawChart
-    });
-  };
 
-  // Retrieve the datastream
-  Geocens.DataService.getDatastream({
-    api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
-    sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
-    datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
-    done: getSeries
-  });
+  <div class="example">
+    <h2 id="chart_include">Including the Chart Module</h2>
 
-</pre>
+    <p>There is an optional module for drawing time series graphs for observations and datastreams. It requires <a href="http://www.highcharts.com/">HighStock</a> (1.3.2 or newer), <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer), and the core GeoCENS JS API (0.4.1 or newer).</p>
 
-<div id="chart"></div>
+    <pre class="code">
 
-<button id="example_eight">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/QJuA2/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_eight").on("click", function() {
+      &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+
+    </pre>
+    <script src="javascripts/highstock.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/geocens-chart.js" type="text/javascript" charset="utf-8"></script>
+
+    <p>Be sure to include HighStock <em>before</em> including the GeoCENS Chart module!</p>
+  </div>
+
+
+  <div class="example">
+    <h2 id="chart_datastream_series">Datastream Time Series Chart</h2>
+
+    <p>The GeoCENS Chart module is a jQuery plugin, so it is invoked using a jQuery selector. By passing the data through the callbacks, the datastream time series can be customized before being plotted on the chart.</p>
+
+    <pre class="code">
 
       // Draw the chart after time series is returned
       var drawChart = function(seriesData, datastream) {
-        var chart = $("#chart").GeocensChart({
+        var chart = $(&quot;#chart&quot;).GeocensChart({
           datastream: datastream
         });
       };
@@ -472,68 +578,63 @@
       // Retrieve the time series after datastream is returned
       var getSeries = function(datastream) {
         datastream.getTimeSeries({
-          start: new Date("2012-01-01T00:00:00Z"),
-          end:   new Date("2013-01-01T00:00:00Z"),
+          start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+          end:   new Date(&quot;2013-01-01T00:00:00Z&quot;),
           done:  drawChart
         });
       };
 
       // Retrieve the datastream
       Geocens.DataService.getDatastream({
-        api_key: "57378dc18d74bef1051312e29a26f0b3",
-        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+        api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
+        sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+        datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
         done: getSeries
       });
 
+    </pre>
+
+    <div id="chart"></div>
+
+    <button onclick='javascript:
+    // Draw the chart after time series is returned
+    var drawChart = function(seriesData, datastream) {
+      var chart = $("#chart").GeocensChart({
+        datastream: datastream
+      });
+    };
+
+    // Retrieve the time series after datastream is returned
+    var getSeries = function(datastream) {
+      datastream.getTimeSeries({
+        start: new Date("2012-01-01T00:00:00Z"),
+        end:   new Date("2013-01-01T00:00:00Z"),
+        done:  drawChart
+      });
+    };
+
+    // Retrieve the datastream
+    Geocens.DataService.getDatastream({
+      api_key: "57378dc18d74bef1051312e29a26f0b3",
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
+      done: getSeries
     });
-  }());
-</script>
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/QJuA2/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="chart_observation_series">Observation Time Series Chart</h2>
+  <div class="example">
+    <h2 id="chart_observation_series">Observation Time Series Chart</h2>
 
-<p>Very similarly to the datastream chart, OGC SOS observation data is straight forward.</p>
+    <p>Very similarly to the datastream chart, OGC SOS observation data is straight forward.</p>
 
-<pre class="code">
-
-  // Draw the chart after time series is returned
-  var drawChart = function(seriesData, observation) {
-    var chart = $(&quot;#chart2&quot;).GeocensChart({
-      observation: observation
-    });
-  };
-
-  // Retrieve the time series after observations is returned (note plural)
-  var getSeries = function(observations) {
-    observations[0].getTimeSeries({
-      start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
-      end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
-      done:  drawChart
-    });
-  };
-
-  // Retrieve the observations
-  Geocens.SOS.getObservation({
-    service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
-    offering: &quot;Temperature&quot;,
-    property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
-    done: getSeries
-  });
-
-</pre>
-
-<div id="chart2"></div>
-
-<button id="example_nine">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/WWcyj/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_nine").on("click", function() {
+    <pre class="code">
 
       // Draw the chart after time series is returned
       var drawChart = function(seriesData, observation) {
-        var chart = $("#chart2").GeocensChart({
+        var chart = $(&quot;#chart2&quot;).GeocensChart({
           observation: observation
         });
       };
@@ -541,58 +642,116 @@
       // Retrieve the time series after observations is returned (note plural)
       var getSeries = function(observations) {
         observations[0].getTimeSeries({
-          start: new Date("2012-01-01T00:00:00Z"),
-          end:   new Date("2012-06-01T00:00:00Z"),
+          start: new Date(&quot;2012-01-01T00:00:00Z&quot;),
+          end:   new Date(&quot;2012-06-01T00:00:00Z&quot;),
           done:  drawChart
         });
       };
 
       // Retrieve the observations
       Geocens.SOS.getObservation({
-        service_url: "http://app.geocens.ca:8171/sos",
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+        offering: &quot;Temperature&quot;,
+        property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
         done: getSeries
       });
 
+    </pre>
+
+    <div id="chart2"></div>
+
+    <button onclick='javascript:
+    // Draw the chart after time series is returned
+    var drawChart = function(seriesData, observation) {
+      var chart = $("#chart2").GeocensChart({
+        observation: observation
+      });
+    };
+
+    // Retrieve the time series after observations is returned (note plural)
+    var getSeries = function(observations) {
+      observations[0].getTimeSeries({
+        start: new Date("2012-01-01T00:00:00Z"),
+        end:   new Date("2012-06-01T00:00:00Z"),
+        done:  drawChart
+      });
+    };
+
+    // Retrieve the observations
+    Geocens.SOS.getObservation({
+      service_url: "http://app.geocens.ca:8171/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: getSeries
     });
-  }());
-</script>
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/WWcyj/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="map_include">Including the Map Module</h2>
+  <div class="example">
+    <h2 id="map_include">Including the Map Module</h2>
 
-<p>There is an optional module for adding observations and datastreams to a map as markers. It requires <a href="http://www.leafletjs.com/">Leaflet</a> (0.6.0 or newer), <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer), and the core GeoCENS JS API (0.4.1 or newer).</p>
+    <p>There is an optional module for adding observations and datastreams to a map as markers. It requires <a href="http://www.leafletjs.com/">Leaflet</a> (0.6.0 or newer), <a href="http://jquery.com/">jQuery</a> (1.10.1 or newer), and the core GeoCENS JS API (0.4.1 or newer).</p>
 
-<pre class="code">
+    <pre class="code">
 
-  &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-  &lt;script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/jquery.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/geocens.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
 
-</pre>
-<script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"></script>
-<script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"></script>
+    </pre>
+    <script src="javascripts/leaflet.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/geocens-map.js" type="text/javascript" charset="utf-8"></script>
 
-<p>Be sure to include Leaflet <em>before</em> including the GeoCENS Map module!</p>
+    <p>Be sure to include Leaflet <em>before</em> including the GeoCENS Map module!</p>
+  </div>
 
 
-<h2 id="map_observations">Add OGC SOS Observations to a Map</h2>
+  <div class="example">
+    <h2 id="map_observations">Add OGC SOS Observations to a Map</h2>
 
-<p>A module is added to Leaflet to make adding OGC SOS observations easy.</p>
+    <p>A module is added to Leaflet to make adding OGC SOS observations easy.</p>
 
-<pre class="code">
+    <pre class="code">
 
-    L.Icon.Default.imagePath = 'images';
+        L.Icon.Default.imagePath = "images";
 
-    var map = L.map('map1', {
+        var map = L.map('map1', {
+              center: [51.07993, -114.131802],
+              zoom: 3
+        });
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+        }).addTo(map);
+
+        var mapObservations = function(observations) {
+          L.geocens(observations).addTo(map);
+        };
+
+        Geocens.SOS.getObservation({
+          service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+          offering: &quot;Temperature&quot;,
+          property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+          done: mapObservations
+        });
+
+    </pre>
+
+    <div id="map1" class="map"></div>
+
+    <button onclick='javascript:
+    L.Icon.Default.imagePath = "images";
+
+    var map = L.map("map1", {
           center: [51.07993, -114.131802],
           zoom: 3
     });
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
     }).addTo(map);
 
     var mapObservations = function(observations) {
@@ -600,62 +759,59 @@
     };
 
     Geocens.SOS.getObservation({
-      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
-      offering: &quot;Temperature&quot;,
-      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+      service_url: "http://app.geocens.ca:8171/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
       done: mapObservations
     });
-
-</pre>
-
-<div id="map1" class="map"></div>
-
-<button id="example_ten">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/GJQvc/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_ten").on("click", function() {
-      L.Icon.Default.imagePath = 'images';
-
-      var map = L.map('map1', {
-            center: [51.07993, -114.131802],
-            zoom: 3
-      });
-
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      var mapObservations = function(observations) {
-        L.geocens(observations).addTo(map);
-      };
-
-      Geocens.SOS.getObservation({
-        service_url: "http://app.geocens.ca:8171/sos",
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
-        done: mapObservations
-      });
-    });
-  }());
-</script>
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/GJQvc/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="map_datastreams">Add Data Service Datastreams to a Map</h2>
+  <div class="example">
+    <h2 id="map_datastreams">Add Data Service Datastreams to a Map</h2>
 
-<p>A module is added to Leaflet to make adding GeoCENS Data Service datastreams easy.</p>
+    <p>A module is added to Leaflet to make adding GeoCENS Data Service datastreams to a map easy.</p>
 
-<pre class="code">
+    <pre class="code">
 
-    L.Icon.Default.imagePath = 'images';
+        L.Icon.Default.imagePath = "images";
 
-    var map = L.map('map2', {
+        var map = L.map('map2', {
+              center: [51.07993, -114.131802],
+              zoom: 3
+        });
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+        }).addTo(map);
+
+        var mapDatastream = function(datastream) {
+          L.geocens(datastream).addTo(map);
+        };
+
+        Geocens.DataService.getDatastream({
+          api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
+          sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
+          datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
+          done: mapDatastream
+        });
+
+    </pre>
+
+    <div id="map2" class="map"></div>
+
+    <button onclick='javascript:
+    L.Icon.Default.imagePath = "images";
+
+    var map = L.map("map2", {
           center: [51.07993, -114.131802],
           zoom: 3
     });
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
     }).addTo(map);
 
     var mapDatastream = function(datastream) {
@@ -663,74 +819,74 @@
     };
 
     Geocens.DataService.getDatastream({
-      api_key: &quot;57378dc18d74bef1051312e29a26f0b3&quot;,
-      sensor_id: &quot;4ddecd5124661f9442cfca8be23f8dda&quot;,
-      datastream_id: &quot;ccc92c6fe57dff592ff687d99c4ebf70&quot;,
+      api_key: "57378dc18d74bef1051312e29a26f0b3",
+      sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
+      datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
       done: mapDatastream
     });
-
-</pre>
-
-<div id="map2" class="map"></div>
-
-<button id="example_eleven">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/nkkwT/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_eleven").on("click", function() {
-      L.Icon.Default.imagePath = 'images';
-
-      var map = L.map('map2', {
-            center: [51.07993, -114.131802],
-            zoom: 3
-      });
-
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      var mapDatastream = function(datastream) {
-        L.geocens(datastream).addTo(map);
-      };
-
-      Geocens.DataService.getDatastream({
-        api_key: "57378dc18d74bef1051312e29a26f0b3",
-        sensor_id: "4ddecd5124661f9442cfca8be23f8dda",
-        datastream_id: "ccc92c6fe57dff592ff687d99c4ebf70",
-        done: mapDatastream
-      });
-    });
-  }());
-</script>
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/nkkwT/">View on JSFiddle</a>
+  </div>
 
 
-<h2 id="map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</h2>
+  <div class="example">
+    <h2 id="map_observations_cluster">Add OGC SOS Observations to a Map with Clustering</h2>
 
-<p>First, include the clustering plugin CSS and JS:</p>
+    <p>First, include the clustering plugin CSS and JS:</p>
 
-<pre class="code">
+    <pre class="code">
 
-  &lt;link rel="stylesheet" href="stylesheets/MarkerCluster.css"&gt;&lt;/link&gt;
-  &lt;link rel="stylesheet" href="stylesheets/MarkerCluster.Default.css"&gt;&lt;/link&gt;
-  &lt;script src="javascripts/leaflet.markercluster.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
+      &lt;link rel="stylesheet" href="stylesheets/MarkerCluster.css"&gt;&lt;/link&gt;
+      &lt;link rel="stylesheet" href="stylesheets/MarkerCluster.Default.css"&gt;&lt;/link&gt;
+      &lt;script src="javascripts/leaflet.markercluster.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
 
-</pre>
-<script src="javascripts/leaflet.markercluster.js" type="text/javascript" charset="utf-8"></script>
+    </pre>
+    <script src="javascripts/leaflet.markercluster.js" type="text/javascript" charset="utf-8"></script>
 
-<p>Then use the clustering plugin as usual when creating the map. A <a href="map.html">fullscreen example</a> version is also available.</p>
+    <p>Then use the clustering plugin as usual when creating the map. A <a href="map.html">fullscreen example</a> version is also available.</p>
 
-<pre class="code">
-    L.Icon.Default.imagePath = 'images';
+    <pre class="code">
+        L.Icon.Default.imagePath = "images";
 
-    var map = L.map('map1', {
+        var map = L.map('map1', {
+              center: [51.07993, -114.131802],
+              zoom: 3
+        });
+
+        var markers = new L.MarkerClusterGroup();
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+        }).addTo(map);
+
+        var mapObservations = function(observations) {
+          markers.addLayer(L.geocens(observations));
+          map.addLayer(markers);
+        };
+
+        Geocens.SOS.getObservation({
+          service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
+          offering: &quot;Temperature&quot;,
+          property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+          done: mapObservations
+        });
+
+    </pre>
+
+    <div id="map3" class="map"></div>
+
+    <button onclick='javascript:
+    L.Icon.Default.imagePath = "images";
+
+    var map = L.map("map3", {
           center: [51.07993, -114.131802],
           zoom: 3
     });
 
     var markers = new L.MarkerClusterGroup();
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&amp;copy; &lt;a href="http://osm.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors'
+    L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors"
     }).addTo(map);
 
     var mapObservations = function(observations) {
@@ -739,47 +895,14 @@
     };
 
     Geocens.SOS.getObservation({
-      service_url: &quot;http://app.geocens.ca:8171/sos&quot;,
-      offering: &quot;Temperature&quot;,
-      property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+      service_url: "http://app.geocens.ca:8171/sos",
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
       done: mapObservations
     });
-
-</pre>
-
-<div id="map3" class="map"></div>
-
-<button id="example_twelve">Run Example</button>
-<a href="http://jsfiddle.net/openfirmware/RDXzt/">View on JSFiddle</a>
-<script>
-  $(document).ready(function() {
-    $("#example_twelve").on("click", function() {
-      L.Icon.Default.imagePath = 'images';
-
-      var map = L.map('map3', {
-            center: [51.07993, -114.131802],
-            zoom: 3
-      });
-
-      var markers = new L.MarkerClusterGroup();
-
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      var mapObservations = function(observations) {
-        markers.addLayer(L.geocens(observations));
-        map.addLayer(markers);
-      };
-
-      Geocens.SOS.getObservation({
-        service_url: "http://app.geocens.ca:8171/sos",
-        offering: "Temperature",
-        property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
-        done: mapObservations
-      });
-    });
-  }());
-</script>
+    '>Run Example</button>
+    <a href="http://jsfiddle.net/openfirmware/RDXzt/">View on JSFiddle</a>
+  </div>
+</main>
 </body>
 </html>
