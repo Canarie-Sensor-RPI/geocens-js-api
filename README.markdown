@@ -421,11 +421,11 @@ The time series observations can be retrieved:
 
 ##### option: start
 
-An optional Date object specifying the start limit of the time series.
+An optional Date object specifying the start limit of the time series. If left empty, will default to 24 hours ago.
 
 ##### option: end
 
-An optional Date object specifying the end limit of the time series.
+An optional Date object specifying the end limit of the time series. If left empty, will default to current date.
 
 #### done
 
@@ -435,9 +435,13 @@ This callback function will return the series data as the first parameter after 
 
 The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the *latest* value in a time range, not the *earliest*.
 
-#### limit
+If left empty, no limit will be applied to the number of records returned by the Data Service.
+
+#### skip
 
 Skip the latest *n* records returned from the Data Service (it sorts date *descending*). Can be used with `limit` to emulate pagination.
+
+If left empty, no time series records will be skipped.
 
 ##### Result
 
