@@ -343,9 +343,7 @@
   //
   var Observation = Geocens.Observation = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this._attributes = options;
     this.service     = options.service;
