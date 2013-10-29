@@ -31,9 +31,7 @@
   //
   var Sensor = Geocens.Sensor = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this.metadata = options;
     this.sensor_id = options.uid || options.sensor_id;
@@ -48,13 +46,11 @@
           params,
           path;
 
-      if (options === undefined) {
-        options = {};
-      }
+      options || (options = {});
+      options.raw || (options.raw = function () {});
+      options.done || (options.done = function () {});
 
-      options.raw  = options.raw || function () {};
-      options.done = options.done || function () {};
-
+      // Always send detail parameter to retrieve extra attributes
       params = {
         "detail": true
       };
@@ -89,9 +85,7 @@
   //
   var Datastream = Geocens.Datastream = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this._attributes = options;
     this.sensor_id = options.sensor_id;
@@ -131,11 +125,8 @@
           params,
           path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
+      options || (options = {});
+      options.done || (options.done || function () {});
 
       params = {
         "detail": true
@@ -224,9 +215,7 @@
   //
   var DataService = Geocens.DataService = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     // Let user set api key once for data source
     this.api_key = options.api_key;
@@ -255,16 +244,10 @@
           sensor_path,
           datastream_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
       datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
@@ -296,16 +279,10 @@
       var self = this,
           sensor_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
 
@@ -325,19 +302,14 @@
           self = this,
           sensors_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.raw  = options.raw || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.raw || (options.raw = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensors_path = this.path + "sensors";
+
       params = {
         "detail": true
       };
@@ -456,9 +428,7 @@
     describe: function(options) {
       var self = this;
 
-      if (options === undefined) {
-        options = {};
-      }
+      options || (options = {});
 
       jQuery.ajax({
         type: 'post',
@@ -480,9 +450,8 @@
       var self = this,
           time, traceHours;
 
-      if (options === undefined) {
-        options = {};
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
 
       function ISODateString(d) {
         function pad(n) { return n < 10 ? '0' + n : n; }
@@ -493,8 +462,6 @@
             pad(d.getUTCMinutes())   + ':' +
             pad(d.getUTCSeconds())   + 'Z';
       }
-
-      options.done = options.done || function () {};
 
       if (options.end !== undefined) {
         time = ISODateString(options.end);
@@ -563,9 +530,7 @@
   //
   var SOS = Geocens.SOS = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     // Let user set service url once for data source
     this.service_url = options.service_url;
@@ -609,18 +574,12 @@
     getObservation: function(options) {
       var self = this;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      if (self.service_url === undefined) {
-        self.service_url = options.service_url;
-      }
-
-      options.done        = options.done || function () {};
-      options.service_url = options.service_url || self.service_url;
-      options.northwest   = options.northwest || [90, -180];
-      options.southeast   = options.southeast || [-90, 180];
+      options || (options = {});
+      options.done || (options.done = function () {});
+      self.service_url || (self.service_url = options.service_url);
+      options.service_url || (options.service_url = self.service_url);
+      options.northwest || (options.northwest = [90, -180]);
+      options.southeast || (options.southeast = [-90, 180]);
 
       // Retrieve observation resource
       $.ajax({
