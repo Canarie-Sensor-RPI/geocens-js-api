@@ -121,13 +121,7 @@
 
       // sort by timestamp
       this._data.sort(function(a, b) {
-        if (a.timestamp < b.timestamp) {
-          return -1;
-        } else if (a.timestamp > b.timestamp) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return a.timestamp - b.timestamp;
       });
 
       return this._data;
@@ -374,13 +368,7 @@
 
       // sort by timestamp
       this._data.sort(function(a, b) {
-        if (a.timestamp < b.timestamp) {
-          return -1;
-        } else if (a.timestamp > b.timestamp) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return a.timestamp - b.timestamp;
       });
 
       return this._data;
