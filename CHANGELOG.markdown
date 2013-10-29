@@ -1,3 +1,7 @@
+1.1.1 (October 29 2013)
+
+* Add support for retrieving all time series results for a datastream
+
 1.1.0 (October 23 2013)
 
 * Add support for retrieving metadata for a sensor
