@@ -315,6 +315,74 @@ $(document).ready(function() {
     clock.restore();
   });
 
+  test('ignores start time when recent is set', 2, function() {
+    var time = new Date("2013-06-25T12:00:00Z");
+    var clock = sinon.useFakeTimers(time.getTime());
+
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.datastream.getTimeSeries({
+      start:  new Date("2012-06-25T12:00:00Z"),
+      recent: true
+    });
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0]));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var match = request.url.indexOf($.param({
+      start: "2012-06-25T12:00:00Z"
+    }));
+
+    ok(match === -1, "custom start time was sent");
+
+    xhr.restore();
+    clock.restore();
+  });
+
+  test('ignores end time when recent is set', 2, function() {
+    var time = new Date("2013-06-25T12:00:00Z");
+    var clock = sinon.useFakeTimers(time.getTime());
+
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve time series
+    this.datastream.getTimeSeries({
+      end:    new Date("2012-06-25T12:00:00Z"),
+      recent: true
+    });
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0]));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var match = request.url.indexOf($.param({
+      end: "2012-06-25T12:00:00Z"
+    }));
+
+    ok(match === -1, "custom end time was sent");
+
+    xhr.restore();
+    clock.restore();
+  });
+
   test('returns timestamp/value array', 5, function() {
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.TimeSeries[0])]);
