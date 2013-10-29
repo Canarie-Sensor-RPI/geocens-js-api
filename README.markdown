@@ -410,11 +410,12 @@ Example attributes for a datastream from GeoCENS Data Service:
 The time series observations can be retrieved:
 
 	datastream.getTimeSeries({
-		limit: 100,
-		skip:  100,
-		start: new Date("2013-01-01 00:00:00Z"),
-		end:   new Date("2013-05-28 00:00:00Z"),
-		done:  function (seriesData) {
+		limit:  100,
+		skip:   100,
+		start:  new Date("2013-01-01 00:00:00Z"),
+		end:    new Date("2013-05-28 00:00:00Z"),
+		recent: false,
+		done:   function (seriesData) {
 			window.seriesData = seriesData;
 		}
 	});
@@ -423,25 +424,39 @@ The time series observations can be retrieved:
 
 An optional Date object specifying the start limit of the time series. If left empty, will default to 24 hours ago.
 
+Ignored if `recent` is set to `true`.
+
 ##### option: end
 
 An optional Date object specifying the end limit of the time series. If left empty, will default to current date.
 
-#### done
+Ignored if `recent` is set to `true`.
+
+#### option: done
 
 This callback function will return the series data as the first parameter after it has been retrieved.
 
-#### limit
+#### option: limit
 
 The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the *latest* value in a time range, not the *earliest*.
 
 If left empty, no limit will be applied to the number of records returned by the Data Service.
 
-#### skip
+#### option: skip
 
 Skip the latest *n* records returned from the Data Service (it sorts date *descending*). Can be used with `limit` to emulate pagination.
 
 If left empty, no time series records will be skipped.
+
+#### option: recent
+
+If `recent` is `true`, then the `start` and `end` date options will be ignored and **all** data points in the time series will be returned. For performance reasons, it is recommended that the `limit` option is specified to reduce the potential size of the response from the GeoCENS Data Service.
+
+For example, specifying `recent` as `true` and `limit` as `200` will return the 200 most recent time series results, regardless of start/end date.
+
+If left empty, will default to `false`.
+
+There is no support currently for the opposite use case, retrieving the oldest *n* results.
 
 ##### Result
 
