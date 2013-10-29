@@ -172,6 +172,11 @@
         params.start = ISODateString(new Date(d - (24 * 3600 * 1000)));
       }
 
+      if (options.recent) {
+        delete params.start;
+        delete params.end;
+      }
+
       path = this.service.path + "sensors/" + this.sensor_id +
               "/datastreams/" + this.datastream_id + "/records";
 
