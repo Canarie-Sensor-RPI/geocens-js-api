@@ -26,14 +26,26 @@
     return this;
   };
 
+  // Utility Functions
+  // ------------------
+  //
+
+  var ISODateString = function(d) {
+    function pad(n) { return n < 10 ? '0' + n : n; }
+    return d.getUTCFullYear()  + '-' +
+      pad(d.getUTCMonth() + 1) + '-' +
+      pad(d.getUTCDate())      + 'T' +
+      pad(d.getUTCHours())     + ':' +
+      pad(d.getUTCMinutes())   + ':' +
+      pad(d.getUTCSeconds())   + 'Z';
+  };
+
   // Geocens.Sensor
   // ------------------
   //
   var Sensor = Geocens.Sensor = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this.metadata = options;
     this.sensor_id = options.uid || options.sensor_id;
@@ -48,13 +60,11 @@
           params,
           path;
 
-      if (options === undefined) {
-        options = {};
-      }
+      options || (options = {});
+      options.raw || (options.raw = function () {});
+      options.done || (options.done = function () {});
 
-      options.raw  = options.raw || function () {};
-      options.done = options.done || function () {};
-
+      // Always send detail parameter to retrieve extra attributes
       params = {
         "detail": true
       };
@@ -69,7 +79,7 @@
         },
         data: params
       }).done(function (data) {
-        var datastreams = $.map(data, function(value, index) {
+        var datastreams = $.map(data, function(value) {
           var datastream = new Geocens.Datastream(value);
           datastream.sensor_id = self.sensor_id;
           datastream.service = self.service;
@@ -89,9 +99,7 @@
   //
   var Datastream = Geocens.Datastream = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this._attributes = options;
     this.sensor_id = options.sensor_id;
@@ -113,13 +121,7 @@
 
       // sort by timestamp
       this._data.sort(function(a, b) {
-        if (a.timestamp < b.timestamp) {
-          return -1;
-        } else if (a.timestamp > b.timestamp) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return a.timestamp - b.timestamp;
       });
 
       return this._data;
@@ -131,11 +133,8 @@
           params,
           path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
+      options || (options = {});
+      options.done || (options.done || function () {});
 
       params = {
         "detail": true
@@ -147,16 +146,6 @@
 
       if (options.skip !== undefined && isFinite(options.skip)) {
         params.skip = options.skip;
-      }
-
-      function ISODateString(d) {
-        function pad(n) { return n < 10 ? '0' + n : n; }
-        return d.getUTCFullYear()    + '-' +
-            pad(d.getUTCMonth() + 1) + '-' +
-            pad(d.getUTCDate())      + 'T' +
-            pad(d.getUTCHours())     + ':' +
-            pad(d.getUTCMinutes())   + ':' +
-            pad(d.getUTCSeconds())   + 'Z';
       }
 
       if (options.end !== undefined) {
@@ -172,6 +161,11 @@
         params.start = ISODateString(new Date(d - (24 * 3600 * 1000)));
       }
 
+      if (options.recent) {
+        delete params.start;
+        delete params.end;
+      }
+
       path = this.service.path + "sensors/" + this.sensor_id +
               "/datastreams/" + this.datastream_id + "/records";
 
@@ -183,7 +177,7 @@
         },
         data: params
       }).done(function (data) {
-        var convertedData = $.map(data, function(value, index) {
+        var convertedData = $.map(data, function(value) {
           return {
             timestamp: Date.parse(value.id),
             value: parseFloat(value.reading)
@@ -219,9 +213,7 @@
   //
   var DataService = Geocens.DataService = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     // Let user set api key once for data source
     this.api_key = options.api_key;
@@ -250,16 +242,10 @@
           sensor_path,
           datastream_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
       datastream_path = sensor_path + "/datastreams/" + options.datastream_id;
@@ -291,16 +277,10 @@
       var self = this,
           sensor_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensor_path = this.path + "sensors/" + options.sensor_id;
 
@@ -320,19 +300,14 @@
           self = this,
           sensors_path;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      options.done = options.done || function () {};
-      options.raw  = options.raw || function () {};
-      options.api_key = options.api_key || self.api_key;
-
-      if (self.api_key === undefined) {
-        self.api_key = options.api_key;
-      }
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.raw || (options.raw = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
 
       sensors_path = this.path + "sensors";
+
       params = {
         "detail": true
       };
@@ -343,7 +318,7 @@
         api_key: options.api_key,
         data: params
       }).done(function (sensorData) {
-        var sensors = $.map(sensorData, function(value, index) {
+        var sensors = $.map(sensorData, function(value) {
           var sensor = new Geocens.Sensor(value);
           sensor.service = self;
           return sensor;
@@ -368,9 +343,7 @@
   //
   var Observation = Geocens.Observation = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     this._attributes = options;
     this.service     = options.service;
@@ -393,13 +366,7 @@
 
       // sort by timestamp
       this._data.sort(function(a, b) {
-        if (a.timestamp < b.timestamp) {
-          return -1;
-        } else if (a.timestamp > b.timestamp) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return a.timestamp - b.timestamp;
       });
 
       return this._data;
@@ -409,7 +376,7 @@
     // Example Series Data:
     //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
     _convertSeriesData: function(data) {
-      parts = data.split(',');
+      var parts = data.split(',');
 
       if (parts.length !== 7) {
         console.warn("Series data may be malformed", data);
@@ -451,9 +418,7 @@
     describe: function(options) {
       var self = this;
 
-      if (options === undefined) {
-        options = {};
-      }
+      options || (options = {});
 
       jQuery.ajax({
         type: 'post',
@@ -475,21 +440,8 @@
       var self = this,
           time, traceHours;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      function ISODateString(d) {
-        function pad(n) { return n < 10 ? '0' + n : n; }
-        return d.getUTCFullYear()    + '-' +
-            pad(d.getUTCMonth() + 1) + '-' +
-            pad(d.getUTCDate())      + 'T' +
-            pad(d.getUTCHours())     + ':' +
-            pad(d.getUTCMinutes())   + ':' +
-            pad(d.getUTCSeconds())   + 'Z';
-      }
-
-      options.done = options.done || function () {};
+      options || (options = {});
+      options.done || (options.done = function () {});
 
       if (options.end !== undefined) {
         time = ISODateString(options.end);
@@ -558,9 +510,7 @@
   //
   var SOS = Geocens.SOS = function(options) {
     // Handle undefined options
-    if (options === undefined) {
-      options = {};
-    }
+    options || (options = {});
 
     // Let user set service url once for data source
     this.service_url = options.service_url;
@@ -604,18 +554,12 @@
     getObservation: function(options) {
       var self = this;
 
-      if (options === undefined) {
-        options = {};
-      }
-
-      if (self.service_url === undefined) {
-        self.service_url = options.service_url;
-      }
-
-      options.done        = options.done || function () {};
-      options.service_url = options.service_url || self.service_url;
-      options.northwest   = options.northwest || [90, -180];
-      options.southeast   = options.southeast || [-90, 180];
+      options || (options = {});
+      options.done || (options.done = function () {});
+      self.service_url || (self.service_url = options.service_url);
+      options.service_url || (options.service_url = self.service_url);
+      options.northwest || (options.northwest = [90, -180]);
+      options.southeast || (options.southeast = [-90, 180]);
 
       // Retrieve observation resource
       $.ajax({
