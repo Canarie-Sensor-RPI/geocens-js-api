@@ -79,7 +79,7 @@
         },
         data: params
       }).done(function (data) {
-        var datastreams = $.map(data, function(value, index) {
+        var datastreams = $.map(data, function(value) {
           var datastream = new Geocens.Datastream(value);
           datastream.sensor_id = self.sensor_id;
           datastream.service = self.service;
@@ -183,7 +183,7 @@
         },
         data: params
       }).done(function (data) {
-        var convertedData = $.map(data, function(value, index) {
+        var convertedData = $.map(data, function(value) {
           return {
             timestamp: Date.parse(value.id),
             value: parseFloat(value.reading)
@@ -324,7 +324,7 @@
         api_key: options.api_key,
         data: params
       }).done(function (sensorData) {
-        var sensors = $.map(sensorData, function(value, index) {
+        var sensors = $.map(sensorData, function(value) {
           var sensor = new Geocens.Sensor(value);
           sensor.service = self;
           return sensor;
@@ -390,7 +390,7 @@
     // Example Series Data:
     //   "Offering,ObservedProperty,ProcedureID,Latitude,Longitude,Unit,Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value*Year|Month|Day|Hour|Minute|Second|Offset|Value"
     _convertSeriesData: function(data) {
-      parts = data.split(',');
+      var parts = data.split(',');
 
       if (parts.length !== 7) {
         console.warn("Series data may be malformed", data);
