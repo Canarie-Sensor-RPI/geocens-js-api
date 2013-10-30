@@ -1,4 +1,4 @@
-//    GeoCENS.js 1.1.1
+//    GeoCENS.js 1.1.2
 
 //    (c) 2013, James Badger, Geo Sensor Web Lab.
 //    All Rights Reserved.

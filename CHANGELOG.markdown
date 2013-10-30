@@ -1,3 +1,7 @@
+1.1.2 (October 30 2013)
+
+* Fix GeoCENS Chart to return Chart objects when called via JQuery selector
+
 1.1.1 (October 29 2013)
 
 * Add support for retrieving all time series results for a datastream
