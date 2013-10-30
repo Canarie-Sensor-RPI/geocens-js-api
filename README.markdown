@@ -549,7 +549,7 @@ Using the chart API with OGC SOS observations is also short:
 		done: getSeries
 	});
 
-This example works in an identical manner to the Data Service example. As with the other example, in the case taht multiple `getTimeSeries` requests are made, all the cached data for that observation will be used for drawing the time series chart.
+This example works in an identical manner to the Data Service example. As with the other example, in the case that multiple `getTimeSeries` requests are made, all the cached data for that observation will be used for drawing the time series chart.
 
 ##### option: observation
 
