@@ -10,7 +10,8 @@
       defaults;
 
   defaults = root.defaults = {
-    chart: {}
+    chart: {},
+    dataEvents: {}
   };
 
   chart = root.chart = function(element, options) {
@@ -60,7 +61,8 @@
 
       series: [{
           name: datasource.name(),
-          data: seriesData
+          data: seriesData,
+          events: settings.dataEvents
       }],
 
       xAxis: {

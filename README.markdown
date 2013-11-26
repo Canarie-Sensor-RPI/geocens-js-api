@@ -563,6 +563,10 @@ Pass in a Data Service datastream object to the chart, which will draw the time 
 
 A JavaScript object with HighStock compatible configuration options. These options will be passed to the chart when it is created, overriding defaults set by the GeoCENS JS API chart module. Note that certain properties may not be overridden.
 
+##### options: dataEvents
+
+A JavaScript object with event callbacks that will be applied to the data series in the Highstock chart. Will default to an empty object if left blank. As the callbacks will be passed to Highstock, `this` will be bound to the point the user triggers the event upon.
+
 ### Map Visualization
 
 The GeoCENS JS API has an optional module for mapping datastreams and/or observations. It requires the [Leaflet](http://leafletjs.com/) 0.6.0 or newer library to be installed. For a web page, include the `geocens-map.js` file in a script tag, **after** the main `geocens.js` file. It can be included with the `geocens-chart.js` module without conflict.
