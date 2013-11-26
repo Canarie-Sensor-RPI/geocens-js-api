@@ -1,4 +1,4 @@
-//    GeoCENS.js 1.1.2
+//    GeoCENS.js 1.1.3
 
 //    (c) 2013, James Badger, Geo Sensor Web Lab.
 //    All Rights Reserved.
@@ -17,7 +17,7 @@
   Geocens = root.Geocens = {};
 
   // Current library version
-  Geocens.VERSION = '1.1.1';
+  Geocens.VERSION = '1.1.3';
 
   // Run Geocens in noConflict mode, which prevents Geocens from overwriting
   // whatever previously held the `Geocens` variable.

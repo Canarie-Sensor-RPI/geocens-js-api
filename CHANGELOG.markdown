@@ -1,3 +1,8 @@
+1.1.3 (November 25 2013)
+
+* Deep merge user-specified chart init options with default GeoCENS chart options
+* Support custom user events on data points
+
 1.1.2 (October 30 2013)
 
 * Fix GeoCENS Chart to return Chart objects when called via JQuery selector
