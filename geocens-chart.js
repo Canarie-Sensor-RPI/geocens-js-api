@@ -76,7 +76,7 @@
       }
     };
 
-    var chartOptions = $.extend({}, chartDefaults, settings.chart);
+    var chartOptions = $.extend(true, {}, chartDefaults, settings.chart);
     var stockChart = new Highcharts.StockChart(chartOptions);
 
     return {
