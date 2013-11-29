@@ -312,7 +312,7 @@
       self._ajax.get({
         path: sensor_path,
         api_key: options.api_key
-      }).done(function (sensorData) {
+      }).done(function(sensorData) {
         var sensor = new Sensor(sensorData);
         sensor.service = self;
         options.done(sensor);
@@ -320,36 +320,27 @@
     },
 
     getSensors: function(options) {
-      var params,
-          self = this,
+      var self = this,
           sensors_path;
 
       options || (options = {});
       options.done || (options.done = function () {});
-      options.raw || (options.raw = function () {});
       options.api_key || (options.api_key = self.api_key);
       self.api_key || (self.api_key = options.api_key);
 
       sensors_path = this.path + "sensors";
 
-      params = {
-        "detail": true
-      };
-
-      // Retrieve sensors resource
-      self._ajax.get({
-        path: sensors_path,
+      this.getRawSensors({
         api_key: options.api_key,
-        data: params
-      }).done(function (sensorData) {
-        var sensors = $.map(sensorData, function(value) {
-          var sensor = new Geocens.Sensor(value);
-          sensor.service = self;
-          return sensor;
-        });
+        done: function(sensorData) {
+          var sensors = $.map(sensorData, function(value) {
+            var sensor = new Geocens.Sensor(value);
+            sensor.service = self;
+            return sensor;
+          });
 
-        options.raw(sensorData);
-        options.done(sensors);
+          options.done(sensors);
+        }
       });
     },
 
