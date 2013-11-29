@@ -24,6 +24,8 @@ $(document).ready(function() {
     equal(sensor.datastreams, null);
   });
 
+
+
   module("Sensor getDatastreams", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";
@@ -127,21 +129,112 @@ $(document).ready(function() {
     ok(datastreams[0].getTimeSeries !== undefined, "datastream does not respond to getTimeSeries");
   });
 
-  test("raw callback does not return Datastream objects", 2, function() {
+
+
+  module("Sensor getRawDatastreams", {
+    setup: function () {
+      this.api_key      = "your_32_character_api_key";
+      this.sensor_id     = "32_character_sensor_id";
+
+      // Path to resource on Data Service
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "sensors/" + this.sensor_id + "/datastreams?detail=true";
+
+      // Create service, sensor
+      var service = new Geocens.DataService({ api_key: this.api_key });
+      this.sensor = new Geocens.Sensor({
+        sensor_id: this.sensor_id
+      });
+      this.sensor.service = service;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
+
+  test('responds on success', 1, function() {
     this.server.respondWith([200, { "Content-Type": "application/json" },
                         JSON.stringify(Fixtures.DataService.Datastreams)]);
-    var datastreams;
+
+    var callback = this.spy();
 
     // Retrieve datastreams
-    this.sensor.getDatastreams({
-      raw: function(data) {
-        datastreams = data;
+    this.sensor.getRawDatastreams({
+      done: callback
+    });
+
+    this.server.respond();
+
+    ok(callback.called, "Done was not called");
+  });
+
+  test('sends the api key', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve datastreams
+    this.sensor.getRawDatastreams();
+
+    equal(1, requests.length, "Fake server did not receive request");
+
+    var request = requests[0];
+
+    equal(request.requestHeaders["x-api-key"], this.api_key, "API mismatch");
+
+    xhr.restore();
+
+  });
+
+  test('makes a request for the datastreams', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve datastreams
+    this.sensor.getRawDatastreams();
+
+    // Return records
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastreams));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var records_path = Geocens.DataService.path + "sensors/" + this.sensor_id +
+                       "/datastreams";
+
+    var url = request.url.split('?')[0];
+
+    equal(url, records_path, "Request not made for records resource");
+
+    xhr.restore();
+  });
+
+  test("callback returns simple JS objects", 2, function() {
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Datastreams)]);
+    var objects;
+
+    // Retrieve datastreams
+    this.sensor.getRawDatastreams({
+      done: function(data) {
+        objects = data;
       }
     });
     this.server.respond();
 
-    equal(datastreams.length, 1);
-    ok(datastreams[0].getTimeSeries === undefined, "datastream responds to getTimeSeries, should not be defined");
+    equal(objects.length, 1);
+    ok(objects[0].getTimeSeries === undefined, "datastream responds to getTimeSeries, should not be defined");
   });
 
 });
