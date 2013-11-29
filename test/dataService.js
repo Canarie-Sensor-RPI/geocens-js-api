@@ -17,6 +17,8 @@ $(document).ready(function() {
     Geocens.DataService.setPath(originalPath);
   });
 
+
+
   module("Data Service with getSensors", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
@@ -80,6 +82,73 @@ $(document).ready(function() {
        "Sensor does not respond to getDatastreams()");
   });
 
+
+
+  module("Data Service with getRawSensors", {
+    setup: function () {
+      this.api_key       = "your_32_character_api_key";
+
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "sensors";
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function () {
+      this.server.restore();
+    }
+  });
+
+  test('makes a request for the sensor resource', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensors
+    Geocens.DataService.getRawSensors({
+      api_key: this.api_key
+    });
+
+    // Return sensor list
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensors));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var sensor_path = Geocens.DataService.path + "sensors?detail=true";
+
+    equal(request.url, sensor_path, "Request not made for sensors resource");
+
+    xhr.restore();
+  });
+
+  test('returns an array of simple JS objects', 2, function() {
+    var jsObject;
+
+    // Retrieve sensor
+    Geocens.DataService.getRawSensors({
+      api_key:       this.api_key,
+      done: function(jsObjects) {
+        jsObject = jsObjects[0];
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.Sensors)]);
+    this.server.respond();
+
+    ok(jsObject !== undefined, "JS Object was not defined");
+    // If it does not look and act like a Sensor object…
+    ok(newSensor.getDatastreams === undefined,
+       "JS Object responds to getDatastreams(), but should not");
+  });
+
+
+
   module("Data Service with getSensor", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
@@ -123,6 +192,8 @@ $(document).ready(function() {
 
     xhr.restore();
   });
+
+
 
   module("Data Service with getDatastream", {
     setup: function () {
@@ -334,6 +405,8 @@ $(document).ready(function() {
     equal(newDatastream.sensor_id, this.sensor_id, "Sensor id was not defined");
   });
 
+
+
   module("Init Data Service, then getSensor", {
     setup: function () {
       this.api_key       = "your_32_character_api_key";
@@ -402,6 +475,8 @@ $(document).ready(function() {
     ok(newSensor.metadata !== undefined,
        "Sensor does not respond to .metadata");
   });
+
+
 
   module("Init Data Service, then getDatastream", {
     setup: function () {
