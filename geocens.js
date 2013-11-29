@@ -54,7 +54,7 @@
   // Extend Sensor object (actually function) prototype with new methods and
   // properties
   jQuery.extend(Sensor.prototype, {
-    // Retrieve datastreams for the sensor
+    // Retrieve sensor datastreams as datastream objects
     getDatastreams: function(options) {
       var self = this,
           params,
@@ -83,6 +83,7 @@
 
     },
 
+    // Retrieve sensor datastreams as js objects
     getRawDatastreams: function(options) {
       var self = this,
           params,
@@ -255,6 +256,7 @@
       }
     },
 
+    // Retrieve datastream as Datastream object
     getDatastream: function(options) {
       var self = this,
           sensor_path,
@@ -291,6 +293,7 @@
       });
     },
 
+    // Retrieve sensors as js objects
     getRawSensors: function(options) {
       var params,
           self = this,
@@ -315,6 +318,7 @@
       }).done(options.done);
     },
 
+    // Retrieve sensor as Sensor object
     getSensor: function(options) {
       var self = this,
           sensor_path;
@@ -337,6 +341,7 @@
       });
     },
 
+    // Retrieve sensors as Sensor objects
     getSensors: function(options) {
       var self = this,
           sensors_path;
