@@ -64,31 +64,21 @@
       options.raw || (options.raw = function () {});
       options.done || (options.done = function () {});
 
-      // Always send detail parameter to retrieve extra attributes
-      params = {
-        "detail": true
-      };
-
       path = this.service.path + "sensors/" + this.sensor_id + "/datastreams";
 
-      $.ajax({
-        url: path,
-        type: 'GET',
-        headers: {
-          "x-api-key": options.api_key || this.service.api_key
-        },
-        data: params
-      }).done(function (data) {
-        var datastreams = $.map(data, function(value) {
-          var datastream = new Geocens.Datastream(value);
-          datastream.sensor_id = self.sensor_id;
-          datastream.service = self.service;
-          return datastream;
-        });
+      this.getRawDatastreams({
+        api_key: options.api_key,
+        done: function(data) {
+          var datastreams = $.map(data, function(value) {
+            var datastream = new Geocens.Datastream(value);
+            datastream.sensor_id = self.sensor_id;
+            datastream.service = self.service;
+            return datastream;
+          });
 
-        self.datastreams = datastreams;
-        options.raw(data, self);
-        options.done(datastreams, self);
+          self.datastreams = datastreams;
+          options.done(datastreams, self);
+        }
       });
 
     },
