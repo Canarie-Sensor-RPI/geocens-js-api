@@ -273,6 +273,30 @@
       });
     },
 
+    getRawSensors: function(options) {
+      var params,
+          self = this,
+          sensors_path;
+
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
+
+      sensors_path = this.path + "sensors";
+
+      params = {
+        "detail": true
+      };
+
+      // Retrieve sensors resource
+      self._ajax.get({
+        path: sensors_path,
+        api_key: options.api_key,
+        data: params
+      }).done(options.done);
+    },
+
     getSensor: function(options) {
       var self = this,
           sensor_path;
