@@ -1,3 +1,7 @@
+1.2.0 (November 29 2013)
+
+* Removed `raw` callbacks from `getSensors` and `getDatastreams`. Use `getRawSensors` and `getRawDatastreams` instead
+
 1.1.3 (November 25 2013)
 
 * Deep merge user-specified chart init options with default GeoCENS chart options
