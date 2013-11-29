@@ -91,6 +91,34 @@
         options.done(datastreams, self);
       });
 
+    },
+
+    getRawDatastreams: function(options) {
+      var self = this,
+          params,
+          path;
+
+      options || (options = {});
+      options.raw || (options.raw = function () {});
+      options.done || (options.done = function () {});
+
+      // Always send detail parameter to retrieve extra attributes
+      params = {
+        "detail": true
+      };
+
+      path = this.service.path + "sensors/" + this.sensor_id + "/datastreams";
+
+      $.ajax({
+        url: path,
+        type: 'GET',
+        headers: {
+          "x-api-key": options.api_key || this.service.api_key
+        },
+        data: params
+      }).done(function (data) {
+        options.done(data, self);
+      });
     }
   });
 
