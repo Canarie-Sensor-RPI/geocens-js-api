@@ -7,6 +7,7 @@ module.exports = function(grunt) {
     jshint: {
       files: ['Gruntfile.js', 'geocens.js', 'geocens-chart.js', 'geocens-map.js', 'test/*.js'],
       options: {
+        expr: true,
         globals: {
           jQuery: true,
           console: true,
