@@ -143,7 +143,7 @@ $(document).ready(function() {
 
     ok(jsObject !== undefined, "JS Object was not defined");
     // If it does not look and act like a Sensor object…
-    ok(newSensor.getDatastreams === undefined,
+    ok(jsObject.getDatastreams === undefined,
        "JS Object responds to getDatastreams(), but should not");
   });
 
