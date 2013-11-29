@@ -259,16 +259,22 @@ An API Key gives access to certain sensors for a user in the GeoCENS Data Servic
 	dsSource.getSensors({
 		done: function (sensors) {
 			window.sensors = sensors;
-		},
-
-		raw: function (data) {
-			window.sensorsJSON = data;
 		}
 	});
 
 When the sensors have been retrieved from the server, the `done` callback will be called. The `sensors` parameter will contain an array of zero or more Sensor objects. From there, each of the Sensor objects can be used to load their datastreams or metadata.
 
-Alternatively or simultaneously the `raw` callback can be used to receive the JS objects from the GeoCENS Data Service not formatted as Sensor objects.
+#### Geocens.DataService.getRawSensors
+
+Similar to `getSensors`, but will return the JSON objects from the GeoCENS Data Service without being formatted as Sensor objects.
+
+	dsSource.getRawSensors({
+		done: function (sensors) {
+			window.sensors = sensors;
+		}
+	});
+
+This function was formerly specified as a separate callback in `getSensors`.
 
 #### Geocens.DataService.getSensor
 
@@ -325,16 +331,23 @@ With a Sensor object, an array of Datastream objects for that sensor can be retr
 	sensor.getDatastreams({
 		done: function (datastreams) {
 			window.datastreams = datastreams;
-		},
-
-		raw: function (data) {
-			window.datastreamJSON = data;
 		}
 	});
 
 When the datastreams have been retrieved from the server, the `done` callback will be called. The `datastreams` parameter will contain an array of zero or more Datastream objects. From there, each of the Datastream objects can be used to load their time series or attributes.
 
-Alternatively or simultaneously the `raw` callback can be used to receive the JS objects from the GeoCENS Data Service not formatted as Datastream objects.
+#### Sensor.getRawDatastreams
+
+Similar to `getDatastreams`, but will return the JSON objects from the GeoCENS Data Service without being formatted as Datastream objects.
+
+	sensor.getDatastreams({
+		done: function (data) {
+			window.datastreamJSON = data;
+		}
+	});
+
+This function was formerly specified as a separate callback in `getDatastreams`.
+
 
 #### Sensor.datastreams
 
