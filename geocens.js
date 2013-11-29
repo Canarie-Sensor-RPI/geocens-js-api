@@ -54,8 +54,37 @@
   // Extend Sensor object (actually function) prototype with new methods and
   // properties
   jQuery.extend(Sensor.prototype, {
-    // Retrieve datastreams for the sensor
+    // Retrieve sensor datastreams as datastream objects
     getDatastreams: function(options) {
+      var self = this,
+          params,
+          path;
+
+      options || (options = {});
+      options.raw || (options.raw = function () {});
+      options.done || (options.done = function () {});
+
+      path = this.service.path + "sensors/" + this.sensor_id + "/datastreams";
+
+      this.getRawDatastreams({
+        api_key: options.api_key,
+        done: function(data) {
+          var datastreams = $.map(data, function(value) {
+            var datastream = new Geocens.Datastream(value);
+            datastream.sensor_id = self.sensor_id;
+            datastream.service = self.service;
+            return datastream;
+          });
+
+          self.datastreams = datastreams;
+          options.done(datastreams, self);
+        }
+      });
+
+    },
+
+    // Retrieve sensor datastreams as js objects
+    getRawDatastreams: function(options) {
       var self = this,
           params,
           path;
@@ -79,18 +108,8 @@
         },
         data: params
       }).done(function (data) {
-        var datastreams = $.map(data, function(value) {
-          var datastream = new Geocens.Datastream(value);
-          datastream.sensor_id = self.sensor_id;
-          datastream.service = self.service;
-          return datastream;
-        });
-
-        self.datastreams = datastreams;
-        options.raw(data, self);
-        options.done(datastreams, self);
+        options.done(data, self);
       });
-
     }
   });
 
@@ -237,6 +256,7 @@
       }
     },
 
+    // Retrieve datastream as Datastream object
     getDatastream: function(options) {
       var self = this,
           sensor_path,
@@ -273,6 +293,32 @@
       });
     },
 
+    // Retrieve sensors as js objects
+    getRawSensors: function(options) {
+      var params,
+          self = this,
+          sensors_path;
+
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.api_key || (options.api_key = self.api_key);
+      self.api_key || (self.api_key = options.api_key);
+
+      sensors_path = this.path + "sensors";
+
+      params = {
+        "detail": true
+      };
+
+      // Retrieve sensors resource
+      self._ajax.get({
+        path: sensors_path,
+        api_key: options.api_key,
+        data: params
+      }).done(options.done);
+    },
+
+    // Retrieve sensor as Sensor object
     getSensor: function(options) {
       var self = this,
           sensor_path;
@@ -288,44 +334,36 @@
       self._ajax.get({
         path: sensor_path,
         api_key: options.api_key
-      }).done(function (sensorData) {
+      }).done(function(sensorData) {
         var sensor = new Sensor(sensorData);
         sensor.service = self;
         options.done(sensor);
       });
     },
 
+    // Retrieve sensors as Sensor objects
     getSensors: function(options) {
-      var params,
-          self = this,
+      var self = this,
           sensors_path;
 
       options || (options = {});
       options.done || (options.done = function () {});
-      options.raw || (options.raw = function () {});
       options.api_key || (options.api_key = self.api_key);
       self.api_key || (self.api_key = options.api_key);
 
       sensors_path = this.path + "sensors";
 
-      params = {
-        "detail": true
-      };
-
-      // Retrieve sensors resource
-      self._ajax.get({
-        path: sensors_path,
+      this.getRawSensors({
         api_key: options.api_key,
-        data: params
-      }).done(function (sensorData) {
-        var sensors = $.map(sensorData, function(value) {
-          var sensor = new Geocens.Sensor(value);
-          sensor.service = self;
-          return sensor;
-        });
+        done: function(sensorData) {
+          var sensors = $.map(sensorData, function(value) {
+            var sensor = new Geocens.Sensor(value);
+            sensor.service = self;
+            return sensor;
+          });
 
-        options.raw(sensorData);
-        options.done(sensors);
+          options.done(sensors);
+        }
       });
     },
 
