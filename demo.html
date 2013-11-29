@@ -114,7 +114,7 @@
   <div class="example">
     <h2 id="get_sensors">Retrieve a List of Sensors</h2>
 
-    <p>The list of sensors available for an API Key can be retrieved using the <code>getSensors</code> function on a GeoCENS Data Service object.</p>
+    <p>The list of sensors available for an API Key can be retrieved using the <code>getSensors</code> function on a GeoCENS Data Service object. If raw JSON objects are preferred instead of JS Objects, <code>getRawSensors</code> should be used.</p>
 
     <pre class="code">
 
@@ -128,10 +128,12 @@
         done: function(sensors) {
           console.log(&quot;Get Sensors&quot;, sensors);
           alert(JSON.stringify(sensors));
-        },
+        }
+      });
 
-        raw: function(data) {
-          console.log(&quot;Get Sensors&quot;, data);
+      service.getRawSensors({
+        done: function(data) {
+          console.log(&quot;Get Raw Sensors&quot;, data);
           alert(JSON.stringify(data));
         }
       });
@@ -146,12 +148,14 @@
 
     service.getSensors({
       done: function(sensors) {
-        console.log("Get Sensors", sensors);
+        console.log(&quot;Get Sensors&quot;, sensors);
         alert(JSON.stringify(sensors));
-      },
+      }
+    });
 
-      raw: function(data) {
-        console.log("Get Sensors", data);
+    service.getRawSensors({
+      done: function(data) {
+        console.log(&quot;Get Raw Sensors&quot;, data);
         alert(JSON.stringify(data));
       }
     });
@@ -202,7 +206,7 @@
   <div class="example">
     <h2 id="get_sensor_datastreams">Retrieve a Sensor's Datastreams</h2>
 
-    <p>With a Sensor object, the list of datastreams for that sensor can be retrieved as raw JS objects or full Datastream objects. Raw is useful if you want to parse the data yourself, otherwise the regular <code>done</code> callback is more useful as it returns full Datastream objects with <code>getTimeSeries</code> functions defined.</p>
+    <p>With a Sensor object, the list of datastreams for that sensor can be retrieved as raw JS objects or full Datastream objects. Raw is useful if you want to parse the data yourself, and can be retrieved with <code>getRawDatastreams</code>. Otherwise the regular <code>getDatastreams</code> function is more useful as it returns full Datastream objects with <code>getTimeSeries</code> functions defined.</p>
 
     <pre class="code">
 
@@ -213,8 +217,11 @@
           done: function(datastreams) {
             console.log(&quot;Example Fourteen&quot;, datastreams);
             alert(datastreams);
-          },
-          raw: function(data) {
+          }
+        });
+
+        sensor.getRawDatastreams({
+          done: function(data) {
             console.log(&quot;Example Fourteen&quot;, data);
             alert(data);
           }
@@ -240,11 +247,14 @@
     var goGetDatastreams = function(sensor) {
       sensor.getDatastreams({
         done: function(datastreams) {
-          console.log("Example Fourteen", datastreams);
+          console.log(&quot;Example Fourteen&quot;, datastreams);
           alert(datastreams);
-        },
-        raw: function(data) {
-          console.log("Example Fourteen", data);
+        }
+      });
+
+      sensor.getRawDatastreams({
+        done: function(data) {
+          console.log(&quot;Example Fourteen&quot;, data);
           alert(data);
         }
       });
