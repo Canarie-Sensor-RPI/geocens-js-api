@@ -624,7 +624,7 @@ $(document).ready(function() {
     var request = requests[0];
     var api_key_path = Geocens.DataService.path + "api_keys/" + this.api_key;
 
-    equal(request.url, sensor_path, "Request not made for api keys resource");
+    equal(request.url, api_key_path, "Request not made for api keys resource");
 
     xhr.restore();
   });
@@ -644,7 +644,7 @@ $(document).ready(function() {
     });
 
     this.server.respondWith([200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadWrite)]);
+                        JSON.stringify(Fixtures.DataService.ApiKeys.readWrite)]);
     this.server.respond();
 
     ok(keyStatus !== undefined, "keyStatus was not defined");
@@ -666,7 +666,7 @@ $(document).ready(function() {
     });
 
     this.server.respondWith([200, { "Content-Type": "application/json" },
-                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadOnly)]);
+                        JSON.stringify(Fixtures.DataService.ApiKeys.readOnly)]);
     this.server.respond();
 
     ok(keyStatus !== undefined, "keyStatus was not defined");
