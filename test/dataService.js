@@ -586,4 +586,47 @@ $(document).ready(function() {
        "Datastream service was not defined");
   });
 
+
+
+  module("Init Data Service, then getApiKeyStatus", {
+    setup: function () {
+      this.api_key  = "your_32_character_api_key";
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "api_keys/" + this.api_key;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function() {
+      this.server.restore();
+    }
+  });
+
+  test('makes a request for the api key resource', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensors
+    Geocens.DataService.getApiKeyStatus({
+      api_key: this.api_key
+    });
+
+    // Return valid read-only api key
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadOnly));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var api_key_path = Geocens.DataService.path + "api_keys/" + this.api_key;
+
+    equal(request.url, sensor_path, "Request not made for api keys resource");
+
+    xhr.restore();
+  });
+
 });
