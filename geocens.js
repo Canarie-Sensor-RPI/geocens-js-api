@@ -496,7 +496,7 @@
       });
     },
 
-    getTimeSeries: function(options) {
+    getRawTimeSeries: function(options) {
       var self = this,
           time, traceHours;
 
@@ -532,8 +532,25 @@
         }
       }).done(function (data) {
         var convertedData = self._convertSeriesData(data);
-        self._cache(convertedData);
         options.done(convertedData, self);
+      });
+    },
+
+    getTimeSeries: function(options) {
+      var self = this,
+          time, traceHours;
+
+      options || (options = {});
+      options.done || (options.done = function () {});
+
+      this.getRawTimeSeries({
+        api_key: options.api_key,
+        end: options.end,
+        start: options.start,
+        done: function (convertedData) {
+          self._cache(convertedData);
+          options.done(convertedData);
+        }
       });
     },
 
