@@ -13,7 +13,7 @@
 If you are using a variable that already is called `Geocens`, you can prevent the GeoCENS JS API from overwriting it. The `noConflict()` method will return the `Geocens` variable back to the previous owner/value.
 
 	var GeocensAPI = Geocens.noConflict();
-	var sosSource = GeocensAPI.SOS({…});
+	var sosSource = GeocensAPI.SOS({…});	
 
 <a name="loadingData"></a>
 ## Loading Data
@@ -201,6 +201,32 @@ Define a Data Service object with your Data Service API key:
 	var dsSource = new Geocens.DataService({
 		api_key: "your_32_character_api_key"
 	});
+
+### Geocens.DataService.getApiKeyStatus
+
+To check if an API Key is valid, the following asynchronous function can be used.
+
+	dsSource.getApiKeyStatus({
+		api_key: "your_32_character_api_key",
+		done: function(status) {
+			// Key exists. `status` is true if key has write access,
+			// false if key is read-only.
+		},
+		fail: function(error) {
+			// Key does not exist, and is invalid.
+		}
+	});
+
+In the case that the API Key is known to the Data Service, the `done` handler will be called with an argument that is `true` for when the API Key has write-access to the GeoCENS Data Service, or `false` when the key is read-only.
+
+If the key is not known to the Data Service, the `done` handler will not be called, and `fail` will be called instead. `fail` will also be called in the case the Data Service is unreachable. The `fail` handler will have an argument with the string value of the error message, which may be one of the following:
+
+* "Not Found"
+	* Will be returned when the API Key is not valid.
+* "Unprocessable Entity"
+	* Will be returned when the API Key to check was not sent to the server.
+* "Service Unavailable"
+	* Will be returned when the Data Service is unavailable. Retrying the request is recommended.
 
 ### Geocens.DataService.getSensors
 
