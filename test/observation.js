@@ -108,6 +108,8 @@ $(document).ready(function() {
     deepEqual(observation.location(), [51.07993, -114.131802]);
   });
 
+
+
   module("SOS Observation getTimeSeries", {
     setup: function () {
       var service = new Geocens.SOS({
@@ -171,6 +173,8 @@ $(document).ready(function() {
     ok(!isNaN(firstPair.timestamp), "timestamp is NaN");
     ok(!isNaN(firstPair.value), "value is NaN");
   });
+
+
 
   module("SOS Observation getTimeSeries Request", {
     setup: function() {
@@ -441,6 +445,8 @@ $(document).ready(function() {
     clock.restore();
   });
 
+
+
   module("SOS Observation describe", {
     setup: function() {
       this.xhr = sinon.useFakeXMLHttpRequest();
@@ -569,6 +575,8 @@ $(document).ready(function() {
     ok(match !== -1, "lon was not specified");
   });
 
+
+
   module("SOS Observation seriesData", {
     setup: function () {
       var service = new Geocens.SOS({
@@ -612,6 +620,20 @@ $(document).ready(function() {
     var data = this.observation.seriesData();
 
     equal(data.length, 6, 'seriesData is empty');
+  });
+
+  test('returns no data when raw time series data has been retrieved', 2, function() {
+    // Retrieve time series
+    this.observation.getRawTimeSeries();
+
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]]);
+    this.server.respond();
+
+    var data = this.observation.seriesData();
+
+    ok(data instanceof Array, 'seriesData is not an array');
+    equal(data.length, 0, 'seriesData is not empty');
   });
 
 test('returns data when time series data has been retrieved multiple times', 2,

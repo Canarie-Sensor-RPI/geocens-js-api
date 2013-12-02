@@ -144,6 +144,43 @@ An optional callback function that will return an array of Time Series objects a
 		value: 5.22
 	}]
 
+The array is presorted on the server side in ascending timestamp order.
+
+### Observation.getRawTimeSeries
+
+An alternative is available that **skips** the caching function for an observation.
+
+	observation.getRawTimeSeries({
+		start: new Date("2013-01-01 00:00:00Z"),
+		end:   new Date("2013-05-28 00:00:00Z"),
+		done:  function (seriesData) {
+			window.seriesData = seriesData;
+		}
+	});
+
+#### option: start
+
+An optional Date object specifying the start limit of the time series.
+
+#### option: end
+
+An optional Date object specifying the end limit of the time series.
+
+#### option: done
+
+An optional callback function that will return an array of Time Series objects as the first parameter. Example response:
+
+	[{
+		timestamp: 1356998400000,
+		value: 3.88
+	},
+	{
+		timestamp: 1369699200000,
+		value: 5.22
+	}]
+
+The array is presorted on the server side in ascending timestamp order. Data will not be cached and will not be accessible in `seriesData`.
+
 ### Observation.seriesData
 
 Retrieve a sorted array of timeseries objects for an SOS Observation, based on data already retrieved by `getTimeSeries()` operations. If `getTimeSeries()` has not yet been called, `seriesData()` will return an empty array.
@@ -382,7 +419,7 @@ For example, specifying `recent` as `true` and `limit` as `200` will return the 
 
 If left empty, will default to `false`.
 
-There is no support currently for the opposite use case, retrieving the oldest *n* results.
+(There is no support currently for the opposite use case, retrieving the oldest *n* results.)
 
 #### Result
 
@@ -400,6 +437,76 @@ The `getTimeSeries` method will return an array of time series objects:
 The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
 
 If the `getTimeSeries` method is called multiple times (with the same or different options) then the results will be merged and can be retrieved with `datastream.seriesData()`.
+
+### Datastream.getRawTimeSeries
+
+Similarly, the time series observations can be retrieved **without** being cached in the datastream object:
+
+	datastream.getRawTimeSeries({
+		limit:  100,
+		skip:   100,
+		start:  new Date("2013-01-01 00:00:00Z"),
+		end:    new Date("2013-05-28 00:00:00Z"),
+		recent: false,
+		done:   function (seriesData) {
+			window.seriesData = seriesData;
+		}
+	});
+
+#### option: start
+
+An optional Date object specifying the start limit of the time series. If left empty, will default to 24 hours ago.
+
+Ignored if `recent` is set to `true`.
+
+#### option: end
+
+An optional Date object specifying the end limit of the time series. If left empty, will default to current date.
+
+Ignored if `recent` is set to `true`.
+
+### option: done
+
+This callback function will return the series data as the first parameter after it has been retrieved. See below for the result format.
+
+### option: limit
+
+The number of records retrieved can be limited to this integer value. The Data Service starts counting at the newest time/value pair, so setting a limit of "1" would return the *latest* value in a time range, not the *earliest*.
+
+If left empty, no limit will be applied to the number of records returned by the Data Service.
+
+### option: skip
+
+Skip the latest *n* records returned from the Data Service (it sorts date *descending*). Can be used with `limit` to emulate pagination.
+
+If left empty, no time series records will be skipped.
+
+### option: recent
+
+If `recent` is `true`, then the `start` and `end` date options will be ignored and **all** data points in the time series will be returned. For performance reasons, it is recommended that the `limit` option is specified to reduce the potential size of the response from the GeoCENS Data Service.
+
+For example, specifying `recent` as `true` and `limit` as `200` will return the 200 most recent time series results, regardless of start/end date.
+
+If left empty, will default to `false`.
+
+(There is no support currently for the opposite use case, retrieving the oldest *n* results.)
+
+#### Result
+
+The `getRawTimeSeries` method will return an array of time series objects:
+
+	[{
+		timestamp: 1356998400000,
+		value: 3.88
+	},
+	{
+		timestamp: 1369699200000,
+		value: 5.22
+	}]
+
+The returned objects contain timestamp and value properties. The timestamps correspond to the number of milliseconds since January 1, 1970, 00:00:00 UTC. They can be parsed with JavaScript's built-in Date library: `new Date(1356998400000)`.
+
+Unlike `getTimeSeries`, the data values are **not** cached in the Datastream object, and will not be accessible by `seriesData`.
 
 ### Datastream.seriesData
 

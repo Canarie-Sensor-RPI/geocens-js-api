@@ -146,8 +146,8 @@
       return this._data;
     },
 
-    // Retrieve time series data for the datastream
-    getTimeSeries: function(options) {
+    // Retrieve raw time series data for the datastream
+    getRawTimeSeries: function(options) {
       var self = this,
           params,
           path;
@@ -203,8 +203,30 @@
           };
         });
 
-        self._cache(convertedData);
         options.done(convertedData, self);
+      });
+
+    },
+
+    // Retrieve time series data for the datastream and cache locally
+    getTimeSeries: function(options) {
+      var self = this,
+          params,
+          path;
+
+      options || (options = {});
+      options.done || (options.done || function () {});
+
+      this.getRawTimeSeries({
+        limit: options.limit,
+        skip: options.skip,
+        end: options.end,
+        start: options.start,
+        recent: options.recent,
+        done: function (convertedData) {
+          self._cache(convertedData);
+          options.done(convertedData, self);
+        }
       });
 
     },
@@ -474,7 +496,7 @@
       });
     },
 
-    getTimeSeries: function(options) {
+    getRawTimeSeries: function(options) {
       var self = this,
           time, traceHours;
 
@@ -510,8 +532,25 @@
         }
       }).done(function (data) {
         var convertedData = self._convertSeriesData(data);
-        self._cache(convertedData);
         options.done(convertedData, self);
+      });
+    },
+
+    getTimeSeries: function(options) {
+      var self = this,
+          time, traceHours;
+
+      options || (options = {});
+      options.done || (options.done = function () {});
+
+      this.getRawTimeSeries({
+        api_key: options.api_key,
+        end: options.end,
+        start: options.start,
+        done: function (convertedData) {
+          self._cache(convertedData);
+          options.done(convertedData);
+        }
       });
     },
 
