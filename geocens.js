@@ -40,6 +40,18 @@
       pad(d.getUTCSeconds())   + 'Z';
   };
 
+  // Convert Translation Engine time series readings format
+  Geocens.convertSOSReadings = function(readings) {
+    return $.map(readings, function(reading) {
+      var time = new Date(reading.time);
+
+      return {
+        timestamp: time.getTime(),
+        value:     parseFloat(reading.value)
+      };
+    });
+  };
+
   // Geocens.Sensor
   // ------------------
   //
@@ -597,18 +609,6 @@
     // Default Translation Engine URL
     path: "http://dataservice.geocens.ca/translation_engine/",
 
-    // Convert Translation Engine Readings format
-    _convertReadings: function(readings) {
-      return $.map(readings, function(reading) {
-        var time = new Date(reading.time);
-
-        return {
-          timestamp: time.getTime(),
-          value:     parseFloat(reading.value)
-        };
-      });
-    },
-
     // Convert Translation Engine output to Objects
     _decode: function(data) {
       var self            = this,
@@ -622,7 +622,7 @@
           offering:     observations.offeringID,
           procedure_id: data.id,
           property:     observations.propertyName,
-          readings:     self._convertReadings(data.readings),
+          readings:     Geocens.convertSOSReadings(data.readings),
           service:      self
         });
       });
