@@ -629,4 +629,68 @@ $(document).ready(function() {
     xhr.restore();
   });
 
+  test('returns true for a valid read-write key', 2, function() {
+    var keyStatus;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      done: function(status) {
+        keyStatus = status;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadWrite)]);
+    this.server.respond();
+
+    ok(keyStatus !== undefined, "keyStatus was not defined");
+    ok(keyStatus, "keyStatus was not read-write");
+  });
+
+  test('returns false for a valid read-only key', 2, function() {
+    var keyStatus;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      done: function(status) {
+        keyStatus = status;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadOnly)]);
+    this.server.respond();
+
+    ok(keyStatus !== undefined, "keyStatus was not defined");
+    ok(!keyStatus, "keyStatus was not read-only");
+  });
+
+  test('calls fail when key not found', 1, function() {
+    var errorMessage;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      fail: function(error) {
+        errorMessage = error;
+      }
+    });
+
+    this.server.respondWith([404, {}, "Not Found"]);
+    this.server.respond();
+
+    ok(errorMessage !== undefined, "errorMessage was not defined");
+  });
+
 });
