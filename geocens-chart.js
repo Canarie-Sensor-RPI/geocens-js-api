@@ -1,4 +1,4 @@
-//    geocens-chart.js 1.2.0
+//    geocens-chart.js 1.2.1
 
 //    (c) 2013, James Badger, Geo Sensor Web Lab.
 //    All Rights Reserved.

@@ -1,3 +1,8 @@
+1.2.1 (December 2 2013)
+
+* Add `getRawTimeSeries` function as an alternative to `getTimeSeries`
+* Move format conversion functions to Geocens namespace
+
 1.2.0 (November 29 2013)
 
 * Removed `raw` callbacks from `getSensors` and `getDatastreams`. Use `getRawSensors` and `getRawDatastreams` instead

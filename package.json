@@ -2,7 +2,7 @@
   "name": "geocens_js_api",
   "description": "GeoCENS JavaScript Data and Visualization Library",
   "author": "James Badger <jamesbadger@gmail.com>",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "All Rights Reserved",
   "main": "geocens.js",
   "readmeFilename": "README.markdown",
@@ -24,6 +24,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.geocens.ca:geocens-js-api.git"
+    "url": "https://github.com/Canarie-Sensor-RPI/geocens-js-api.git"
   }
 }
