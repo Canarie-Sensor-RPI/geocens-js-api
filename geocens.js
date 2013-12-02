@@ -52,6 +52,16 @@
     });
   };
 
+  // Convert Data Service time series readings format
+  Geocens.convertDataServiceReadings = function(readings) {
+    return $.map(readings, function(value) {
+      return {
+        timestamp: Date.parse(value.id),
+        value: parseFloat(value.reading)
+      };
+    });
+  };
+
   // Geocens.Sensor
   // ------------------
   //
@@ -208,13 +218,7 @@
         },
         data: params
       }).done(function (data) {
-        var convertedData = $.map(data, function(value) {
-          return {
-            timestamp: Date.parse(value.id),
-            value: parseFloat(value.reading)
-          };
-        });
-
+        var convertedData = Geocens.convertDataServiceReadings(data);
         options.done(convertedData, self);
       });
 
