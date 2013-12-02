@@ -40,6 +40,8 @@ $(document).ready(function() {
     deepEqual(datastream.location(), [51, -114]);
   });
 
+
+
   module("Datastream GetTimeSeries", {
     setup: function () {
       this.api_key      = "your_32_character_api_key";
@@ -406,6 +408,8 @@ $(document).ready(function() {
     ok(!isNaN(firstPair.value), "value is NaN");
   });
 
+
+
   module("Datastream seriesData", {
     setup: function () {
       var api_key       = "your_32_character_api_key",
@@ -435,6 +439,22 @@ $(document).ready(function() {
 
   test('returns no data when no time series data has been retrieved', 2,
     function() {
+    var data = this.datastream.seriesData();
+
+    ok(data instanceof Array, 'seriesData is not an array');
+    equal(data.length, 0, 'seriesData is not empty');
+
+  });
+
+  test('returns no data when raw time series data has been retrieved', 2, function() {
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.TimeSeries[0])]);
+
+    // Retrieve time series
+    this.datastream.getRawTimeSeries();
+
+    this.server.respond();
+
     var data = this.datastream.seriesData();
 
     ok(data instanceof Array, 'seriesData is not an array');
