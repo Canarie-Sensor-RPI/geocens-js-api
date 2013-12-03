@@ -309,7 +309,11 @@
       // Retrieve api key resource
       $.ajax({
         url: api_key_path,
-        type: 'GET'
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
       })
       .done(options.done)
       .fail(options.fail);
