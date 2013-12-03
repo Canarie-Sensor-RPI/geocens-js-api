@@ -2,6 +2,14 @@
 
 window.Fixtures = {
   DataService: {
+    ApiKeys: {
+      readOnly: {
+        write: false
+      },
+      readWrite: {
+        write: true
+      }
+    },
     Datastream: {
       uid: "ccc92c6fe57dff592ff687d99c4ebf70",
       id: "carbonMonoxide",

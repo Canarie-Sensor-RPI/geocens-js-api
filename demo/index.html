@@ -43,6 +43,7 @@
     <ol>
       <li><a href="#include">Include the Libraries</a></li>
       <li><a href="#data_service_object">Create a Service Object</a></li>
+      <li><a href="#data_service_api_keys">Verify an API Key</a></li>
       <li><a href="#get_sensors">Retrieve a List of Sensors</a></li>
       <li><a href="#get_sensor">Retrieve a Sensor</a></li>
       <li><a href="#get_sensor_datastreams">Retrieve a Sensor's Datastreams</a></li>
@@ -78,8 +79,9 @@
 
     <script src="../test/vendor/jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="../geocens.js" type="text/javascript" charset="utf-8"></script>
+  </div>
 
-
+  <div class="example">
     <h2 id="data_service_object">Create a Service Object</h2>
 
     <p>A service object allows you to retrieve specific sensors from the GeoCENS Data Service. You will need an account with the GeoCENS Data Service to generate an API token key; this key allows you to retrieve data from the Restful API. A registration page for the Data Service is coming soon.</p>
@@ -108,6 +110,53 @@
       + "key: " + service.api_key);
     '>Run Example</button>
     <a href="http://jsfiddle.net/openfirmware/XWhcx/1/">View on JSFiddle</a>
+  </div>
+
+  <div class="example">
+    <h2 id="data_service_api_keys">Verify an API Key</h2>
+
+    <p>An API Key for the GeoCENS Data Service can be checked with the <code>getApiKeyStatus</code> function. If the key exists, it will return <code>true</code> or <code>false</code> depending on the key's permission to write data to the Data Service. If the key does not exist, the fail handler will be called instead.</p>
+
+    <pre class="code">
+
+      var api_key = &quot;57378dc18d74bef1051312e29a26f0b3&quot;;
+
+      var service = new Geocens.DataService({
+        api_key: api_key
+      });
+
+      service.getApiKeyStatus({
+        api_key: api_key,
+        done: function(status) {
+          console.log(&quot;Key is valid, can it write?&quot;, status);
+          alert(status);
+        },
+        fail: function(error) {
+          console.log(&quot;Key is invalid! Error:&quot;, error.statusText);
+          alert(error.statusText);
+        }
+      });
+
+    </pre>
+    <button onclick='javascript:
+    var api_key = "57378dc18d74bef1051312e29a26f0b3";
+
+    var service = new Geocens.DataService({
+      api_key: api_key
+    });
+
+    service.getApiKeyStatus({
+      api_key: api_key,
+      done: function(status) {
+        console.log("Key is valid, can it write?", status);
+        alert(status);
+      },
+      fail: function(error) {
+        console.log("Key is invalid! Error:", error.statusText);
+        alert(error.statusText);
+      }
+    });
+    '>Run Example</button>
   </div>
 
 

@@ -294,6 +294,31 @@
       }
     },
 
+    getApiKeyStatus: function(options) {
+      var self = this,
+          api_key_path;
+
+      options || (options = {});
+      options.done || (options.done = function () {});
+      options.fail || (options.fail = function () {});
+      options.api_key || (options.api_key = this.api_key);
+      this.api_key || (this.api_key = options.api_key);
+
+      api_key_path = this.path + "api_keys/" + this.api_key;
+
+      // Retrieve api key resource
+      $.ajax({
+        url: api_key_path,
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      })
+      .done(options.done)
+      .fail(options.fail);
+    },
+
     // Retrieve datastream as Datastream object
     getDatastream: function(options) {
       var self = this,

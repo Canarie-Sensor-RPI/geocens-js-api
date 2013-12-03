@@ -586,4 +586,111 @@ $(document).ready(function() {
        "Datastream service was not defined");
   });
 
+
+
+  module("Init Data Service, then getApiKeyStatus", {
+    setup: function () {
+      this.api_key  = "your_32_character_api_key";
+      var basePath  = Geocens.DataService.path;
+      this.api_path = basePath + "api_keys/" + this.api_key;
+
+      this.server = sinon.fakeServer.create();
+    },
+
+    teardown: function() {
+      this.server.restore();
+    }
+  });
+
+  test('makes a request for the api key resource', 2, function() {
+    var xhr = sinon.useFakeXMLHttpRequest();
+    var requests = [];
+
+    xhr.onCreate = function (request) {
+      requests.push(request);
+    };
+
+    // Retrieve sensors
+    Geocens.DataService.getApiKeyStatus({
+      api_key: this.api_key
+    });
+
+    // Return valid read-only api key
+    requests[0].respond(200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.ReadOnly));
+
+    equal(requests.length, 1, "Fake server did not receive requests");
+
+    var request = requests[0];
+    var api_key_path = Geocens.DataService.path + "api_keys/" + this.api_key;
+
+    equal(request.url, api_key_path, "Request not made for api keys resource");
+
+    xhr.restore();
+  });
+
+  test('returns true for a valid read-write key', 2, function() {
+    var keyStatus;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      done: function(status) {
+        keyStatus = status;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.readWrite)]);
+    this.server.respond();
+
+    ok(keyStatus !== undefined, "keyStatus was not defined");
+    ok(keyStatus.write, "keyStatus was not read-write");
+  });
+
+  test('returns false for a valid read-only key', 2, function() {
+    var keyStatus;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      done: function(status) {
+        keyStatus = status;
+      }
+    });
+
+    this.server.respondWith([200, { "Content-Type": "application/json" },
+                        JSON.stringify(Fixtures.DataService.ApiKeys.readOnly)]);
+    this.server.respond();
+
+    ok(keyStatus !== undefined, "keyStatus was not defined");
+    ok(!keyStatus.write, "keyStatus was not read-only");
+  });
+
+  test('calls fail when key not found', 1, function() {
+    var errorMessage;
+
+    var source = new Geocens.DataService({
+      api_key: this.api_key
+    });
+
+    source.getApiKeyStatus({
+      api_key: this.api_key,
+      fail: function(error) {
+        errorMessage = error;
+      }
+    });
+
+    this.server.respondWith([404, {}, "Not Found"]);
+    this.server.respond();
+
+    ok(errorMessage !== undefined, "errorMessage was not defined");
+  });
+
 });
