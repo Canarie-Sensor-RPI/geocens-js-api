@@ -648,7 +648,7 @@ $(document).ready(function() {
     this.server.respond();
 
     ok(keyStatus !== undefined, "keyStatus was not defined");
-    ok(keyStatus, "keyStatus was not read-write");
+    ok(keyStatus.write, "keyStatus was not read-write");
   });
 
   test('returns false for a valid read-only key', 2, function() {
@@ -670,7 +670,7 @@ $(document).ready(function() {
     this.server.respond();
 
     ok(keyStatus !== undefined, "keyStatus was not defined");
-    ok(!keyStatus, "keyStatus was not read-only");
+    ok(!keyStatus.write, "keyStatus was not read-only");
   });
 
   test('calls fail when key not found', 1, function() {
