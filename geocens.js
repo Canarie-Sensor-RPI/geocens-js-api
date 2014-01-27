@@ -550,8 +550,6 @@
 
       if (options.start !== undefined) {
         traceHours = (options.end - options.start) / (1000 * 3600);
-      } else {
-        traceHours = 24;
       }
 
       $.ajax({

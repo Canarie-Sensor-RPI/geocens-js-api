@@ -358,7 +358,7 @@ $(document).ready(function() {
     clock.restore();
   });
 
-  test('sends the current time - 24 hours as the default start time', 2,
+  test('sends null as the default start time', 2,
     function() {
     var time = new Date();
     var clock = sinon.useFakeTimers(time.getTime());
@@ -379,7 +379,7 @@ $(document).ready(function() {
       traceHours: 24
     }));
 
-    ok(match !== -1, "traceHours was not specified");
+    ok(match === -1, "traceHours was specified");
     clock.restore();
   });
 
