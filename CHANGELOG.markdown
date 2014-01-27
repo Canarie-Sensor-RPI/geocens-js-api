@@ -1,3 +1,8 @@
+1.2.3 (January 27 2014)
+
+* Fix bug where a null end time on a `getTimeSeries` request is imcorrectly converted into a `NaN` date.
+* Add support for Translation Engine parameter that returns full procedure IDs on `GetObservation` requests.
+
 1.2.2 (January 27 2014)
 
 * Allow custom interval for SOS `getTimeSeries`. This enables retrieval of recent data without an end date.
