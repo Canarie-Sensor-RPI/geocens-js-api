@@ -52,6 +52,7 @@
       <li><a href="#ogc_sos_object">Create an OGC SOS Service Object</a></li>
       <li><a href="#get_observation">Retrieve SOS Observations</a></li>
       <li><a href="#get_observation_time_series">Retrieve an Observation Time Series</a></li>
+      <li><a href="#get_observation_recent_time_series">Retrieve an Observation Recent Time Series</a></li>
       <li><a href="#get_observation_description">Retrieve an Observation Sensor Description</a></li>
       <li><a href="#chart_include">Including the Chart Module</a></li>
       <li><a href="#chart_datastream_series">Datastream Time Series Chart</a></li>
@@ -546,6 +547,58 @@
     });
     '>Run Example</button>
     <a href="http://jsfiddle.net/openfirmware/rYHdq/">View on JSFiddle</a>
+  </div>
+
+
+  <div class="example">
+    <h2 id="get_observation_recent_time_series">Retrieve an Observation Recent Time Series</h2>
+
+    <p>Alternatively, the most recent records can be returned by using the <code>interval</code> parameter.</p>
+
+    <pre class="code">
+
+      var goGetRecords = function(observations) {
+        observations[0].getTimeSeries({
+          interval: 3648,
+          done:  function(seriesData) {
+            console.log(&quot;Recent Observations Example&quot;, seriesData);
+            alert(JSON.stringify(seriesData));
+          }
+        });
+      };
+
+      var service = new Geocens.SOS({
+        service_url: &quot;http://app.geocens.ca:8171/sos&quot;
+      });
+
+      service.getObservation({
+        offering: &quot;Temperature&quot;,
+        property: &quot;urn:ogc:def:property:noaa:ndbc:Water Temperature&quot;,
+        done: goGetRecords
+      });
+
+    </pre>
+    <button onclick='javascript:
+    var goGetRecords = function(observations) {
+      observations[0].getTimeSeries({
+        interval: 3648,
+        done:  function(seriesData) {
+          console.log("Recent Observations Example", seriesData);
+          alert(JSON.stringify(seriesData));
+        }
+      });
+    };
+
+    var service = new Geocens.SOS({
+      service_url: "http://app.geocens.ca:8171/sos"
+    });
+
+    service.getObservation({
+      offering: "Temperature",
+      property: "urn:ogc:def:property:noaa:ndbc:Water Temperature",
+      done: goGetRecords
+    });
+    '>Run Example</button>
   </div>
 
 

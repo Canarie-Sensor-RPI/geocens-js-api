@@ -544,7 +544,9 @@
       options || (options = {});
       options.done || (options.done = function () {});
 
-      if (options.end !== undefined) {
+      if (options.end === null || options.end === undefined) {
+        time = "";
+      } else if (options.end !== undefined) {
         time = ISODateString(options.end);
       }
 
@@ -670,14 +672,15 @@
         type: 'GET',
         url: this.path + "GetObservations",
         data: {
-          maxReturn:      10000,
-          offeringID:     options.offering,
-          propertyName:   options.property,
-          service:        options.service_url,
-          topleftLat:     options.northwest[0],
-          topleftLon:     options.northwest[1],
-          bottomrightLat: options.southeast[0],
-          bottomrightLon: options.southeast[1]
+          maxReturn:        10000,
+          offeringID:       options.offering,
+          propertyName:     options.property,
+          service:          options.service_url,
+          topleftLat:       options.northwest[0],
+          topleftLon:       options.northwest[1],
+          bottomrightLat:   options.southeast[0],
+          bottomrightLon:   options.southeast[1],
+          ifProcedureInURI: true
         }
       }).done(function (data) {
         var converted = self._decode(data);
