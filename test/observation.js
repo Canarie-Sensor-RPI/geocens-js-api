@@ -324,7 +324,7 @@ $(document).ready(function() {
     ok(match !== -1, "lon was not specified");
   });
 
-  test('sends the current time as the default end time', 2, function() {
+  test('sends null as the default end time', 2, function() {
     var time = new Date();
     var clock = sinon.useFakeTimers(time.getTime());
 
@@ -354,11 +354,11 @@ $(document).ready(function() {
       time: ISODateString(time)
     }));
 
-    ok(match !== -1, "end time was not specified");
+    ok(match === -1, "end time was specified");
     clock.restore();
   });
 
-  test('sends the current time - 24 hours as the default start time', 2,
+  test('sends null as the default start time', 2,
     function() {
     var time = new Date();
     var clock = sinon.useFakeTimers(time.getTime());
@@ -379,7 +379,7 @@ $(document).ready(function() {
       traceHours: 24
     }));
 
-    ok(match !== -1, "traceHours was not specified");
+    ok(match === -1, "traceHours was specified");
     clock.restore();
   });
 
@@ -443,6 +443,67 @@ $(document).ready(function() {
 
     ok(match !== -1, "traceHours was not specified");
     clock.restore();
+  });
+
+  test('sends custom end time with interval', 3, function() {
+    var end = new Date("2012-02-03T00:00:00Z");
+
+    function ISODateString(d) {
+      function pad(n) { return n < 10 ? '0' + n : n; }
+      return d.getUTCFullYear()    + '-' +
+          pad(d.getUTCMonth() + 1) + '-' +
+          pad(d.getUTCDate())      + 'T' +
+          pad(d.getUTCHours())     + ':' +
+          pad(d.getUTCMinutes())   + ':' +
+          pad(d.getUTCSeconds())   + 'Z';
+    }
+
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      interval: 72,
+      end:     end,
+      done:    function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var intervalMatch = request.url.indexOf($.param({
+      traceHours: 72
+    }));
+    var endTimeMatch = request.url.indexOf($.param({
+      time: ISODateString(end)
+    }));
+
+    ok(intervalMatch !== -1, "traceHours was not specified");
+    ok(endTimeMatch !== -1, "end time was not specified");
+  });
+
+  test('sends custom interval with no start/end time', 3, function() {
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      interval: 72,
+      done:    function() {}
+    });
+
+    // Return records
+    this.requests[0].respond(200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.TimeSeries[0]);
+
+    equal(this.requests.length, 1, "Fake server did not receive requests");
+
+    var request = this.requests[0];
+    var intervalMatch = request.url.indexOf($.param({
+      traceHours: 72
+    }));
+    var endTimeMatch = request.url.indexOf("time=");
+
+    ok(intervalMatch !== -1, "traceHours was not specified");
+    ok(endTimeMatch === -1, "end time was specified");
   });
 
 

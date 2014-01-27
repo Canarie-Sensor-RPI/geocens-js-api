@@ -546,15 +546,12 @@
 
       if (options.end !== undefined) {
         time = ISODateString(options.end);
-      } else {
-        options.end = new Date();
-        time = ISODateString(new Date());
       }
 
       if (options.start !== undefined) {
         traceHours = (options.end - options.start) / (1000 * 3600);
       } else {
-        traceHours = 24;
+        traceHours = options.interval;
       }
 
       $.ajax({
@@ -585,9 +582,10 @@
       options.done || (options.done = function () {});
 
       this.getRawTimeSeries({
-        api_key: options.api_key,
-        end: options.end,
-        start: options.start,
+        api_key:  options.api_key,
+        end:      options.end,
+        start:    options.start,
+        interval: options.interval,
         done: function (convertedData) {
           self._cache(convertedData);
           options.done(convertedData);
