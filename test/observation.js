@@ -324,7 +324,7 @@ $(document).ready(function() {
     ok(match !== -1, "lon was not specified");
   });
 
-  test('sends the current time as the default end time', 2, function() {
+  test('sends null as the default end time', 2, function() {
     var time = new Date();
     var clock = sinon.useFakeTimers(time.getTime());
 
@@ -354,7 +354,7 @@ $(document).ready(function() {
       time: ISODateString(time)
     }));
 
-    ok(match !== -1, "end time was not specified");
+    ok(match === -1, "end time was specified");
     clock.restore();
   });
 

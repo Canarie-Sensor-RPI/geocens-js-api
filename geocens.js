@@ -546,9 +546,6 @@
 
       if (options.end !== undefined) {
         time = ISODateString(options.end);
-      } else {
-        options.end = new Date();
-        time = ISODateString(new Date());
       }
 
       if (options.start !== undefined) {
