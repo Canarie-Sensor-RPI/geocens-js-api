@@ -136,15 +136,15 @@ This will retrieve the most recent 168 hours of data, regardless of start or end
 
 #### option: start
 
-An optional Date object specifying the start limit of the time series.
+An optional Date object specifying the start limit of the time series. If left empty, will default to `null`.
 
 #### option: end
 
-An optional Date object specifying the end limit of the time series.
+An optional Date object specifying the end limit of the time series. If left empty, will default to `null`.
 
 #### option: interval
 
-The number of hours of data to retrieve from the SOS. Ignored if both `start` and `end` are set. If used without `start` and `end` set (or set to `null`) then then most recent *n* hours of observations will be retrieved, regardless of start or end date.
+The number of hours of data to retrieve from the SOS. Ignored if both `start` and `end` are set. If used without `start` and `end` set (or set to `null`) then then most recent *n* hours of observations will be retrieved, regardless of start or end date. If left empty, will default to `null`.
 
 #### option: done
 
@@ -186,15 +186,15 @@ This will retrieve the most recent 168 hours of data, regardless of start or end
 
 #### option: start
 
-An optional Date object specifying the start limit of the time series.
+An optional Date object specifying the start limit of the time series. If left empty, will default to `null`.
 
 #### option: end
 
-An optional Date object specifying the end limit of the time series.
+An optional Date object specifying the end limit of the time series. If left empty, will default to `null`.
 
 #### option: interval
 
-The number of hours of data to retrieve from the SOS. Ignored if both `start` and `end` are set. If used without `start` and `end` set (or set to `null`) then then most recent *n* hours of observations will be retrieved, regardless of start or end date.
+The number of hours of data to retrieve from the SOS. Ignored if both `start` and `end` are set. If used without `start` and `end` set (or set to `null`) then then most recent *n* hours of observations will be retrieved, regardless of start or end date. If left empty, will default to `null`.
 
 #### option: done
 
