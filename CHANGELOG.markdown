@@ -1,3 +1,7 @@
+1.2.2 (January 27 2014)
+
+* Allow custom interval for SOS `getTimeSeries`. This enables retrieval of recent data without an end date.
+
 1.2.1 (December 2 2013)
 
 * Add `getRawTimeSeries` function as an alternative to `getTimeSeries`
