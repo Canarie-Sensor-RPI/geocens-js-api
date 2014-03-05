@@ -174,6 +174,23 @@ $(document).ready(function() {
     ok(!isNaN(firstPair.value), "value is NaN");
   });
 
+  test('calls fail handler when TE responds with error', 1, function() {
+    this.server.respondWith([200, { "Content-Type": "text/plain" },
+                        Fixtures.SOS.NoData]);
+
+    var seriesData;
+    var failSpy = sinon.spy();
+
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      fail: failSpy
+    });
+
+    this.server.respond();
+
+    ok(failSpy.called, "Fail was not called");
+  });
+
 
 
   module("SOS Observation getTimeSeries Request", {
