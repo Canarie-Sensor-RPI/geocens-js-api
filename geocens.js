@@ -593,7 +593,7 @@
         } else {
           options.fail(data, self);
         }
-      });
+      }).fail(options.fail);
     },
 
     getTimeSeries: function(options) {
