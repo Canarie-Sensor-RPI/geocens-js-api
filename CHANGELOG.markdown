@@ -1,3 +1,7 @@
+1.2.4 (March 5 2014)
+
+* Improve error handling and "No Data" responses from GeoCENS Translation Engine.
+
 1.2.3 (January 27 2014)
 
 * Fix bug where a null end time on a `getTimeSeries` request is imcorrectly converted into a `NaN` date.

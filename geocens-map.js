@@ -1,4 +1,4 @@
-//    geocens-map.js 1.2.3
+//    geocens-map.js 1.2.4
 
 //    (c) 2013, James Badger, Geo Sensor Web Lab.
 //    All Rights Reserved.
