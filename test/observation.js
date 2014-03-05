@@ -191,6 +191,21 @@ $(document).ready(function() {
     ok(callback.called, "Fail was not called");
   });
 
+  test('calls fail handler when AJAX error occurs', 1, function() {
+    this.server.respondWith([404, {}, ""]);
+
+    var seriesData;
+    var callback = sinon.spy();
+
+    // Retrieve time series
+    this.observation.getTimeSeries({
+      fail: callback
+    });
+
+    this.server.respond();
+
+    ok(callback.called, "Fail was not called");
+  });
 
 
   module("SOS Observation getTimeSeries Request", {
