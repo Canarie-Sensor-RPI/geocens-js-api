@@ -516,6 +516,21 @@
       });
     },
 
+    // Check for error response from Translation Engine
+    _validateResponse: function(data) {
+      var isValid = true;
+      // Check for JSON error response
+      try {
+        JSON.parse(data);
+        isValid = false;
+      }
+      catch (e) {
+        // no-op
+      }
+
+      return isValid;
+    },
+
     describe: function(options) {
       var self = this;
 
@@ -543,6 +558,7 @@
 
       options || (options = {});
       options.done || (options.done = function () {});
+      options.fail || (options.fail = function () {});
 
       if (options.end === null || options.end === undefined) {
         time = "";
@@ -571,8 +587,12 @@
           traceHours:   traceHours
         }
       }).done(function (data) {
-        var convertedData = self._convertSeriesData(data);
-        options.done(convertedData, self);
+        if (self._validateResponse(data)) {
+          var convertedData = self._convertSeriesData(data);
+          options.done(convertedData, self);
+        } else {
+          options.fail(data, self);
+        }
       });
     },
 
@@ -582,6 +602,7 @@
 
       options || (options = {});
       options.done || (options.done = function () {});
+      options.fail || (options.fail = function () {});
 
       this.getRawTimeSeries({
         api_key:  options.api_key,
@@ -591,7 +612,8 @@
         done: function (convertedData) {
           self._cache(convertedData);
           options.done(convertedData);
-        }
+        },
+        fail: options.fail
       });
     },
 

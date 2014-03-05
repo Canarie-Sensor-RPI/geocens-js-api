@@ -179,16 +179,16 @@ $(document).ready(function() {
                         Fixtures.SOS.NoData]);
 
     var seriesData;
-    var failSpy = sinon.spy();
+    var callback = sinon.spy();
 
     // Retrieve time series
     this.observation.getTimeSeries({
-      fail: failSpy
+      fail: callback
     });
 
     this.server.respond();
 
-    ok(failSpy.called, "Fail was not called");
+    ok(callback.called, "Fail was not called");
   });
 
 
