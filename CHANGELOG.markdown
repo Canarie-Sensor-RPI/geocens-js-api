@@ -1,3 +1,7 @@
+1.2.5 (May 26 2014)
+
+* Fixed bug where dates could be off by an hour for SOS time series.
+
 1.2.4 (March 5 2014)
 
 * Improve error handling and "No Data" responses from GeoCENS Translation Engine.
