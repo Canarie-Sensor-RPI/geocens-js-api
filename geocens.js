@@ -498,7 +498,7 @@
           year:   pieces[0],
           month:  pieces[1] - 1,
           day:    pieces[2],
-          hour:   pieces[3] - 1,
+          hour:   pieces[3],
           minute: pieces[4],
           second: pieces[5],
           zone:   pieces[6],
