@@ -114,4 +114,4 @@ See `Gruntfile.js` for more tasks that can be run from the command line.
 
 ## License
 
-2013, James Badger, Geo Sensor Web Lab, All Rights Reserved.
+2013–2014, James Badger, Geo Sensor Web Lab, All Rights Reserved.
